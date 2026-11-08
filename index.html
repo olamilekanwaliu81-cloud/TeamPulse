@@ -1,0 +1,826 @@
+<title>TeamPulse Prototype</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: left rail with a pill-shaped active item, soft white cards on a lavender page.
+   Leader flow: welcome, team cards, needs-attention, summary table + gauge, then rank, income and feed. */
+:root{
+  --bg:#EEF0F8; --surface:#FFFFFF; --surface2:#F4F5FB; --ink:#171C3F; --muted:#686E8E; --line:#E3E6F2;
+  --accent:#6A5AE0; --accent-ink:#FFFFFF; --accent-soft:#E9E6FB;
+  --orange:#E8801A; --orange-soft:#FDEBD6; --teal:#1FA58E; --teal-soft:#D6F2EA; --blue:#3F82F0; --blue-soft:#DEEAFE;
+  --gold:#A8600A; --gold-soft:#FDEBD6;
+  --good:#1B8550; --good-soft:#DAF2E4; --warn:#9A5A08; --warn-soft:#FDEBD0; --bad:#C0352D; --bad-soft:#FBE0DD;
+  --navy:#171C3F; --navy-ink:#FFFFFF;
+  --av0:#D6D1F7; --av1:#FAD9B5; --av2:#CFE2FB; --av3:#F8D2DC; --av4:#CDEFE4;
+  --shadow:0 1px 2px rgba(23,28,63,.05),0 10px 30px rgba(23,28,63,.06);
+  --display:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+  --body:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D0F21; --surface:#171A34; --surface2:#1F2342; --ink:#ECEEFB; --muted:#9BA1C7; --line:#2B3058;
+    --accent:#8F83FF; --accent-ink:#10112A; --accent-soft:#2B2862;
+    --orange:#FFAA52; --orange-soft:#3C2B15; --teal:#4FD6BE; --teal-soft:#143A30; --blue:#7DB0FF; --blue-soft:#1C2E54;
+    --gold:#FFB86B; --gold-soft:#3C2B15;
+    --good:#5CC680; --good-soft:#163824; --warn:#F0B64F; --warn-soft:#3A2B0D; --bad:#F2887F; --bad-soft:#43201D;
+    --navy:#ECEEFB; --navy-ink:#10112A;
+    --av0:#332F6E; --av1:#4A3A18; --av2:#223A66; --av3:#52272F; --av4:#1C4A3E;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 30px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D0F21; --surface:#171A34; --surface2:#1F2342; --ink:#ECEEFB; --muted:#9BA1C7; --line:#2B3058;
+  --accent:#8F83FF; --accent-ink:#10112A; --accent-soft:#2B2862;
+  --orange:#FFAA52; --orange-soft:#3C2B15; --teal:#4FD6BE; --teal-soft:#143A30; --blue:#7DB0FF; --blue-soft:#1C2E54;
+  --gold:#FFB86B; --gold-soft:#3C2B15;
+  --good:#5CC680; --good-soft:#163824; --warn:#F0B64F; --warn-soft:#3A2B0D; --bad:#F2887F; --bad-soft:#43201D;
+  --navy:#ECEEFB; --navy-ink:#10112A;
+  --av0:#332F6E; --av1:#4A3A18; --av2:#223A66; --av3:#52272F; --av4:#1C4A3E;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 30px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.2;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:1.7rem;font-weight:800} h2{font-size:1.3rem;font-weight:700} h3{font-size:1.05rem;font-weight:700}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ic{width:20px;height:20px;flex:none}
+.shell{display:grid;grid-template-columns:232px minmax(0,1fr);gap:20px;max-width:1480px;margin:0 auto;padding-top:16px}
+.side{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));align-self:start;height:calc(100vh - 32px - env(safe-area-inset-top,0px));
+  background:var(--surface);border-radius:24px;padding:22px 14px 16px;display:flex;flex-direction:column;gap:22px;box-shadow:var(--shadow)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.3rem;padding:0 8px;letter-spacing:-.02em}
+.brand svg{color:var(--accent)}
+.side nav{display:flex;flex-direction:column;gap:6px}
+.nav-item{display:flex;align-items:center;gap:12px;border:0;background:none;padding:12px 14px;border-radius:16px;cursor:pointer;color:var(--muted);font-weight:600;text-align:left;white-space:nowrap}
+.nav-item:hover{background:var(--surface2);color:var(--ink)}
+.nav-item[aria-current=page]{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 18px rgba(106,90,224,.28)}
+.nav-item .pill{margin-left:auto}
+.cyclecard{margin-top:auto;background:var(--accent-soft);border-radius:18px;padding:14px;font-size:.8rem;color:var(--muted)}
+.cyclecard b{display:block;color:var(--ink);font-size:.9rem;margin:2px 0}
+.content{min-width:0;display:flex;flex-direction:column;gap:18px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding-block:0 4px;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.search{flex:1 1 260px;display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:999px;padding:0 18px;box-shadow:var(--shadow);color:var(--muted)}
+.search input{flex:1;min-width:0;border:0;background:none;padding:13px 0;outline:none}
+.search:focus-within{outline:2px solid var(--accent)}
+.top-right{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.iconbtn{position:relative;width:46px;height:46px;border-radius:50%;border:0;background:var(--surface);box-shadow:var(--shadow);display:grid;place-items:center;cursor:pointer;color:var(--ink)}
+.iconbtn i{position:absolute;top:11px;right:12px;width:9px;height:9px;border-radius:50%;background:var(--orange);border:2px solid var(--surface)}
+.me{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:999px;padding:5px 16px 5px 6px;box-shadow:var(--shadow)}
+.me .me-n{font-weight:700;font-size:.9rem;line-height:1.2}
+.as{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted)}
+.proto{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;background:var(--accent-soft);border-radius:14px;padding:8px 14px;font-size:.82rem;color:var(--muted)}
+.proto .grow{flex:1 1 260px}
+select,input[type=text],input[type=number],input[type=email],input[type=date],textarea{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:8px 12px;min-height:42px;max-width:100%}
+textarea{width:100%;min-height:80px;resize:vertical}
+input:disabled,select:disabled{opacity:.55}
+input[readonly]{background:var(--surface2);color:var(--muted)}
+main{display:flex;flex-direction:column;gap:20px}
+.card{background:var(--surface);border-radius:22px;padding:22px;box-shadow:var(--shadow);min-width:0}
+.card h3{margin-bottom:12px}
+.head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
+.sub{color:var(--muted);font-size:.88rem}
+.grid{display:grid;gap:20px}
+.g-att{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g-two{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.hello{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between}
+.hello p{margin:4px 0 0}
+.crews{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(196px,1fr))}
+.crew{background:var(--surface);border-radius:22px;padding:16px 18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;min-width:0}
+.crew-top{display:flex;align-items:center;gap:12px}
+.crew-top b{display:block;line-height:1.2}
+.sq{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:.8rem;flex:none}
+.c-accent.sq{background:var(--accent-soft);color:var(--accent)} .c-orange.sq{background:var(--orange-soft);color:var(--orange)}
+.c-teal.sq{background:var(--teal-soft);color:var(--teal)} .c-blue.sq{background:var(--blue-soft);color:var(--blue)}
+.stack{display:flex}
+.stack .av{border:2px solid var(--surface);margin-left:-9px;width:32px;height:32px;font-size:.7rem}
+.stack .av:first-child{margin-left:0}
+.av.more{background:var(--surface2);color:var(--muted)}
+.prog{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.prog b{color:var(--ink)}
+.meter{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.meter.c-orange i{background:var(--orange)} .meter.c-teal i{background:var(--teal)} .meter.c-blue i{background:var(--blue)}
+.minis{display:flex;flex-wrap:wrap;gap:6px}
+.mini{font-size:.74rem;font-weight:600;background:var(--surface2);border-radius:99px;padding:3px 10px;color:var(--muted);white-space:nowrap}
+.mini.warn{background:var(--warn-soft);color:var(--warn)}
+.crew.add{border:2px dashed var(--accent);background:var(--surface);box-shadow:none;align-items:center;justify-content:center;cursor:pointer;color:var(--accent);font-weight:700;min-height:150px;font-family:inherit;font-size:1rem}
+.crew.add .plus{width:42px;height:42px;border-radius:12px;background:var(--accent-soft);display:grid;place-items:center;font-size:1.6rem;line-height:1}
+.split{display:grid;gap:20px;grid-template-columns:minmax(0,2.3fr) minmax(250px,1fr)}
+.trio{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+@media (max-width:1100px){.split{grid-template-columns:1fr}}
+.gauge{width:100%;max-width:310px;display:block;margin:4px auto 0}
+.g-num{font:800 30px var(--display);fill:var(--ink)}
+.g-sub{font:500 12px var(--body);fill:var(--muted)}
+.g-end{font:500 11px var(--body);fill:var(--muted)}
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;margin-top:10px}
+.stats4 b{display:block;font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.2}
+.stats4 span{font-size:.72rem;color:var(--muted);line-height:1.2;display:block}
+.stats4 .n1{color:var(--ink)} .stats4 .n2{color:var(--teal)} .stats4 .n3{color:var(--orange)} .stats4 .n4{color:var(--accent)}
+.btn{border:0;background:var(--surface2);color:var(--ink);border-radius:12px;padding:8px 16px;min-height:42px;cursor:pointer;font-weight:600}
+.btn:hover{background:var(--accent-soft)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.dark{background:var(--navy);color:var(--navy-ink);border-radius:999px;padding:10px 20px}
+.btn.sm{min-height:32px;padding:4px 12px;font-size:.84rem;border-radius:10px}
+.btn.good{background:var(--good-soft);color:var(--good)}
+.btn.bad{background:var(--bad-soft);color:var(--bad)}
+.pill{display:inline-block;font-size:.73rem;font-weight:700;padding:2px 10px;border-radius:99px;background:var(--surface2);color:var(--muted);white-space:nowrap}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.acc{background:var(--accent-soft);color:var(--accent)}
+.pill.gold{background:var(--gold-soft);color:var(--gold)}
+.av{width:38px;height:38px;border-radius:50%;display:inline-grid;place-items:center;font-weight:700;font-size:.8rem;flex:none;object-fit:cover}
+.av.lg{width:68px;height:68px;font-size:1.25rem}
+.a0{background:var(--av0)} .a1{background:var(--av1)} .a2{background:var(--av2)} .a3{background:var(--av3)} .a4{background:var(--av4)}
+.rows{display:flex;flex-direction:column}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:11px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0;padding-top:0}
+.row .grow{flex:1 1 180px;min-width:0}
+.row .name{font-weight:700}
+.mono{font-family:var(--mono);font-size:.82rem}
+.empty{color:var(--muted);font-size:.9rem;padding:6px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:0;background:var(--surface2);border-radius:99px;padding:6px 14px;cursor:pointer;font-size:.84rem;font-weight:600;color:var(--muted)}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:600px}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle;font-variant-numeric:tabular-nums}
+tr.click{cursor:pointer} tr.click:hover td{background:var(--surface2)}
+td.num,th.num{text-align:right}
+.who{display:flex;align-items:center;gap:10px}
+.dots{display:inline-flex;gap:3px}
+.dots i{width:9px;height:9px;border-radius:3px;background:var(--line)}
+.dots i.on{background:var(--accent)}
+.diff{display:block;font-size:.7rem;color:var(--warn);white-space:nowrap}
+.tree .node{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:8px 0;cursor:pointer}
+.tree .lvl{border-left:2px solid var(--line);margin-left:19px;padding-left:16px}
+.tree .dim{opacity:.6}
+.ci-layout{display:grid;gap:20px;grid-template-columns:minmax(210px,270px) minmax(0,1fr)}
+@media (max-width:760px){.ci-layout{grid-template-columns:1fr}}
+.ci-list{display:flex;flex-direction:column;gap:10px}
+.ci-item{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;border:2px solid transparent;background:var(--surface);border-radius:18px;padding:12px 14px;cursor:pointer;box-shadow:var(--shadow)}
+.ci-item[aria-pressed=true]{border-color:var(--accent)}
+.mail{border-radius:16px;background:var(--surface2);padding:16px 18px;margin-bottom:18px}
+.mail .meta{font-size:.78rem;color:var(--muted)}
+.mail .subj{font-weight:700;margin:2px 0 6px}
+.mail p{margin:6px 0}
+form .field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+form label,.lbl{font-size:.85rem;font-weight:600}
+.inline{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.hint{font-size:.82rem;color:var(--muted)}
+.hint.good{color:var(--good)} .hint.warn{color:var(--warn)} .hint.bad{color:var(--bad)}
+.goal{display:flex;gap:8px;margin-bottom:8px}
+.goal select{flex:none;font-weight:700;background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.goal input{flex:1;min-width:0}
+.yn{display:flex;gap:12px;flex-wrap:wrap}
+.yn label{flex:1 1 140px;border:2px solid transparent;border-radius:16px;padding:14px;text-align:center;cursor:pointer;font-weight:700;background:var(--surface2)}
+.yn input{position:absolute;opacity:0;pointer-events:none}
+.yn label:has(input:checked){background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.yn label:has(input:focus-visible){outline:2px solid var(--accent)}
+.counters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.counters input{width:100%}
+.feed .post{display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.feed .post:first-child{border-top:0;padding-top:4px}
+.spark{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--orange-soft);color:var(--orange)}
+.spark.rank{background:var(--accent-soft);color:var(--accent)}
+.bars{display:flex;align-items:flex-end;gap:12px;height:150px;border-bottom:1px solid var(--line);padding-top:18px}
+.bars div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:.74rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.bars i{display:block;width:100%;max-width:46px;background:var(--accent-soft);border-radius:12px 12px 6px 6px;min-height:4px}
+.bars div.now i{background:var(--orange)}
+.bars div.now{color:var(--ink);font-weight:700}
+.axis{display:flex;gap:12px;font-size:.75rem;color:var(--muted);padding-top:6px}
+.axis span{flex:1;text-align:center}
+.legend{display:flex;gap:14px;font-size:.78rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.lock{display:inline-flex;align-items:center;gap:6px}
+.overlay{position:fixed;inset:0;z-index:40;background:rgba(13,15,40,.55);display:grid;place-items:start center;padding:24px 16px;overflow-y:auto}
+.modal{background:var(--surface);border-radius:24px;padding:24px;width:min(680px,100%);margin-block:auto;box-shadow:var(--shadow)}
+.modal .x{float:right}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:14px 0}
+.kv div{background:var(--surface2);border-radius:14px;padding:10px 14px}
+.kv .k{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.kv .v{font-weight:700;font-variant-numeric:tabular-nums}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;background:var(--navy);color:var(--navy-ink);padding:11px 20px;border-radius:14px;max-width:min(520px,calc(100% - 32px));box-shadow:var(--shadow)}
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:row;align-items:center;padding:10px 12px;border-radius:20px;overflow-x:auto;gap:10px}
+  .side nav{flex-direction:row}
+  .brand{padding:0 6px}
+  .cyclecard{display:none}
+}
+@media (prefers-reduced-motion:no-preference){.meter i{transition:width .3s}}
+</style>
+
+<div class="shell">
+  <aside class="side">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M2 15h6l3-9 5 17 3-8h7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      TeamPulse
+    </div>
+    <nav id="tabs" aria-label="Sections"></nav>
+    <div class="cyclecard">Current cycle<b>15 Oct – 14 Nov 2026</b>Counts as November. NeoLife's sales month runs from the 15th to the 14th.</div>
+  </aside>
+  <div class="content">
+    <header class="top">
+      <label class="search" id="searchbox"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input id="q" type="search" placeholder="Search members, team ID or NeoLife ID" aria-label="Search members"></label>
+      <div class="top-right">
+        <button class="iconbtn" type="button" data-act="bell" aria-label="Notifications"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 17h12l-1.5-2V10.5a4.5 4.5 0 10-9 0V15z"/><path d="M10 20a2 2 0 004 0"/></svg><i id="bell-dot" hidden></i></button>
+        <div class="me" id="me"></div>
+      </div>
+    </header>
+    <div class="proto"><span class="grow">Prototype with example people and numbers. Nothing is saved or emailed.</span>
+      <label class="as" for="role">View as
+        <select id="role">
+          <option value="admin">Admin · Team Leader</option>
+          <option value="qsm">QSM · Tunde Bakare</option>
+          <option value="member">Member · Blessing Udoh</option>
+        </select>
+      </label>
+      <button class="btn sm" data-act="signin" type="button">Sign in with an ID</button>
+      <button class="btn sm" data-act="reset" type="button">Reset example data</button>
+    </div>
+    <main id="main"></main>
+  </div>
+</div>
+<div id="modal"></div>
+<div id="toast" role="status" hidden></div>
+
+<script>
+const RANKS=[{n:'Distributor',q:0},{n:'Manager',q:500},{n:'Senior Manager',q:1000},{n:'Executive Manager',q:2000},{n:'Director',q:4000}];
+const CI={
+  earn:{day:'10th',title:'Earnings and orders',subject:'How much have you made this cycle?',body:'Tell us your earnings, your active orders and when your order clears.'},
+  ppv:{day:'14th',title:'PPV and QPV',subject:'Your affirmation plan: PPV and QPV',body:'How many PPV will you finish this cycle? How much QPV is your team building?'},
+  plan:{day:'15th',title:'New-month plan',subject:'Your new-month plan starts today',body:'Write what you will do next month. Every goal starts with "I will" or "I must".'},
+  paid:{day:'20th to 25th',title:'Monthly responsibility',subject:'Have you paid your monthly responsibility?',body:'One tap: yes or no.'},
+  signup:{day:'28th',title:'Sign-ups and step-ups',subject:'Did you sign anyone this cycle?',body:'Tell us about new sign-ups, step-ups in your team and any tools you bought.'}
+};
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>'$'+Number(n).toLocaleString('en-US');
+const num=n=>Number(n).toLocaleString('en-US');
+const initials=n=>n.split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const hash=s=>[...s].reduce((a,c)=>a+c.charCodeAt(0),0)%5;
+let S,toastTimer;
+
+function seed(){
+  const B=o=>Object.assign({status:'active',ppv:null,qpv:null,earn:null,orders:null,clears:null,paid:null,done:[],plan:null,phone:'',city:'',bio:'',photo:null,idHrs:300,pendingHrs:0,history:[]},o);
+  const members=[
+    B({id:'leader',leader:true,name:'Olamilekan Waliu',rank:null,sponsor:null,teamId:'04OW000',neoId:'063-7710452',city:'Lagos'}),
+    B({id:'m_adaeze',name:'Adaeze Okafor',rank:3,sponsor:'leader',teamId:'04OW231',neoId:'063-4410287',ppv:310,qpv:2150,earn:420,orders:3,clears:'22 Nov',paid:true,done:['earn','ppv','plan','paid','signup'],city:'Abuja',plan:{goals:[['I will','help 2 people place their first 100 PV order'],['I must','hold a team call every Saturday']],signups:2,target:'$1,000 and above'},history:[{from:2,to:3,cycle:'July'}]}),
+    B({id:'m_tunde',name:'Tunde Bakare',rank:2,sponsor:'leader',teamId:'04OW558',neoId:'063-4410911',ppv:180,qpv:1128,earn:210,orders:2,clears:'19 Nov',paid:true,done:['earn','ppv','plan','paid','signup'],city:'Ibadan',plan:{goals:[['I will','sign 1 new distributor']],signups:1,target:'$300 to $1,000'},history:[{from:1,to:2,cycle:'May'}]}),
+    B({id:'m_chioma',name:'Chioma Eze',rank:2,sponsor:'m_adaeze',teamId:'05OW190',neoId:'063-5102338',ppv:265,qpv:1066,earn:160,orders:1,clears:'25 Nov',paid:true,done:['earn','ppv','plan','paid','signup'],city:'Enugu',plan:{goals:[['I must','reach 1,000 QPV again']],signups:1,target:'$300 to $1,000'},history:[{from:1,to:2,cycle:'October'}]}),
+    B({id:'m_femi',name:'Femi Adeyemi',rank:1,sponsor:'m_tunde',teamId:'05OW774',neoId:'063-5203019',ppv:250,qpv:1010,earn:85,orders:2,clears:'20 Nov',paid:true,done:['earn','ppv','plan','paid','signup'],city:'Lagos',plan:{goals:[['I will','sponsor 1 person and reach Senior Manager']],signups:1,target:'$300 to $1,000'},history:[{from:0,to:1,cycle:'September'}]}),
+    B({id:'m_sade',name:'Sade Ogunleye',rank:1,sponsor:'m_chioma',teamId:'05OW336',neoId:'063-5304470',ppv:136,qpv:136,earn:'none',orders:0,clears:null,paid:false,done:['earn','ppv','paid'],city:'Lagos',history:[{from:0,to:1,cycle:'August'}]}),
+    B({id:'m_ngozi',name:'Ngozi Nwosu',rank:0,sponsor:'m_tunde',teamId:'05OW812',neoId:'063-5405521',ppv:100,qpv:100,earn:40,orders:1,clears:'18 Nov',paid:true,done:['earn','ppv','paid'],city:'Onitsha'}),
+    B({id:'m_ibrahim',name:'Ibrahim Musa',rank:0,sponsor:'m_tunde',teamId:'05OW447',neoId:'063-5506632',ppv:90,qpv:90,earn:'none',orders:0,clears:null,paid:false,done:['earn','ppv','plan','paid','signup'],city:'Kano',plan:{goals:[['I will','raise my PPV to 100']],signups:0,target:'$0 to $300'}}),
+    B({id:'m_blessing',name:'Blessing Udoh',rank:0,sponsor:'m_femi',teamId:'06OW209',neoId:'063-5607743',ppv:272,qpv:272,earn:60,orders:2,clears:'21 Nov',paid:true,done:['earn','ppv','plan','paid','signup'],city:'Uyo',idHrs:20,plan:{goals:[['I will','invite 5 people to a product demo']],signups:1,target:'$0 to $300'}}),
+    B({id:'m_kelechi',name:'Kelechi Obi',rank:0,sponsor:'m_femi',teamId:'06OW661',neoId:'063-5708854',ppv:136,qpv:520,earn:25,orders:1,clears:'24 Nov',paid:null,done:['earn','ppv','plan','signup'],city:'Owerri',plan:{goals:[['I will','sign 2 distributors']],signups:2,target:'$0 to $300'}}),
+    B({id:'m_emeka',name:'Emeka Nnamdi',rank:0,sponsor:'m_chioma',teamId:'05OW905',neoId:'063-5809965',ppv:125,qpv:125,earn:'none',orders:0,clears:null,paid:true,done:['earn','ppv','paid'],city:'Enugu'}),
+    B({id:'m_funke',name:'Funke Alabi',rank:0,sponsor:'m_adaeze',teamId:'06OW118',neoId:'063-5910076',city:'Abuja'}),
+    B({id:'m_yusuf',name:'Yusuf Danjuma',rank:0,sponsor:'m_adaeze',teamId:'06OW334',neoId:'063-6011187',ppv:150,qpv:150,earn:30,orders:1,clears:'23 Nov',paid:true,done:['earn','ppv','plan','paid','signup'],city:'Kaduna',plan:{goals:[['I will','keep my 150 PPV every month']],signups:0,target:'$0 to $300'}}),
+    B({id:'m_grace',name:'Grace Ibe',rank:0,sponsor:'m_femi',teamId:'06OW305',neoId:'063-5521904',status:'pending',pendingHrs:3,idHrs:3,city:'Port Harcourt',ppv:136,qpv:136,firstPv:136})
+  ];
+  members.forEach(m=>{m.email=m.email||m.name.toLowerCase().replace(/[^a-z ]/g,'').split(' ').join('.')+'@example.com'});
+  return {
+    members,
+    claims:[
+      {id:'c1',by:'m_blessing',count:1,planned:1,src:'28th check-in',state:'review'},
+      {id:'c2',by:'m_kelechi',count:2,planned:2,src:'28th check-in',state:'review'},
+      {id:'c3',by:'m_femi',count:1,planned:1,src:'Reported to Admin on 9 Nov',state:'review'}
+    ],
+    feed:[
+      {id:'f1',kind:'join',who:'m_yusuf',by:'m_adaeze',when:'12 days ago'},
+      {id:'f2',kind:'rank',who:'m_chioma',to:'Senior Manager',when:'3 weeks ago'},
+      {id:'f3',kind:'join',who:'m_emeka',by:'m_chioma',when:'5 weeks ago'}
+    ],
+    dismissed:[],n:10
+  };
+}
+function fresh(keep){
+  S=Object.assign(seed(),{role:keep?keep.role:'admin',view:keep?keep.view:'dashboard',filter:'all',ci:'earn',asId:keep?keep.asId:'m_adaeze',userId:keep?keep.userId:null,modal:null});
+}
+const NAV={admin:['dashboard','team','signups','checkins','feed','profile'],qsm:['dashboard','team','signups','checkins','feed','profile'],member:['checkins','signups','feed','profile']};
+const NAVL=r=>({dashboard:'Dashboard',team:'Team',signups:r==='admin'?'Sign-ups':'Report a sign-up',checkins:'Check-ins',feed:'Team feed',profile:'My profile'});
+const ME={admin:'leader',qsm:'m_tunde',member:'m_blessing'};
+const meId=()=>S.userId||ME[S.role];
+const YEAR=2026;
+
+const byId=id=>S.members.find(m=>m.id===id);
+const rankName=m=>m.leader?'Team Leader':RANKS[m.rank].n;
+const kids=id=>S.members.filter(x=>x.sponsor===id);
+function subtreeIds(id){return [id].concat(...kids(id).map(k=>subtreeIds(k.id)))}
+function visible(){
+  if(S.role==='admin')return S.members.filter(m=>!m.leader);
+  if(S.role==='qsm')return subtreeIds(meId()).map(byId);
+  return [byId(meId())];
+}
+function calcQ(m){
+  return (m.ppv||0)+kids(m.id).filter(k=>k.status==='active'&&k.rank!==4).reduce((s,k)=>s+calcQ(k),0);
+}
+function recommend(m){
+  if(m.leader||m.status!=='active'||m.ppv==null||m.ppv<100||m.qpv==null)return null;
+  let best=0;for(let i=1;i<=3;i++)if(m.qpv>=RANKS[i].q)best=i;
+  return best>m.rank?best:null;
+}
+function qualified(m){return m.rank>=1&&m.ppv!=null&&m.ppv>=100&&m.qpv!=null&&m.qpv>=RANKS[m.rank].q}
+const pill=(t,k='')=>`<span class="pill ${k}">${esc(t)}</span>`;
+const av=(m,c='')=>m.photo?`<img class="av ${c}" src="${m.photo}" alt="">`:`<span class="av a${hash(m.id)} ${c}" aria-hidden="true">${esc(initials(m.name))}</span>`;
+const incomeTxt=m=>m.earn==null?'<span class="sub">No reply</span>':m.earn==='none'?'<span class="sub">Not yet</span>':money(m.earn);
+function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{el.hidden=true},3600)}
+function teamId(){let t;do{t='0'+String(YEAR).slice(-1)+'OW'+String(Math.floor(Math.random()*1000)).padStart(3,'0')}while(S.members.some(m=>m.teamId===t));return t}
+const validNeo=v=>/^\d{3}-\d{7}$/.test(v);
+
+/* ---------- chrome ---------- */
+const IC=p=>`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const ICON={
+  dashboard:IC('<rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/>'),
+  team:IC('<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M17 14c2.5 0 4.5 2 4.5 4.5"/>'),
+  signups:IC('<circle cx="10" cy="8" r="3.4"/><path d="M3.5 20c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5"/><path d="M19 8v6M16 11h6"/>'),
+  checkins:IC('<rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8.5 12l2.5 2.5 4.5-5"/>'),
+  feed:IC('<path d="M12 3l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6L12 15.4 7 18.2l1.2-5.6L4 8.8l5.6-.6z"/>'),
+  profile:IC('<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4 3.4-7 7.5-7s7.5 3 7.5 7"/>')
+};
+function bellCount(){
+  if(S.role!=='admin')return 0;
+  return S.claims.filter(c=>c.state==='review').length+S.members.filter(m=>m.status==='pending').length+S.members.map(recommend).filter((r,i)=>r!=null&&!S.dismissed.includes(S.members[i].id)).length;
+}
+function badgeCount(){
+  const n=S.claims.filter(c=>c.state==='review').length+S.members.filter(m=>m.status==='pending').length;
+  return n?`<span class="pill warn">${n}</span>`:'';
+}
+function renderChrome(){
+  $('#role').value=S.role;
+  const me=byId(meId());
+  $('#role').options[1].textContent='QSM · '+(S.role==='qsm'?me.name:'Tunde Bakare');
+  $('#role').options[2].textContent='Member · '+(S.role==='member'?me.name:'Blessing Udoh');
+  $('#me').innerHTML=`${av(me)}<div><div class="me-n">${esc(me.name)}</div><div class="sub">${S.role==='admin'?'Team Leader · Admin':S.role==='qsm'?'QSM · '+esc(rankName(me)):'Member · '+esc(rankName(me))}</div></div>`;
+  $('#searchbox').hidden=S.role==='member';
+  $('#bell-dot').hidden=!(bellCount()>0);
+  const L=NAVL(S.role);
+  $('#tabs').innerHTML=NAV[S.role].map(v=>`<button class="nav-item" type="button" data-act="nav" data-v="${v}" ${S.view===v?'aria-current="page"':''}>${ICON[v]}<span>${L[v]}</span>${v==='signups'&&S.role==='admin'?badgeCount():''}</button>`).join('');
+}
+
+/* ---------- dashboard ---------- */
+function gauge(pct){
+  return `<svg class="gauge" viewBox="0 0 200 120" role="img" aria-label="${pct} percent of check-ins answered">
+    <defs><linearGradient id="gg" x1="0" x2="1" y1="0" y2="0"><stop offset="0" style="stop-color:var(--teal)"/><stop offset="1" style="stop-color:var(--orange)"/></linearGradient></defs>
+    <path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="var(--surface2)" stroke-width="16" stroke-linecap="round" pathLength="100"/>
+    <path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="url(#gg)" stroke-width="16" stroke-linecap="round" pathLength="100" stroke-dasharray="${pct} 100"/>
+    <text x="100" y="82" text-anchor="middle" class="g-num">${pct}%</text>
+    <text x="100" y="100" text-anchor="middle" class="g-sub">Check-ins answered</text>
+    <text x="20" y="118" text-anchor="middle" class="g-end">0</text><text x="180" y="118" text-anchor="middle" class="g-end">100</text></svg>`;
+}
+function feedText(f){
+  const w=byId(f.who);
+  return f.kind==='join'?{who:w,t:`<b>${esc(w.name)}</b> joined the team`,s:`Sponsored by ${esc(byId(f.by).name)}`,rank:false}
+    :{who:w,t:`<b>${esc(w.name)}</b> stepped up to ${esc(f.to)}`,s:'Congratulations on the new rank',rank:true};
+}
+function dashboard(){
+  const isAdmin=S.role==='admin';
+  const me=byId(meId());
+  const vis=visible().filter(m=>m.status==='active');
+  const slots=vis.length*5,done=vis.reduce((s,m)=>s+m.done.length,0),pct=slots?Math.round(done/slots*100):0;
+  const activeP=vis.filter(m=>m.ppv!=null&&m.ppv>=100).length;
+  const unpaid=vis.filter(m=>m.paid===false).length;
+  const pend=S.members.filter(m=>m.status==='pending'&&(isAdmin||vis.some(v=>v.id===m.sponsor)));
+  const recs=vis.map(m=>[m,recommend(m)]).filter(([m,r])=>r!=null&&!S.dismissed.includes(m.id));
+  const late=vis.filter(m=>m.done.length<5);
+  const f=S.filter,q=(S.q||'').trim().toLowerCase();
+  const filt={all:()=>true,late:m=>m.done.length<5,unpaid:m=>m.paid!==true,noinc:m=>m.earn==='none',low:m=>m.ppv==null||m.ppv<100}[f];
+  const chip=(k,t)=>`<button class="chip" type="button" data-act="filter" data-v="${k}" aria-pressed="${f===k}">${t}</button>`;
+  const groups=[[3,'Executive Managers','EM','accent'],[2,'Senior Managers','SM','orange'],[1,'Managers','M','teal'],[0,'Distributors','D','blue'],[4,'Directors','DIR','accent']];
+  const crews=groups.map(([r,name,ab,c])=>{
+    const g=vis.filter(m=>m.rank===r);if(!g.length)return '';
+    const d=g.reduce((s,m)=>s+m.done.length,0),p=Math.round(d/(g.length*5)*100),fu=g.filter(m=>m.done.length<5).length;
+    return `<div class="crew"><div class="crew-top"><span class="sq c-${c}">${ab}</span><div><b>${name}</b><span class="sub">${g.length} member${g.length>1?'s':''}</span></div></div>
+      <div class="stack">${g.slice(0,4).map(m=>av(m)).join('')}${g.length>4?`<span class="av more">+${g.length-4}</span>`:''}</div>
+      <div class="prog"><span>Check-ins answered</span><b>${p}%</b></div><div class="meter c-${c}"><i style="width:${p}%"></i></div>
+      <div class="minis"><span class="mini ${fu?'warn':''}">${fu} to follow up</span><span class="mini">${g.filter(m=>m.ppv!=null&&m.ppv>=100).length} active</span></div></div>`;
+  }).join('');
+  const rows=vis.filter(filt).filter(m=>!q||(m.name+' '+m.teamId+' '+m.neoId).toLowerCase().includes(q)).map(m=>{
+    const calc=calcQ(m),diff=m.qpv!=null&&Math.abs(m.qpv-calc)>0,ql=qualified(m);
+    return `<tr class="click" data-act="member" data-id="${m.id}">
+      <td><div class="who">${av(m)}<div><div style="font-weight:700">${esc(m.name)}</div><div class="mono sub">${esc(m.teamId)}</div></div></div></td>
+      <td>${pill(RANKS[m.rank].n,m.rank>=1?'acc':'')} ${m.rank>=1?(ql?pill('Qualified','good'):pill('Not qualified','warn')):''}</td>
+      <td class="num">${m.ppv==null?'<span class="sub">No reply</span>':num(m.ppv)+(m.ppv<100?' '+pill('Under 100','bad'):'')}</td>
+      <td class="num">${m.qpv==null?'<span class="sub">No reply</span>':num(m.qpv)}${diff?`<span class="diff">System ${num(calc)}</span>`:''}</td>
+      <td class="num">${incomeTxt(m)}</td>
+      <td>${m.paid===true?pill('Paid','good'):m.paid===false?pill('Not paid','bad'):pill('No answer','warn')}</td>
+      <td><span class="dots" title="${m.done.length} of 5 check-ins answered">${[0,1,2,3,4].map(i=>`<i class="${i<m.done.length?'on':''}"></i>`).join('')}</span></td>
+    </tr>`}).join('');
+  const top=[...vis].filter(m=>m.qpv!=null).sort((a,b)=>b.qpv-a.qpv).slice(0,3);
+  const hist=[0,1,2,3,4].map(i=>vis.reduce((s,m)=>s+incomeHist(m)[i],0)),mx=Math.max(...hist,1);
+  const posts=S.feed.slice(0,3).map(feedText);
+  return `
+  <div class="hello"><div><h1>Welcome, ${isAdmin?'Team Lead':esc(me.name.split(' ')[0])}!</h1><p class="sub">Check-in completion this cycle: <b>${pct}%</b>. Target 75 to 80%.</p></div>
+    <button class="btn dark" type="button" data-act="report">Cycle report</button></div>
+  <div class="crews">${crews}${isAdmin?`<button class="crew add" type="button" data-act="nav" data-v="signups"><span class="plus">+</span>Add a sign-up</button>`:''}</div>
+  <div class="grid g-att" id="attn">
+    ${isAdmin?`<section class="card"><h3>Pending activation</h3>
+      ${pend.length?`<div class="rows">${pend.map(m=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">Sponsor ${esc(byId(m.sponsor).name)} · first order ${m.firstPv||0} PV · activates itself in ${Math.max(0,24-m.pendingHrs)}h</div></div><button class="btn sm primary" type="button" data-act="activate" data-id="${m.id}">Activate</button></div>`).join('')}</div>`:'<div class="empty">Nobody is waiting.</div>'}
+    </section>`:''}
+    <section class="card"><h3>Rank-up recommendations</h3>
+      ${recs.length?`<div class="rows">${recs.map(([m,r])=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">PPV ${m.ppv} · QPV ${num(m.qpv)} reaches ${RANKS[r].n} (${num(RANKS[r].q)})</div></div>${isAdmin?`<button class="btn sm good" type="button" data-act="recok" data-id="${m.id}">Confirm</button><button class="btn sm" type="button" data-act="recno" data-id="${m.id}">Dismiss</button>`:pill('Admin confirms')}</div>`).join('')}</div>`:'<div class="empty">No one has reached a new threshold.</div>'}
+    </section>
+    <section class="card"><h3>Not fully replied</h3>
+      ${late.length?`<div class="rows">${late.map(m=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">${m.done.length===0?'No answers yet':m.done.length+' of 5 answered'}</div></div><button class="btn sm" type="button" data-act="remind" data-id="${m.id}">Remind</button></div>`).join('')}</div>`:'<div class="empty">Everyone has replied.</div>'}
+    </section>
+  </div>
+  <div class="split">
+    <section class="card">
+      <div class="head"><h2>Team this cycle</h2>
+        <div class="chips">${chip('all','All')}${chip('late','Not replied')}${chip('unpaid','Not paid')}${chip('noinc','No income yet')}${chip('low','Under 100 PPV')}</div></div>
+      <p class="sub">Select a row for a member's plan, history and income. "System count" is the QPV worked out from members in this system. Customers outside the system explain most gaps.</p>
+      <div class="scroll"><table><thead><tr><th>Member</th><th>Rank</th><th class="num">PPV</th><th class="num">QPV</th><th class="num">Income</th><th>Monthly</th><th>Replies</th></tr></thead>
+      <tbody>${rows||'<tr><td colspan="7" class="empty">No members match.</td></tr>'}</tbody></table></div>
+    </section>
+    <section class="card"><div class="head"><h3 style="margin:0">Overall progress</h3><span class="pill acc">${esc(isAdmin?'Whole team':'Your downline')}</span></div>
+      ${gauge(pct)}
+      <div class="stats4"><div><b class="n1">${vis.length}</b><span>Members</span></div><div><b class="n2">${activeP}</b><span>Active, 100+ PPV</span></div><div><b class="n3">${unpaid}</b><span>Not paid</span></div><div><b class="n4">${recs.length}</b><span>Rank-up checks</span></div></div>
+      <p class="sub" style="text-align:center;margin:14px 0 0">${done} of ${slots} check-in answers received</p>
+    </section>
+  </div>
+  <div class="trio">
+    <section class="card"><div class="head"><h3 style="margin:0">Rank performance</h3><button class="btn sm" type="button" data-act="nav" data-v="team">See all</button></div>
+      <div class="rows" style="margin-top:12px">${top.map(m=>`<div class="row"><span>${av(m)}</span><div class="grow" style="flex:1 1 90px"><div class="name">${esc(m.name)}</div><div class="sub">${RANKS[m.rank].n}</div></div><b>${num(m.qpv)} <span class="sub" style="font-weight:500">QPV</span></b></div>`).join('')||'<div class="empty">No numbers yet.</div>'}</div></section>
+    <section class="card"><div class="head"><h3 style="margin:0">Income by cycle</h3><span class="legend"><span><i style="background:var(--accent-soft)"></i>Earlier</span><span><i style="background:var(--orange)"></i>This cycle</span></span></div>
+      <p class="sub" style="margin:4px 0 0">Team total in USD. Example history.</p>
+      <div class="bars" style="margin-top:8px">${hist.map((v,i)=>`<div class="${i===4?'now':''}">${money(v)}<i style="height:${Math.round(v/mx*78)}%"></i></div>`).join('')}</div>
+      <div class="axis">${['Jul','Aug','Sep','Oct','Nov'].map(x=>`<span>${x}</span>`).join('')}</div></section>
+    <section class="card feed"><div class="head"><h3 style="margin:0">Team feed</h3><button class="btn sm" type="button" data-act="nav" data-v="feed">See all</button></div>
+      <div style="margin-top:8px">${posts.map(p=>`<div class="post"><div class="spark ${p.rank?'rank':''}" aria-hidden="true">${p.rank?IC('<path d="M12 19V5M5 12l7-7 7 7"/>'):IC('<path d="M12 3l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6L12 15.4 7 18.2l1.2-5.6L4 8.8l5.6-.6z"/>')}</div><div style="flex:1;min-width:0"><div>${p.t}</div><div class="sub">${p.s}</div></div></div>`).join('')||'<div class="empty">Nothing yet.</div>'}</div></section>
+  </div>`;
+}
+
+/* ---------- team ---------- */
+function team(){
+  const root=S.role==='admin'?'leader':meId();
+  const node=(m,d)=>{
+    const c=kids(m.id);
+    return `<div class="node ${m.status==='pending'?'dim':''}" data-act="member" data-id="${m.id}">${av(m)}
+      <div class="grow" style="flex:1 1 180px"><div style="font-weight:600">${esc(m.name)}</div><div class="mono sub">${esc(m.teamId)} · ${esc(m.neoId)}</div></div>
+      ${pill(rankName(m),m.leader||m.rank>=1?'acc':'')}${m.status==='pending'?pill('Pending','warn'):''}
+    </div>${c.length?`<div class="lvl">${c.map(k=>node(k,d+1)).join('')}</div>`:''}`;
+  };
+  const r=byId(root);
+  return `<section class="card"><div class="head"><h2>${S.role==='admin'?'Whole team':'Your downline'}</h2><span class="sub">${subtreeIds(root).length-1} people under ${esc(r.name)}${S.role==='qsm'?'. QSMs only see their own downline.':''}</span></div>
+    <div class="tree" style="margin-top:12px">${node(r,0)}</div></section>`;
+}
+
+/* ---------- sign-ups ---------- */
+function newMemberForm(p,sponsorId){
+  const sel=sponsorId?`<input type="hidden" name="sponsor" value="${sponsorId}">`:
+   `<div class="field"><label for="${p}sp">Sponsor</label><select id="${p}sp" name="sponsor">${S.members.filter(m=>m.status==='active').map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join('')}</select></div>`;
+  return `<form data-form="newmember" novalidate>${sel}
+    <div class="field"><label for="${p}nm">Full name</label><input id="${p}nm" name="name" type="text" required></div>
+    <div class="field"><label for="${p}em">Email</label><input id="${p}em" name="email" type="email" required></div>
+    <div class="field"><label for="${p}ph">Phone</label><input id="${p}ph" name="phone" type="text"></div>
+    <div class="field"><label for="${p}ne">NeoLife ID</label><input id="${p}ne" name="neo" type="text" placeholder="063-9262173" inputmode="numeric" maxlength="11" required>
+      <span class="hint">3 digits, a hyphen, 7 digits. Double-check it: it can be corrected for 48 hours, then it locks.</span></div>
+    <div class="field"><label for="${p}pv">First-order PV</label><input id="${p}pv" name="pv" type="number" min="0" list="${p}pvl" placeholder="136" required><datalist id="${p}pvl"><option value="100"><option value="136"><option value="250"><option value="272"></datalist><span class="hint">They have already ordered. This becomes their PPV and counts toward their sponsor's QPV once they are active.</span></div>
+    <p class="hint" id="${p}err" role="alert"></p>
+    <button class="btn primary" type="submit">${sponsorId?'Send sign-up details':'Add as pending'}</button>
+  </form>`;
+}
+function signups(){
+  if(S.role!=='admin'){
+    return `<section class="card"><h2>Report a sign-up</h2><p class="sub">Got a new sign-up? Tell your Admin now. You do not need to wait for the 28th.</p>
+      <form data-form="report" novalidate style="margin-top:12px;max-width:460px">
+        <div class="field"><label for="rp-n">Name of the new person</label><input id="rp-n" name="who" type="text"></div>
+        <div class="field"><label for="rp-c">How many people?</label><input id="rp-c" name="count" type="number" min="1" value="1"></div>
+        <button class="btn primary" type="submit">Tell my Admin</button></form></section>`;
+  }
+  const review=S.claims.filter(c=>c.state==='review'),details=S.claims.filter(c=>c.state==='details'),pend=S.members.filter(m=>m.status==='pending');
+  return `<div class="grid g-two">
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <section class="card"><h3>Waiting for your confirmation</h3>
+        ${review.length?`<div class="rows">${review.map(c=>{const m=byId(c.by);return `<div class="row"><div class="grow"><div class="name">${esc(m.name)} says ${c.count} sign-up${c.count>1?'s':''}</div><div class="sub">${esc(c.src)} · their plan said ${c.planned}</div></div>
+          <button class="btn sm good" type="button" data-act="confirm" data-id="${c.id}">Confirm</button><button class="btn sm bad" type="button" data-act="reject" data-id="${c.id}">Reject</button></div>`}).join('')}</div>`:'<div class="empty">No claims waiting.</div>'}
+      </section>
+      <section class="card"><h3>Confirmed, waiting for details</h3>
+        ${details.length?`<div class="rows">${details.map(c=>`<div class="row"><div class="grow"><div class="name">${esc(byId(c.by).name)}</div><div class="sub">${c.count} person${c.count>1?'s':''} still to add</div></div><button class="btn sm" type="button" data-act="openmail" data-id="${c.id}">See the mail they got</button></div>`).join('')}</div>`:'<div class="empty">Nothing waiting.</div>'}
+      </section>
+      <section class="card"><h3>Pending activation</h3>
+        ${pend.length?`<div class="rows">${pend.map(m=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub"><span class="mono">${esc(m.teamId)}</span> · sponsor ${esc(byId(m.sponsor).name)} · first order ${m.firstPv||0} PV · activates itself in ${Math.max(0,24-m.pendingHrs)}h</div></div><button class="btn sm primary" type="button" data-act="activate" data-id="${m.id}">Activate</button></div>`).join('')}</div>`:'<div class="empty">Nobody is pending.</div>'}
+      </section>
+    </div>
+    <section class="card"><h3>Add a sign-up</h3><p class="sub" style="margin-top:0">For when a sponsor tells you about a new person. They start as Pending and get a team ID automatically.</p>${newMemberForm('add-')}</section>
+  </div>`;
+}
+
+/* ---------- check-ins ---------- */
+function checkins(){
+  const asId=S.role==='admin'?S.asId:meId();
+  const m=byId(asId);
+  const picker=S.role==='admin'?`<label class="as" for="asid">Answering as <select id="asid">${S.members.filter(x=>!x.leader&&x.status==='active').map(x=>`<option value="${x.id}" ${x.id===asId?'selected':''}>${esc(x.name)}</option>`).join('')}</select></label>`:'';
+  const list=Object.keys(CI).map(k=>`<button class="ci-item" type="button" data-act="ci" data-v="${k}" aria-pressed="${S.ci===k}"><span class="pill ${m.done.includes(k)?'good':'warn'}">${m.done.includes(k)?'Answered':'Open'}</span><b>${CI[k].title}</b><span class="sub">Sent on the ${CI[k].day}</span></button>`).join('');
+  const c=CI[S.ci];
+  return `<div class="head"><div><h2>Check-ins</h2><p class="sub" style="margin:2px 0 0">What ${esc(m.name.split(' ')[0])} receives by email and fills in.</p></div>${picker}</div>
+  <div class="ci-layout"><div class="ci-list">${list}</div>
+    <section class="card">
+      <div class="mail"><div class="meta">From TeamPulse · to ${esc(m.name)} · ${c.day}</div><div class="subj">${c.subject}</div><p>Hi ${esc(m.name.split(' ')[0])}, ${c.body}</p><p class="meta">It takes about two minutes. Your answers go straight to your profile.</p></div>
+      ${ciForm(S.ci,m)}
+    </section></div>`;
+}
+function ciForm(k,m){
+  if(k==='earn'){const none=m.earn==='none';return `<form data-form="earn" novalidate>
+    <div class="field"><label for="e-amt">Money made this cycle (USD)</label>
+      <div class="inline"><input id="e-amt" name="amt" type="number" min="0" step="1" value="${typeof m.earn==='number'?m.earn:''}" ${none?'disabled':''}>
+      <label class="inline" style="font-weight:400"><input id="e-none" name="none" type="checkbox" ${none?'checked':''}> Not yet</label></div></div>
+    <div class="field"><label for="e-ord">Active orders right now</label><input id="e-ord" name="orders" type="number" min="0" value="${m.orders==null?'':m.orders}"></div>
+    <div class="field"><label for="e-clr">When will your order clear?</label><input id="e-clr" name="clears" type="date"></div>
+    <button class="btn primary" type="submit">Save my answers</button></form>`}
+  if(k==='ppv'){const none=m.qpv===0;return `<form data-form="ppv" novalidate>
+    <div class="field"><label for="p-ppv">Your PPV this cycle</label><input id="p-ppv" name="ppv" type="number" min="0" value="${m.ppv==null?'':m.ppv}"><span class="hint" id="p-ppvh">NeoLife asks for 100 PPV to stay active.</span></div>
+    <div class="field"><label for="p-qpv">Your team's QPV</label>
+      <div class="inline"><input id="p-qpv" name="qpv" type="number" min="0" value="${m.qpv==null?'':m.qpv}" ${none?'disabled':''}>
+      <label class="inline" style="font-weight:400"><input id="p-none" name="none" type="checkbox"> None yet, I have no downline</label></div>
+      <span class="hint" id="p-qpvh">If you have no downline, your QPV is just your PPV.</span></div>
+    <button class="btn primary" type="submit">Save my answers</button></form>`}
+  if(k==='plan'){const g=(m.plan&&m.plan.goals.length?m.plan.goals:[['I will','']]);return `<form data-form="plan" novalidate>
+    <div class="lbl" style="margin-bottom:6px">My goals for next month</div>
+    <div id="goals">${g.map(([p,t])=>goalRow(p,t)).join('')}</div>
+    <button class="btn sm" type="button" data-act="addgoal" style="margin-bottom:16px">Add another goal</button>
+    <div class="field"><label for="pl-s">How many people will you sign?</label><input id="pl-s" name="signups" type="number" min="0" value="${m.plan?m.plan.signups:''}"></div>
+    <div class="field"><label for="pl-t">How much do you want to make?</label><select id="pl-t" name="target">${['$0 to $300','$300 to $1,000','$1,000 and above'].map(o=>`<option ${m.plan&&m.plan.target===o?'selected':''}>${o}</option>`).join('')}</select></div>
+    <div class="field"><label for="pl-p">Your PPV for next month</label><input id="pl-p" name="pp" type="number" min="0"></div>
+    <div class="field"><label for="pl-q">Your QPV for next month</label><input id="pl-q" name="pq" type="number" min="0"></div>
+    <button class="btn primary" type="submit">Save my plan</button></form>`}
+  if(k==='paid'){return `<form data-form="paid" novalidate><div class="lbl" style="margin-bottom:8px">Have you paid your monthly responsibility?</div>
+    <div class="yn"><label><input type="radio" name="paid" value="yes" ${m.paid===true?'checked':''}> Yes, paid</label><label><input type="radio" name="paid" value="no" ${m.paid===false?'checked':''}> Not yet</label></div>
+    <p class="hint" id="paid-err" role="alert"></p><button class="btn primary" type="submit">Save my answer</button></form>`}
+  return `<form data-form="signup" novalidate><div class="lbl" style="margin-bottom:8px">Did you sign anyone this cycle?</div>
+    <div class="yn" style="margin-bottom:14px"><label><input type="radio" name="su" value="yes"> Yes</label><label><input type="radio" name="su" value="no"> No</label></div>
+    <div class="field"><label for="s-n">If yes, how many?</label><input id="s-n" name="count" type="number" min="1" value="1"><span class="hint">Your Admin confirms it, then you get a second email to enter their details.</span></div>
+    <div class="lbl" style="margin-bottom:6px">Step-ups in your team this cycle</div>
+    <div class="counters" style="margin-bottom:14px">${['Managers','Senior Managers','Executive Managers','Directors'].map((x,i)=>`<div><label for="st${i}" class="sub">${x}</label><input id="st${i}" name="st${i}" type="number" min="0" value="0"></div>`).join('')}</div>
+    <div class="lbl" style="margin-bottom:8px">Did you buy any tools this month?</div>
+    <div class="yn" style="margin-bottom:14px"><label><input type="radio" name="tools" value="yes"> Yes</label><label><input type="radio" name="tools" value="no" checked> No</label></div>
+    <p class="hint" id="su-err" role="alert"></p><button class="btn primary" type="submit">Save my answers</button></form>`;
+}
+function goalRow(p,t){return `<div class="goal"><select name="gp" aria-label="Goal starts with"><option ${p==='I will'?'selected':''}>I will</option><option ${p==='I must'?'selected':''}>I must</option></select><input name="gt" type="text" aria-label="Goal" value="${esc(t)}" placeholder="what you will do"></div>`}
+
+/* ---------- feed ---------- */
+function feed(){
+  const items=S.feed.map(f=>{
+    const w=byId(f.who);
+    if(f.kind==='join')return {id:f.id,rank:false,t:`<b>${esc(w.name)}</b> joined the team`,s:`Sponsored by ${esc(byId(f.by).name)}`,when:f.when};
+    return {id:f.id,rank:true,t:`<b>${esc(w.name)}</b> stepped up to ${esc(f.to)}`,s:'Congratulations on the new rank',when:f.when};
+  });
+  return `<section class="card feed"><div class="head"><h2>Team feed</h2><span class="sub">New members and step-ups, shown to the whole team</span></div>
+   <div style="margin-top:8px">${items.map(i=>`<div class="post"><div class="spark ${i.rank?'rank':''}" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${i.rank?'<path d="M12 19V5M5 12l7-7 7 7"/>':'<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/>'}</svg></div>
+     <div style="flex:1;min-width:0"><div>${i.t}</div><div class="sub">${i.s} · ${i.when}</div></div>
+     ${S.role==='admin'?`<button class="btn sm" type="button" data-act="hidepost" data-id="${i.id}">Hide</button>`:''}</div>`).join('')||'<div class="empty">Nothing yet.</div>'}</div></section>`;
+}
+
+/* ---------- profile ---------- */
+function profile(){
+  const m=byId(meId());
+  const editable=m.idHrs<48,left=48-m.idHrs;
+  const next=!m.leader&&m.rank<3?RANKS[m.rank+1]:null;
+  const pctN=next&&m.qpv!=null?Math.min(100,Math.round(m.qpv/next.q*100)):0;
+  const sim=`<label class="as" for="simid" style="margin-top:6px">Prototype control: NeoLife ID was saved
+    <select id="simid"><option value="6" ${m.idHrs===6?'selected':''}>6 hours ago</option><option value="40" ${m.idHrs===40?'selected':''}>40 hours ago</option><option value="50" ${m.idHrs===50?'selected':''}>50 hours ago</option><option value="300" ${m.idHrs===300?'selected':''}>300 hours ago</option></select></label>`;
+  return `<div class="grid g-two">
+    <section class="card"><h2>My profile</h2>
+      <form data-form="profile" novalidate style="margin-top:14px">
+        <div class="inline" style="margin-bottom:14px">${av(m,'lg')}<div class="field" style="margin:0"><label for="pf-ph">Profile picture</label><input id="pf-ph" type="file" accept="image/*"></div></div>
+        <div class="field"><label for="pf-n">Display name</label><input id="pf-n" name="name" type="text" value="${esc(m.name)}"></div>
+        <div class="field"><label for="pf-p">Phone</label><input id="pf-p" name="phone" type="text" value="${esc(m.phone)}"></div>
+        <div class="field"><label for="pf-c">City</label><input id="pf-c" name="city" type="text" value="${esc(m.city)}"></div>
+        <div class="field"><label for="pf-b">About me</label><textarea id="pf-b" name="bio">${esc(m.bio)}</textarea></div>
+        <div class="field"><label for="pf-t">Team ID</label><div class="lock"><input id="pf-t" type="text" class="mono" value="${esc(m.teamId)}" readonly><span class="pill">Set by the system</span></div></div>
+        <div class="field"><label for="pf-ne">NeoLife ID</label>
+          <div class="lock"><input id="pf-ne" name="neo" type="text" class="mono" value="${esc(m.neoId)}" maxlength="11" ${editable?'':'readonly'}>${editable?pill('Editable for '+left+'h','warn'):pill('Locked','bad')}</div>
+          <span class="hint">${editable?'You can correct it for 48 hours after it was first saved. Then it locks.':'Locked after 48 hours. If it is wrong, ask your Admin for a logged correction.'}</span>${sim}</div>
+        <p class="hint" id="pf-err" role="alert"></p>
+        <button class="btn primary" type="submit">Save profile</button>
+      </form></section>
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <section class="card"><h3>${m.leader?'Your role':'My progress'}</h3>
+        ${m.leader?'<p class="sub" style="margin:0">You are the Admin. You are the only person who can add another Admin.</p>':`
+        <div class="kv"><div><div class="k">Rank</div><div class="v">${RANKS[m.rank].n}</div></div><div><div class="k">PPV</div><div class="v">${m.ppv==null?'—':num(m.ppv)}</div></div><div><div class="k">QPV</div><div class="v">${m.qpv==null?'—':num(m.qpv)}</div></div></div>
+        ${next?`<div class="sub">Next: ${next.n} at ${num(next.q)} QPV with 100 PPV</div><div class="meter"><i style="width:${pctN}%"></i></div><div class="sub">${pctN}% of the way</div>`:'<div class="sub">Next steps for Director use the Director rules.</div>'}`}
+      </section>
+      ${m.leader?'':`<section class="card"><h3>Rank history</h3>${m.history.length?`<div class="rows">${m.history.map(h=>`<div class="row"><div class="grow">${RANKS[h.from].n} to <b>${RANKS[h.to].n}</b></div><span class="sub">${h.cycle}</span></div>`).join('')}</div>`:'<div class="empty">No rank changes yet.</div>'}</section>`}
+    </div></div>`;
+}
+
+const views={dashboard,team,signups,checkins,feed,profile};
+
+/* ---------- member modal and mails ---------- */
+function incomeHist(m){
+  const e=typeof m.earn==='number'?m.earn:0;
+  return e?[0.55,0.8,0.7,0.9,1].map(f=>Math.round(e*f)):[0,0,0,0,0];
+}
+function memberModal(m){
+  const calc=m.leader?0:calcQ(m),h=incomeHist(m),mx=Math.max(...h,1);
+  const sponsor=m.sponsor?byId(m.sponsor):null;
+  return `<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(m.name)}">
+    <button class="btn sm x" type="button" data-act="close">Close</button>
+    <div class="inline">${av(m,'lg')}<div><h2>${esc(m.name)}</h2><div class="sub">${esc(rankName(m))}${sponsor?' · sponsor '+esc(sponsor.name):''}</div><div class="mono sub">${esc(m.teamId)} · ${esc(m.neoId)}</div></div></div>
+    ${m.leader?'':`
+    <div class="kv"><div><div class="k">PPV</div><div class="v">${m.ppv==null?'No reply':num(m.ppv)}</div></div><div><div class="k">QPV reported</div><div class="v">${m.qpv==null?'No reply':num(m.qpv)}</div></div><div><div class="k">QPV system count</div><div class="v">${num(calc)}</div></div>
+    <div><div class="k">Income</div><div class="v">${m.earn==null?'No reply':m.earn==='none'?'Not yet':money(m.earn)}</div></div><div><div class="k">Active orders</div><div class="v">${m.orders==null?'—':m.orders}</div></div><div><div class="k">Order clears</div><div class="v">${m.clears||'—'}</div></div></div>
+    <h3>Plan for next month</h3>
+    ${m.plan?`<div class="rows" style="margin-bottom:6px">${m.plan.goals.map(([p,t])=>`<div class="row"><b>${p}</b> ${esc(t)}</div>`).join('')}</div><div class="sub">Plans to sign ${m.plan.signups} · income target ${esc(m.plan.target)}</div>`:'<div class="empty">No plan sent yet.</div>'}
+    <h3 style="margin-top:16px">Income by cycle (example history, USD)</h3>
+    <div class="bars">${h.map(v=>`<div>${v?money(v):'0'}<i style="height:${Math.round(v/mx*80)}%"></i></div>`).join('')}</div>
+    <div class="axis">${['Jul','Aug','Sep','Oct','Nov'].map(x=>`<span>${x}</span>`).join('')}</div>
+    ${m.history.length?`<h3 style="margin-top:16px">Rank history</h3><div class="rows">${m.history.map(x=>`<div class="row"><div class="grow">${RANKS[x.from].n} to <b>${RANKS[x.to].n}</b></div><span class="sub">${x.cycle}</span></div>`).join('')}</div>`:''}`}
+  </div></div>`;
+}
+function welcomeModal(m){
+  const sp=byId(m.sponsor),fn=esc(m.name.split(' ')[0]),sn=esc(sp.name);
+  return `<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="Welcome email">
+    <button class="btn sm x" type="button" data-act="close">Close</button>
+    <h2>${fn} is active</h2>
+    <p class="sub">${fn}'s first order of ${m.firstPv||0} PV now counts toward ${sn}'s QPV, the team feed shows the new member, and this email was sent:</p>
+    <div class="mail"><div class="meta">To ${esc(m.name)} · from TeamPulse</div><div class="subj">Welcome to the family, ${fn}!</div>
+      <p>Congratulations, ${fn}, and welcome to the family! ${sn} is proud of you for stepping up and joining the business. Your first order of ${m.firstPv||0} PV makes you a NeoLife Distributor today.</p>
+      <p>Now the real work starts. Here is what to do:</p>
+      <ol><li><b>Build your business actively.</b> Work it every week, not once in a while.</li>
+        <li><b>Start calling people.</b> Write a list of names today and reach out to them about your business.</li>
+        <li><b>Start recruiting.</b> Invite people to look at what you are doing.</li>
+        <li><b>Train your team.</b> Show them to do what you do, and how to earn with their own skills. Help them place their first order.</li>
+        <li><b>Grow through them.</b> When your team signs people, you sign more people too.</li>
+        <li><b>Stay close to ${sn}.</b> Book a call to plan your first 30 days.</li></ol>
+      <p>Sign in to TeamPulse with your team ID <span class="mono">${esc(m.teamId)}</span> or your NeoLife ID. You can correct your NeoLife ID for 48 hours after you first save it. Then it locks.</p></div>
+    <button class="btn primary" type="button" data-act="close">Done</button></div></div>`;
+}
+function mailModal(c){
+  const m=byId(c.by);
+  return `<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="Details email">
+    <button class="btn sm x" type="button" data-act="close">Close</button>
+    <h2>Sign-up confirmed</h2><p class="sub">${esc(m.name)} received this email after you confirmed.</p>
+    <div class="mail"><div class="meta">To ${esc(m.name)} · from TeamPulse</div><div class="subj">Your sign-up is confirmed. Add their details</div>
+      <p>Hi ${esc(m.name.split(' ')[0])}, your Admin confirmed ${c.count} new sign-up${c.count>1?'s':''}. Please add the details so ${c.count>1?'they join':'they join'} your team.</p></div>
+    <button class="btn primary" type="button" data-act="detailsform" data-id="${c.id}">Open the details form (as ${esc(m.name.split(' ')[0])})</button></div></div>`;
+}
+function detailsModal(c){
+  const m=byId(c.by);
+  return `<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="Sign-up details">
+    <button class="btn sm x" type="button" data-act="close">Close</button>
+    <h2>New sign-up details</h2><p class="sub">${esc(m.name)} fills this in. ${c.count} left to add.</p>
+    <div id="dm" data-claim="${c.id}">${newMemberForm('dm-',m.id)}</div></div></div>`;
+}
+const maskEmail=e=>e.replace(/^(.).*(@.*)$/,'$1***$2');
+function signinModal(md){
+  const m=md.found;
+  return `<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="Sign in">
+    <button class="btn sm x" type="button" data-act="close">Close</button>
+    <h2>Sign in</h2>
+    ${m?`<p>We sent a one-time sign-in link to <b>${esc(maskEmail(m.email))}</b>.</p><p class="sub">Prototype: tap below as if you opened the link. An ID alone never signs anyone in, because IDs are not secret.</p><button class="btn primary" type="button" data-act="signinok">Open the link</button>`
+    :`<p class="sub">Use your email, your team ID or your NeoLife ID.</p>
+    <form data-form="signin" novalidate><div class="field"><label for="si-id">Email, team ID or NeoLife ID</label><input id="si-id" name="id" type="text" autocomplete="username" placeholder="06OW209"></div>
+    <p class="hint ${md.err?'bad':''}" id="si-err" role="alert">${esc(md.err||'Try 06OW209 (Blessing), 063-4410911 (Tunde), or 06OW305 (Grace, still pending).')}</p>
+    <button class="btn primary" type="submit">Send me a sign-in link</button></form>`}
+  </div></div>`;
+}
+function renderModal(){
+  const md=S.modal,el=$('#modal');
+  if(!md){el.innerHTML='';return}
+  el.innerHTML=md.t==='signin'?signinModal(md):md.t==='member'?memberModal(byId(md.id)):md.t==='welcome'?welcomeModal(byId(md.id)):md.t==='mail'?mailModal(S.claims.find(c=>c.id===md.id)):detailsModal(S.claims.find(c=>c.id===md.id));
+}
+
+/* ---------- render and events ---------- */
+function render(){
+  renderChrome();
+  $('#main').innerHTML=views[S.view]();
+  bindView();
+  renderModal();
+}
+function bindView(){
+  const as=$('#asid');if(as)as.onchange=e=>{S.asId=e.target.value;render()};
+  const sim=$('#simid');if(sim)sim.onchange=e=>{byId(meId()).idHrs=Number(e.target.value);render()};
+  const ph=$('#pf-ph');if(ph)ph.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{byId(meId()).photo=r.result;render();toast('Picture updated')};r.readAsDataURL(f)};
+  const en=$('#e-none');if(en)en.onchange=e=>{$('#e-amt').disabled=e.target.checked};
+  const pp=$('#p-ppv'),pq=$('#p-qpv'),pn=$('#p-none');
+  if(pp){
+    const upd=()=>{
+      const v=pp.value===''?null:Number(pp.value),h=$('#p-ppvh');
+      if(v==null){h.className='hint';h.textContent='NeoLife asks for 100 PPV to stay active.'}
+      else if(v<100){h.className='hint bad';h.textContent=v+' PPV is under the 100 minimum. You will not be active for bonuses this cycle.'}
+      else{h.className='hint good';h.textContent=v+' PPV. You meet the 100 minimum.'}
+      const q=pn.checked?(v||0):(pq.value===''?null:Number(pq.value)),qh=$('#p-qpvh');
+      if(q==null){qh.className='hint';qh.textContent='If you have no downline, your QPV is just your PPV.'}
+      else{let best=0;for(let i=1;i<=3;i++)if(q>=RANKS[i].q)best=i;
+        if(v!=null&&v>=100&&best>0){qh.className='hint good';qh.textContent=num(q)+' QPV reaches '+RANKS[best].n+' ('+num(RANKS[best].q)+'). Your Admin will review it.'}
+        else{const nx=RANKS[Math.max(1,best+1)];qh.className='hint';qh.textContent=num(q)+' QPV. Next threshold: '+nx.n+' at '+num(nx.q)+(v!=null&&v<100?', and it needs 100 PPV.':'.')}}
+    };
+    pp.oninput=upd;pq.oninput=upd;pn.onchange=()=>{pq.disabled=pn.checked;upd()};
+    if(pp.value)upd();
+  }
+}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-act]');if(!a)return;
+  if(a.classList.contains('overlay')&&e.target!==a)return;
+  const id=a.dataset.id,act=a.dataset.act;
+  if(act==='nav'){S.view=a.dataset.v;render();window.scrollTo(0,0)}
+  else if(act==='filter'){S.filter=a.dataset.v;render()}
+  else if(act==='ci'){S.ci=a.dataset.v;render()}
+  else if(act==='member'){S.modal={t:'member',id};renderModal()}
+  else if(act==='signin'){S.modal={t:'signin'};renderModal();const i=$('#si-id');if(i)i.focus()}
+  else if(act==='signinok'){const m=S.modal.found;S.userId=m.id;S.role=m.leader?'admin':(m.rank===2?'qsm':'member');S.view=S.role==='member'?'checkins':'dashboard';S.modal=null;render();window.scrollTo(0,0);toast('Signed in as '+m.name)}
+  else if(act==='bell'){if(S.role==='admin'){S.view='dashboard';render();const el=$('#attn');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}else toast('You are all caught up.')}
+  else if(act==='report'){toast('Cycle report exported (prototype only).')}
+  else if(act==='close'){S.modal=null;renderModal()}
+  else if(act==='reset'){fresh({role:S.role,view:S.view,asId:S.asId,userId:S.userId});$('#q').value='';render();toast('Example data restored')}
+  else if(act==='remind'){toast('Reminder sent to '+byId(id).name+' by email')}
+  else if(act==='recok'){const m=byId(id),r=recommend(m);m.history.push({from:m.rank,to:r,cycle:'November'});S.feed.unshift({id:'f'+(S.n++),kind:'rank',who:m.id,to:RANKS[r].n,when:'just now'});m.rank=r;render();toast(m.name+' is now '+RANKS[r].n+'. The team feed shows it.')}
+  else if(act==='recno'){S.dismissed.push(id);render();toast('Recommendation dismissed and logged')}
+  else if(act==='activate'){const m=byId(id);m.status='active';m.pendingHrs=0;S.feed.unshift({id:'f'+(S.n++),kind:'join',who:m.id,by:m.sponsor,when:'just now'});render();S.modal={t:'welcome',id};renderModal()}
+  else if(act==='confirm'){const c=S.claims.find(x=>x.id===id);c.state='details';render();S.modal={t:'mail',id};renderModal()}
+  else if(act==='reject'){S.claims=S.claims.filter(x=>x.id!==id);render();toast('Claim rejected. The member is told why.')}
+  else if(act==='openmail'){S.modal={t:'mail',id};renderModal()}
+  else if(act==='detailsform'){S.modal={t:'details',id};renderModal()}
+  else if(act==='hidepost'){S.feed=S.feed.filter(f=>f.id!==id);render();toast('Post hidden from the team')}
+  else if(act==='addgoal'){$('#goals').insertAdjacentHTML('beforeend',goalRow('I will',''))}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.modal){S.modal=null;renderModal()}});
+$('#role').onchange=e=>{
+  S.role=e.target.value;S.userId=null;S.view=S.role==='member'?'checkins':'dashboard';S.filter='all';
+  if(S.role==='admin')S.asId='m_adaeze';
+  render();window.scrollTo(0,0);
+};
+document.addEventListener('submit',e=>{
+  const f=e.target.closest('form[data-form]');if(!f)return;e.preventDefault();
+  const k=f.dataset.form,d=new FormData(f);
+  const who=byId(S.role==='admin'?S.asId:meId());
+  const mark=key=>{if(!who.done.includes(key))who.done.push(key)};
+  if(k==='signin'){
+    const raw=String(d.get('id')).trim(),v=raw.toUpperCase().replace(/\s/g,'').replace(/0W/,'OW'),low=raw.toLowerCase();
+    const m=S.members.find(x=>x.teamId===v||x.neoId===raw||x.email===low);
+    if(!m){S.modal={t:'signin',err:'We cannot find that ID. Check it and try again.'};renderModal();return}
+    if(m.status==='pending'){S.modal={t:'signin',err:'Your account is waiting for activation by your Admin. You will get an email when it opens.'};renderModal();return}
+    S.modal={t:'signin',found:m};renderModal();return;
+  }
+  if(k==='earn'){
+    const none=d.get('none')==='on';
+    if(!none&&d.get('amt')===''){toast('Enter an amount, or tick "Not yet".');return}
+    who.earn=none?'none':Number(d.get('amt'));who.orders=d.get('orders')===''?0:Number(d.get('orders'));
+    if(d.get('clears')){const dt=new Date(d.get('clears')+'T00:00:00');who.clears=dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}
+    mark('earn');render();toast('Saved to '+who.name.split(' ')[0]+"'s profile");
+  }else if(k==='ppv'){
+    if(d.get('ppv')===''){toast('Enter your PPV.');return}
+    who.ppv=Number(d.get('ppv'));who.qpv=d.get('none')==='on'?who.ppv:(d.get('qpv')===''?who.ppv:Number(d.get('qpv')));
+    mark('ppv');render();toast('Saved. '+(who.ppv<100?'PPV is under 100, so your Admin will see a flag.':'You meet the 100 PPV minimum.'));
+  }else if(k==='plan'){
+    const p=d.getAll('gp'),t=d.getAll('gt');
+    const goals=p.map((x,i)=>[x,t[i].trim()]).filter(g=>g[1]);
+    if(!goals.length){toast('Write at least one goal after "I will" or "I must".');return}
+    who.plan={goals,signups:Number(d.get('signups')||0),target:d.get('target')};
+    mark('plan');render();toast('Plan saved. Every goal keeps its "I will" or "I must".');
+  }else if(k==='paid'){
+    const v=d.get('paid');if(!v){$('#paid-err').className='hint bad';$('#paid-err').textContent='Choose yes or not yet.';return}
+    who.paid=v==='yes';mark('paid');render();toast('Saved');
+  }else if(k==='signup'){
+    const v=d.get('su');if(!v){$('#su-err').className='hint bad';$('#su-err').textContent='Choose yes or no.';return}
+    mark('signup');
+    if(v==='yes'){const n=Math.max(1,Number(d.get('count')||1));S.claims.push({id:'c'+(S.n++),by:who.id,count:n,planned:who.plan?who.plan.signups:0,src:'28th check-in',state:'review'});render();toast('Saved. Your Admin will confirm your '+n+' sign-up'+(n>1?'s':'')+'.')}
+    else{render();toast('Saved')}
+  }else if(k==='report'){
+    const n=Math.max(1,Number(d.get('count')||1));
+    S.claims.push({id:'c'+(S.n++),by:meId(),count:n,planned:byId(meId()).plan?byId(meId()).plan.signups:0,src:'Reported to Admin today'+(d.get('who')?' ('+d.get('who')+')':''),state:'review'});
+    f.reset();toast('Your Admin has been told. They will add the new person.');
+  }else if(k==='profile'){
+    const m=byId(meId()),err=$('#pf-err'),nm=String(d.get('name')).trim();
+    if(!nm){err.className='hint bad';err.textContent='Display name cannot be empty.';return}
+    if(m.idHrs<48){
+      const neo=String(d.get('neo')).trim();
+      if(!validNeo(neo)){err.className='hint bad';err.textContent='NeoLife ID must look like 063-9262173.';return}
+      if(S.members.some(x=>x.id!==m.id&&x.neoId===neo)){err.className='hint bad';err.textContent='That NeoLife ID already belongs to someone else.';return}
+      m.neoId=neo;
+    }
+    m.name=nm;m.phone=d.get('phone');m.city=d.get('city');m.bio=d.get('bio');
+    render();toast('Profile saved');
+  }else if(k==='newmember'){
+    const p=f.closest('#dm')?'dm-':'add-',err=$('#'+p+'err');
+    const name=String(d.get('name')).trim(),neo=String(d.get('neo')).trim(),email=String(d.get('email')).trim();
+    const bad=m=>{err.className='hint bad';err.textContent=m};
+    const pv=Number(d.get('pv'));
+    if(!name)return bad('Enter the new person\'s full name.');
+    if(!/^\S+@\S+\.\S+$/.test(email))return bad('Enter a valid email address.');
+    if(!validNeo(neo))return bad('NeoLife ID must look like 063-9262173 (3 digits, a hyphen, 7 digits).');
+    if(S.members.some(x=>x.neoId===neo))return bad('That NeoLife ID is already in the system.');
+    if(!(pv>0))return bad('Enter the PV of their first order, for example 100, 136, 250 or 272.');
+    const nm={id:'m_'+(S.n++),name,email,rank:0,sponsor:d.get('sponsor'),teamId:teamId(),neoId:neo,status:'pending',firstPv:pv,ppv:pv,qpv:pv,earn:null,orders:null,clears:null,paid:null,done:[],plan:null,phone:String(d.get('phone')||''),city:'',bio:'',photo:null,idHrs:0,pendingHrs:0,history:[]};
+    S.members.push(nm);
+    const dm=f.closest('#dm');
+    if(dm){const c=S.claims.find(x=>x.id===dm.dataset.claim);c.count-=1;if(c.count<=0)S.claims=S.claims.filter(x=>x!==c);S.modal=null}
+    render();
+    toast(name+' added with a '+pv+' PV first order and team ID '+nm.teamId+'. Pending until you activate; it activates itself in 24 hours.');
+  }
+});
+$('#q').oninput=e=>{S.q=e.target.value;if(S.view!=='dashboard')S.view='dashboard';render()};
+fresh();render();
+</script>
