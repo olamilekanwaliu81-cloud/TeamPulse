@@ -1,5 +1,6 @@
 <title>TeamPulse</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='8' fill='%236A5AE0'/%3E%3Cpath d='M3 15h5l3-8 5 14 3-7h6' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -252,7 +253,7 @@ footer .links a{color:var(--foot-ink)}
   <div class="in nav-in">
     <a class="brand" href="#top" data-go="top"><svg viewBox="0 0 28 28" aria-hidden="true"><use href="#i-pulse"/></svg>TeamPulse</a>
     <nav class="links" aria-label="Page sections"><a href="#month" data-go="month">A month</a><a href="#features" data-go="features">Features</a><a href="#how" data-go="how">How it works</a><a href="#leaders" data-go="leaders">For leaders</a><a href="#faq" data-go="faq">Questions</a></nav>
-    <div class="nav-cta"><a class="btn ghost sm" href="https://claude.ai/artifact/3NZrnfxKCkFkpTi9eLVnsn" target="_blank" rel="noopener">Try the prototype</a><a class="btn primary sm" href="#join" data-go="join">Sign in</a></div>
+    <div class="nav-cta"><a class="btn ghost sm" href="app.html">Try the app</a><a class="btn primary sm" href="#join" data-go="join">Sign in</a></div>
   </div>
 </header>
 
@@ -266,7 +267,7 @@ footer .links a{color:var(--foot-ink)}
         <p class="lead">TeamPulse asks each person the right questions on the right days, keeps every answer on their profile, and shows you who needs a call this week.</p>
         <div class="hero-cta">
           <a class="btn primary" href="#join" data-go="join">Sign in <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <a class="btn ghost" href="https://claude.ai/artifact/3NZrnfxKCkFkpTi9eLVnsn" target="_blank" rel="noopener">See the prototype</a>
+          <a class="btn ghost" href="app.html">Try the app</a>
         </div>
         <div class="ticks">
           <span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Runs in your phone's browser</span>
@@ -390,17 +391,12 @@ footer .links a{color:var(--foot-ink)}
     <div class="formcard">
       <form id="si" novalidate>
         <h3>Sign in</h3>
-        <p class="sub">Use your TeamPulse ID and your password.</p>
+        <p class="sub">Enter your TeamPulse ID. You type your password on the next screen.</p>
         <div class="field"><label for="s-id">TeamPulse ID</label><input id="s-id" name="id" type="text" autocomplete="username" placeholder="06OW674" maxlength="7"><span class="err" id="se-id" role="alert"></span></div>
-        <div class="field"><label for="s-pw">Password</label><div class="pw"><input id="s-pw" name="pw" type="password" autocomplete="current-password"><button class="eye" type="button" id="eye" aria-label="Show password">Show</button></div><span class="err" id="se-pw" role="alert"></span></div>
-        <button class="btn primary" type="submit" style="width:100%;justify-content:center">Sign in <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <button class="btn primary" type="submit" style="width:100%;justify-content:center">Continue <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
         <p class="hint" style="margin-top:14px;font-size:.84rem;color:var(--muted)">First time? Open the "Set your password" link in your welcome email. <button class="link" type="button" id="forgot">Forgot your password?</button></p>
+        <p class="hint" style="margin-top:10px;font-size:.82rem;color:var(--muted)">Trying the demo? Use <b style="font-family:var(--mono);color:var(--ink)">06OW209</b> with the password <b style="font-family:var(--mono);color:var(--ink)">demo1234</b>.</p>
       </form>
-      <div class="result" id="sires" hidden>
-        <div class="ok"><span class="tile"><svg class="ic" style="width:18px;height:18px"><use href="#i-check"/></svg></span>That ID looks right</div>
-        <p style="color:var(--muted);font-size:.95rem">In the real app this signs you in. To try the sign-in screens now, open the prototype. Every example member's password there is <b style="font-family:var(--mono);color:var(--ink)">demo1234</b>.</p>
-        <div class="row"><a class="btn primary" href="https://claude.ai/artifact/3NZrnfxKCkFkpTi9eLVnsn" target="_blank" rel="noopener">Open the prototype</a><button class="btn ghost" type="button" id="back">Back</button></div>
-      </div>
     </div>
   </div>
 </div>
@@ -454,21 +450,17 @@ const nav=$('#nav');
 const onScroll=()=>nav.classList.toggle('stuck',window.scrollY>8);
 window.addEventListener('scroll',onScroll,{passive:true});onScroll();
 
-const form=$('#si'),res=$('#sires');
+const form=$('#si');
 const setErr=(id,msg,inputId)=>{$('#'+id).textContent=msg||'';const i=$('#'+inputId);if(i){if(msg)i.setAttribute('aria-invalid','true');else i.removeAttribute('aria-invalid')}};
 const normId=s=>s.trim().toUpperCase().replace(/\s/g,'').replace(/0W/,'OW');
 form.addEventListener('submit',e=>{
   e.preventDefault();
-  const id=normId(form.elements.id.value),pw=form.elements.pw.value;
-  let ok=true;
-  const check=(cond,eid,msg,iid)=>{setErr(eid,cond?'':msg,iid);if(!cond)ok=false};
-  check(/^0\dOW\d{3}$/.test(id),'se-id','Use the format 06OW674: a zero, one digit, OW and three digits.','s-id');
-  check(pw.length>0,'se-pw','Enter your password.','s-pw');
-  if(!ok){const bad=form.querySelector('[aria-invalid=true]');if(bad)bad.focus();return}
-  form.hidden=true;res.hidden=false;
+  const id=normId(form.elements.id.value),ok=/^0\dOW\d{3}$/.test(id);
+  setErr('se-id',ok?'':'Use the format 06OW674: a zero, one digit, OW and three digits.','s-id');
+  if(!ok){$('#s-id').focus();return}
+  try{sessionStorage.setItem('tp_id',id)}catch(_){}
+  location.href='app.html#signin';
 });
-$('#back').addEventListener('click',()=>{res.hidden=true;form.hidden=false;$('#s-pw').value='';$('#s-id').focus()});
-$('#eye').addEventListener('click',()=>{const i=$('#s-pw'),show=i.type==='password';i.type=show?'text':'password';$('#eye').textContent=show?'Hide':'Show';$('#eye').setAttribute('aria-label',show?'Hide password':'Show password')});
 let tt;const toast=t=>{const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>{el.hidden=true},3200)};
 $('#forgot').addEventListener('click',()=>toast('In the real app we email a reset link to the address on file. Your team leader can also reset it.'));
 </script>

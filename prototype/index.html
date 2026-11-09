@@ -1,5 +1,6 @@
 <title>TeamPulse Prototype</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='8' fill='%236A5AE0'/%3E%3Cpath d='M3 15h5l3-8 5 14 3-7h6' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -57,6 +58,7 @@ button,input,select,textarea{font:inherit;color:inherit}
   background:var(--surface);border-radius:24px;padding:22px 14px 16px;display:flex;flex-direction:column;gap:22px;box-shadow:var(--shadow)}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.3rem;padding:0 8px;letter-spacing:-.02em}
 .brand svg{color:var(--accent)}
+.brand{text-decoration:none;color:inherit}
 .side nav{display:flex;flex-direction:column;gap:6px}
 .nav-item{display:flex;align-items:center;gap:12px;border:0;background:none;padding:12px 14px;border-radius:16px;cursor:pointer;color:var(--muted);font-weight:600;text-align:left;white-space:nowrap}
 .nav-item:hover{background:var(--surface2);color:var(--ink)}
@@ -223,10 +225,10 @@ form label,.lbl{font-size:.85rem;font-weight:600}
 
 <div class="shell">
   <aside class="side">
-    <div class="brand">
+    <a class="brand" href="./" title="Back to the landing page">
       <svg width="30" height="30" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M2 15h6l3-9 5 17 3-8h7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       TeamPulse
-    </div>
+    </a>
     <nav id="tabs" aria-label="Sections"></nav>
     <div class="cyclecard" id="cyclecard"></div>
   </aside>
@@ -247,6 +249,7 @@ form label,.lbl{font-size:.85rem;font-weight:600}
           <option value="member">Member · Blessing Udoh</option>
         </select>
       </label>
+      <a class="btn sm" href="./" style="text-decoration:none">Landing page</a>
       <button class="btn sm" data-act="signin" type="button">Sign in</button>
       <button class="btn sm" data-act="reset" type="button">Reset example data</button>
     </div>
@@ -738,7 +741,7 @@ function signinModal(md){
     <form data-form="forgot" novalidate style="margin-top:14px"><div class="field"><label for="fp-id">TeamPulse ID</label><input id="fp-id" name="id" type="text" placeholder="06OW209" maxlength="7"></div><button class="btn primary" type="submit">Send reset link</button></form>`+tail}
   if(step==='sent'){const m=md.found;return head+`<h2>Check your email</h2><p>If that TeamPulse ID exists, we sent a reset link to the email on file${m?' ('+esc(maskEmail(m.email))+')':''}. The link works for 7 days.</p>${m?`<p class="sub" style="margin:10px 0">Prototype: tap below as if you opened the link.</p><button class="btn primary" type="button" data-act="openset" data-id="${m.id}">Open the reset link</button>`:''}`+tail}
   return head+`<h2>Sign in</h2><p class="sub">Use your TeamPulse ID and your password.</p>
-    <form data-form="signin" novalidate style="margin-top:14px"><div class="field"><label for="si-id">TeamPulse ID</label><input id="si-id" name="id" type="text" autocomplete="username" placeholder="06OW209" maxlength="7"></div>
+    <form data-form="signin" novalidate style="margin-top:14px"><div class="field"><label for="si-id">TeamPulse ID</label><input id="si-id" name="id" type="text" autocomplete="username" placeholder="06OW209" maxlength="7" value="${esc(md.prefill||'')}"></div>
     <div class="field"><label for="si-pw">Password</label><input id="si-pw" name="pw" type="password" autocomplete="current-password"></div>
     <p class="hint ${md.err?'bad':''}" id="si-err" role="alert">${esc(md.err||"Prototype: every example member's password is demo1234. Try 06OW209 (Blessing), 04OW558 (Tunde) or 04OW000 (the team leader). 06OW305 (Grace) is still pending.")}</p>
     ${md.needsSet?`<p style="margin-bottom:10px"><button class="btn sm" type="button" data-act="openset" data-id="${md.needsSet}">Prototype: open the link from my welcome email</button></p>`:''}
@@ -903,4 +906,10 @@ document.addEventListener('submit',e=>{
 $('#today').onchange=e=>{if(e.target.value){S.today=e.target.value;render()}};
 $('#q').oninput=e=>{S.q=e.target.value;if(S.view!=='dashboard')S.view='dashboard';render()};
 fresh();render();
+(function fromLanding(){
+  if(location.hash!=='#signin')return;
+  let id='';try{id=sessionStorage.getItem('tp_id')||'';sessionStorage.removeItem('tp_id')}catch(_){}
+  S.modal={t:'signin',prefill:id};renderModal();
+  const el=$(id?'#si-pw':'#si-id');if(el)el.focus();
+})();
 </script>

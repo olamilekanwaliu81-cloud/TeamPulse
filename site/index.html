@@ -1,0 +1,468 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{-webkit-text-size-adjust:100%}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>TeamPulse</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='8' fill='%236A5AE0'/%3E%3Cpath d='M3 15h5l3-8 5 14 3-7h6' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: sticky nav, hero with a product screen and floating cards, a month-by-month calendar,
+   feature cards with colored icon tiles, a sign-in band, a leaders section, FAQ, dark footer. */
+:root{
+  --bg:#F5F4FD; --surface:#FFFFFF; --surface2:#F0EFFA; --ink:#171C3F; --muted:#5F6586; --line:#E4E5F3;
+  --accent:#6A5AE0; --accent-ink:#FFFFFF; --accent-soft:#E9E6FB;
+  --orange:#D9740F; --orange-soft:#FDEBD6; --teal:#168F7A; --teal-soft:#D6F2EA; --blue:#3A78E4; --blue-soft:#DEEAFE; --pink:#D6416C; --pink-soft:#FBDDE6;
+  --navy:#171C3F; --navy-ink:#FFFFFF; --foot:#171C3F; --foot-ink:#C9CCE6;
+  --good:#1B8550; --good-soft:#DAF2E4; --bad:#C0352D;
+  --shadow:0 1px 2px rgba(23,28,63,.05),0 12px 32px rgba(23,28,63,.08);
+  --display:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+  --body:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D0F21; --surface:#171A34; --surface2:#1E2242; --ink:#ECEEFB; --muted:#A0A6CB; --line:#2B3058;
+    --accent:#8F83FF; --accent-ink:#10112A; --accent-soft:#2B2862;
+    --orange:#FFAA52; --orange-soft:#3C2B15; --teal:#4FD6BE; --teal-soft:#143A30; --blue:#7DB0FF; --blue-soft:#1C2E54; --pink:#FF8FAE; --pink-soft:#4A2233;
+    --navy:#ECEEFB; --navy-ink:#10112A; --foot:#0A0B1A; --foot-ink:#A0A6CB;
+    --good:#5CC680; --good-soft:#163824; --bad:#F2887F;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 12px 32px rgba(0,0,0,.3);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D0F21; --surface:#171A34; --surface2:#1E2242; --ink:#ECEEFB; --muted:#A0A6CB; --line:#2B3058;
+  --accent:#8F83FF; --accent-ink:#10112A; --accent-soft:#2B2862;
+  --orange:#FFAA52; --orange-soft:#3C2B15; --teal:#4FD6BE; --teal-soft:#143A30; --blue:#7DB0FF; --blue-soft:#1C2E54; --pink:#FF8FAE; --pink-soft:#4A2233;
+  --navy:#ECEEFB; --navy-ink:#10112A; --foot:#0A0B1A; --foot-ink:#A0A6CB;
+  --good:#5CC680; --good-soft:#163824; --bad:#F2887F;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 12px 32px rgba(0,0,0,.3);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--body);padding-block:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.12;text-wrap:balance;letter-spacing:-.02em}
+h1{font-size:clamp(2.3rem,5.2vw,3.9rem);font-weight:800}
+h2{font-size:clamp(1.7rem,3.4vw,2.5rem);font-weight:800}
+h3{font-size:1.1rem;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+a{color:inherit}
+button,input,select,textarea,summary{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+.ic{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.in{max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.lead{font-size:1.1rem;color:var(--muted);max-width:56ch}
+
+/* nav */
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid transparent}
+header.nav.stuck{border-bottom-color:var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.35rem;letter-spacing:-.02em;text-decoration:none}
+.brand svg{color:var(--accent);width:30px;height:30px}
+.links{display:flex;gap:28px;font-weight:600;font-size:.95rem;color:var(--muted)}
+.links a{text-decoration:none;padding:6px 0;border-bottom:2px solid transparent}
+.links a:hover{color:var(--ink);border-bottom-color:var(--accent)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:12px 22px;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap;transition:transform .15s,box-shadow .15s}
+.btn .ic{width:18px;height:18px}
+.btn.primary{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 20px color-mix(in srgb,var(--accent) 35%,transparent)}
+.btn.dark{background:var(--navy);color:var(--navy-ink)}
+.btn.ghost{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn:hover{transform:translateY(-1px)}
+.btn.sm{padding:9px 18px;font-size:.92rem}
+@media (max-width:860px){.links{display:none}}
+@media (max-width:640px){.nav-cta .btn.ghost{display:none}.nav-cta .btn{padding:9px 16px}}
+@media (max-width:380px){.brand{font-size:1.15rem}.brand svg{width:24px;height:24px}.nav-cta .btn{padding:8px 12px;font-size:.85rem}h1{font-size:2.05rem}}
+
+/* hero */
+.hero{padding-block:44px 28px;overflow-x:clip}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:48px;align-items:center}
+@media (max-width:980px){.hero-grid{grid-template-columns:minmax(0,1fr);gap:36px}}
+.hero-copy{display:flex;flex-direction:column;gap:22px}
+.pill-tag{align-self:flex-start;display:inline-flex;gap:8px;align-items:center;background:var(--surface);box-shadow:var(--shadow);border-radius:999px;padding:6px 14px 6px 8px;font-size:.84rem;font-weight:600;color:var(--muted)}
+.pill-tag i{background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:2px 9px;font-style:normal;font-weight:700;font-size:.74rem}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px}
+.ticks{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:.9rem;color:var(--muted);font-weight:500}
+.ticks span{display:inline-flex;gap:7px;align-items:center}
+.ticks .ic{width:17px;height:17px;color:var(--teal);stroke-width:2.4}
+
+.visual{position:relative;padding:18px 0 34px}
+.blob{position:absolute;inset:-4% -6% 0 8%;width:98%;height:100%;color:var(--accent-soft);z-index:0}
+.mock{position:relative;z-index:1;display:grid;grid-template-columns:54px minmax(0,1fr);background:var(--surface);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--line)}
+.mock-side{background:var(--surface2);display:flex;flex-direction:column;align-items:center;gap:14px;padding:16px 0}
+.mock-side .logo{color:var(--accent);margin-bottom:6px}
+.mock-side .dot{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:var(--muted)}
+.mock-side .dot.on{background:var(--accent);color:var(--accent-ink)}
+.mock-side .ic{width:16px;height:16px}
+.mock-main{padding:16px 18px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.mock-h{font-weight:800;font-size:1.05rem}
+.mock-sub{font-size:.72rem;color:var(--muted);margin-top:-8px}
+.mock-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mc{background:var(--surface2);border-radius:12px;padding:9px 10px;min-width:0}
+.mc b{display:block;font-size:.72rem;line-height:1.2}
+.mc .bar{height:5px;border-radius:9px;background:var(--line);margin:7px 0 3px;overflow:hidden}
+.mc .bar i{display:block;height:100%;border-radius:9px}
+.mc small{font-size:.66rem;color:var(--muted)}
+.mock-split{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:10px}
+.mlist{display:flex;flex-direction:column;gap:7px}
+.mrow{display:flex;align-items:center;gap:8px;font-size:.7rem;min-width:0}
+.mrow .av{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:.58rem;font-weight:700;flex:none}
+.mrow span.n{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.mrow .tag{font-size:.6rem;font-weight:700;border-radius:99px;padding:1px 7px;background:var(--good-soft);color:var(--good)}
+.mrow .tag.w{background:var(--orange-soft);color:var(--orange)}
+.mock-gauge{background:var(--surface2);border-radius:12px;display:grid;place-items:center;padding:6px}
+.mock-gauge svg{width:100%;max-width:150px}
+.float{position:absolute;z-index:2;background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:10px 14px;display:flex;gap:10px;align-items:center;font-size:.8rem;border:1px solid var(--line);max-width:230px}
+.float b{display:block;font-size:.82rem;line-height:1.25}
+.float small{color:var(--muted);font-size:.72rem;line-height:1.3;display:block}
+.float .tile{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;flex:none}
+.float .tile .ic{width:18px;height:18px}
+.f1{left:-4%;bottom:0}.f2{right:-2%;top:4%}.f3{right:4%;bottom:-2px}
+@media (prefers-reduced-motion:no-preference){
+  .f1{animation:bob 6s ease-in-out infinite}.f2{animation:bob 7s ease-in-out -2s infinite}.f3{animation:bob 6.5s ease-in-out -4s infinite}
+  @keyframes bob{50%{transform:translateY(-7px)}}
+}
+.ex{position:absolute;left:62px;top:-2px;z-index:3;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--navy);color:var(--navy-ink);border-radius:99px;padding:3px 10px}
+@media (max-width:560px){.f1{left:0}.f2{right:0}.f3{display:none}.mock-row .mc:nth-child(3){display:none}.mock-row{grid-template-columns:repeat(2,1fr)}.mock-split{grid-template-columns:1fr}.mock-gauge{display:none}}
+
+/* facts strip */
+.strip{margin-top:12px;background:var(--surface);border-radius:22px;box-shadow:var(--shadow);display:grid;grid-template-columns:repeat(4,1fr);padding:10px}
+.fact{display:flex;gap:14px;align-items:center;padding:14px 18px;border-left:1px solid var(--line)}
+.fact:first-child{border-left:0}
+.fact .tile{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;flex:none}
+.fact b{display:block;font-size:1.35rem;line-height:1.1;font-weight:800;font-variant-numeric:tabular-nums}
+.fact span{font-size:.8rem;color:var(--muted);line-height:1.3;display:block}
+@media (max-width:900px){.strip{grid-template-columns:repeat(2,1fr)}.fact:nth-child(3){border-left:0}}
+@media (max-width:480px){.strip{grid-template-columns:1fr}.fact{border-left:0;border-top:1px solid var(--line)}.fact:first-child{border-top:0}}
+.t-acc{background:var(--accent-soft);color:var(--accent)}.t-or{background:var(--orange-soft);color:var(--orange)}.t-tl{background:var(--teal-soft);color:var(--teal)}.t-bl{background:var(--blue-soft);color:var(--blue)}.t-pk{background:var(--pink-soft);color:var(--pink)}
+
+section{padding-block:76px 0}
+.sec-head{display:flex;flex-direction:column;gap:12px;max-width:640px;margin-bottom:34px}
+.sec-head.c{text-align:center;align-items:center;margin-inline:auto}
+
+/* month */
+.month{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+@media (max-width:1020px){.month{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.month{grid-template-columns:1fr}}
+.day{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column;gap:10px}
+.day .d{display:flex;align-items:baseline;gap:6px}
+.day .d b{font-size:2.3rem;font-weight:800;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.day .d span{font-size:.8rem;color:var(--muted);font-weight:600}
+.day p{font-size:.9rem;color:var(--muted)}
+.win{margin-top:auto;display:inline-flex;gap:6px;align-items:center;font-size:.76rem;font-weight:700;border-radius:99px;padding:4px 11px;align-self:flex-start}
+.note-row{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px 24px;color:var(--muted);font-size:.92rem}
+.note-row span{display:inline-flex;gap:8px;align-items:center}
+.note-row .ic{width:18px;height:18px;color:var(--accent)}
+
+/* features */
+.feats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.feats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.feats{grid-template-columns:1fr}}
+.feat{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:22px;display:flex;flex-direction:column;gap:12px}
+.feat .tile{width:52px;height:52px;border-radius:16px;display:grid;place-items:center}
+.feat .tile .ic{width:26px;height:26px}
+.feat p{color:var(--muted);font-size:.94rem}
+
+/* two-column blocks */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+@media (max-width:900px){.split{grid-template-columns:minmax(0,1fr);gap:28px}}
+.steps{display:flex;flex-direction:column;gap:0;counter-reset:s}
+.step{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--line)}
+.step:first-child{border-top:0;padding-top:0}
+.step .n{width:44px;height:44px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:800}
+.step p{color:var(--muted);font-size:.95rem;margin-top:3px}
+.ranks{background:var(--surface);border-radius:24px;box-shadow:var(--shadow);padding:26px;display:flex;flex-direction:column;gap:6px}
+.rk{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.rk:first-of-type{border-top:0}
+.rk b{font-weight:700}.rk span.q{font-family:var(--mono);font-size:.86rem;color:var(--muted)}
+.rk .bar{grid-column:1/-1;height:7px;border-radius:9px;background:var(--surface2);overflow:hidden}
+.rk .bar i{display:block;height:100%;border-radius:9px;background:var(--accent)}
+.ranks .foot{font-size:.86rem;color:var(--muted);margin-top:10px}
+
+/* sign-in band */
+.band{margin-top:76px;background:var(--navy);color:var(--navy-ink);border-radius:32px;padding:clamp(28px,5vw,56px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:40px;align-items:start}
+@media (max-width:900px){.band{grid-template-columns:minmax(0,1fr)}}
+.band h2{color:var(--navy-ink)}
+.band .lead{color:color-mix(in srgb,var(--navy-ink) 72%,transparent)}
+.band .ticks{color:color-mix(in srgb,var(--navy-ink) 78%,transparent);flex-direction:column;gap:10px;margin-top:20px}
+.band .ticks .ic{color:var(--orange)}
+.formcard{background:var(--surface);color:var(--ink);border-radius:24px;padding:26px;box-shadow:var(--shadow)}
+.formcard h3{margin-bottom:4px}
+.formcard .sub{font-size:.9rem;color:var(--muted);margin-bottom:16px}
+.f2c{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media (max-width:560px){.f2c{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.field label{font-size:.85rem;font-weight:600}
+.field input{background:var(--surface2);border:1.5px solid transparent;border-radius:12px;padding:12px 14px;min-height:46px;width:100%}
+.field input:focus{outline:none;border-color:var(--accent);background:var(--surface)}
+.field input[aria-invalid=true]{border-color:var(--bad)}
+.field .err{font-size:.8rem;color:var(--bad);min-height:1.1em}
+.field .hint{font-size:.78rem;color:var(--muted)}
+.result{display:flex;flex-direction:column;gap:14px}
+.result pre{margin:0;background:var(--surface2);border-radius:14px;padding:14px;font:500 .86rem/1.6 var(--mono);white-space:pre-wrap;word-break:break-word}
+.result ol{margin:0;padding-left:20px;color:var(--muted);font-size:.93rem;display:flex;flex-direction:column;gap:6px}
+.result .ok{display:flex;gap:10px;align-items:center;font-weight:700}
+.result .ok .tile{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--good-soft);color:var(--good)}
+.result .row{display:flex;flex-wrap:wrap;gap:10px}
+.result .small{font-size:.82rem;color:var(--muted)}
+
+.pw{position:relative}
+.pw input{padding-right:74px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--accent);font-weight:700;cursor:pointer;padding:8px 10px;border-radius:8px}
+.link{background:none;border:0;color:var(--accent);font-weight:600;cursor:pointer;padding:0;text-decoration:underline;font-size:inherit}
+/* faq */
+.faq{max-width:780px;margin-inline:auto;display:flex;flex-direction:column;gap:12px}
+details{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:4px 22px}
+summary{cursor:pointer;font-weight:700;padding:16px 0;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:1.5rem;line-height:1;color:var(--accent);flex:none}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);padding-bottom:18px;font-size:.96rem;max-width:62ch}
+
+footer{margin-top:80px;background:var(--foot);color:var(--foot-ink);padding-block:36px calc(36px + env(safe-area-inset-bottom,0px))}
+.foot-in{display:flex;flex-wrap:wrap;gap:18px 40px;justify-content:space-between;align-items:center}
+footer .brand{color:#fff}footer .brand svg{color:#9C92FF}
+footer p{font-size:.84rem;max-width:62ch}
+footer .links a{color:var(--foot-ink)}
+.copy-toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:var(--navy-ink);padding:10px 18px;border-radius:12px;z-index:50;box-shadow:var(--shadow);font-size:.9rem}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-pulse" viewBox="0 0 28 28"><path d="M2 15h6l3-9 5 17 3-8h7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8.5 15l2.2 2.2 4.3-4.4"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4 3.4-7 7.5-7s7.5 3 7.5 7"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M17 14c2.5 0 4.5 2 4.5 4.5"/></symbol>
+  <symbol id="i-rank" viewBox="0 0 24 24"><path d="M4 17l5.5-5.5 3.5 3.5L20 8"/><path d="M15 8h5v5"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18"/><circle cx="16.5" cy="14.5" r="1.2"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6L12 15.4 7 18.2l1.2-5.6L4 8.8l5.6-.6z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.3-2.9 8-7 9.5-4.1-1.5-7-5.2-7-9.5V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0013.5 4h-7A2.5 2.5 0 004 6.5v7A2.5 2.5 0 006.5 16H8"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 017 0v2.5"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></symbol>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="in nav-in">
+    <a class="brand" href="#top" data-go="top"><svg viewBox="0 0 28 28" aria-hidden="true"><use href="#i-pulse"/></svg>TeamPulse</a>
+    <nav class="links" aria-label="Page sections"><a href="#month" data-go="month">A month</a><a href="#features" data-go="features">Features</a><a href="#how" data-go="how">How it works</a><a href="#leaders" data-go="leaders">For leaders</a><a href="#faq" data-go="faq">Questions</a></nav>
+    <div class="nav-cta"><a class="btn ghost sm" href="app.html">Try the app</a><a class="btn primary sm" href="#join" data-go="join">Sign in</a></div>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" style="padding-top:44px">
+  <div class="in">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="pill-tag"><i>New</i>Monthly check-ins for NeoLife teams</span>
+        <h1>Know where every distributor <em>stands.</em></h1>
+        <p class="lead">TeamPulse asks each person the right questions on the right days, keeps every answer on their profile, and shows you who needs a call this week.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="#join" data-go="join">Sign in <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="btn ghost" href="app.html">Try the app</a>
+        </div>
+        <div class="ticks">
+          <span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Runs in your phone's browser</span>
+          <span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Two minutes per question</span>
+          <span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>No spreadsheets</span>
+        </div>
+      </div>
+
+      <div class="visual" role="img" aria-label="Example TeamPulse dashboard with a team progress gauge, a new-member celebration and a payout reminder">
+        <svg class="blob" viewBox="0 0 600 480" preserveAspectRatio="none" aria-hidden="true"><path d="M70 120C110 20 280-10 400 30c120 40 200 120 190 240-10 120-110 190-240 190S60 430 30 320C10 250 30 190 70 120z" fill="currentColor"/></svg>
+        <span class="ex">Example data</span>
+        <div class="mock">
+          <div class="mock-side" aria-hidden="true">
+            <svg class="ic logo" viewBox="0 0 28 28" style="width:24px;height:24px;stroke:none;fill:none"><use href="#i-pulse"/></svg>
+            <span class="dot on"><svg class="ic"><use href="#i-grid"/></svg></span>
+            <span class="dot"><svg class="ic"><use href="#i-users"/></svg></span>
+            <span class="dot"><svg class="ic"><use href="#i-cal"/></svg></span>
+            <span class="dot"><svg class="ic"><use href="#i-star"/></svg></span>
+          </div>
+          <div class="mock-main">
+            <div><div class="mock-h">Welcome, Team Lead!</div><div class="mock-sub">Check-in completion this month: 80%</div></div>
+            <div class="mock-row">
+              <div class="mc"><b>Executive Managers</b><div class="bar"><i style="width:100%;background:var(--accent)"></i></div><small>100% answered</small></div>
+              <div class="mc"><b>Senior Managers</b><div class="bar"><i style="width:100%;background:var(--orange)"></i></div><small>100% answered</small></div>
+              <div class="mc"><b>Managers</b><div class="bar"><i style="width:80%;background:var(--teal)"></i></div><small>80% answered</small></div>
+            </div>
+            <div class="mock-split">
+              <div class="mlist">
+                <div class="mrow"><span class="av t-acc">AO</span><span class="n">Adaeze Okafor</span><span class="tag">Qualified</span></div>
+                <div class="mrow"><span class="av t-or">TB</span><span class="n">Tunde Bakare</span><span class="tag">Qualified</span></div>
+                <div class="mrow"><span class="av t-tl">SO</span><span class="n">Sade Ogunleye</span><span class="tag w">Not paid</span></div>
+                <div class="mrow"><span class="av t-bl">IM</span><span class="n">Ibrahim Musa</span><span class="tag w">Under 100 PPV</span></div>
+              </div>
+              <div class="mock-gauge">
+                <svg viewBox="0 0 200 120" aria-hidden="true"><defs><linearGradient id="hg" x1="0" x2="1"><stop offset="0" style="stop-color:var(--teal)"/><stop offset="1" style="stop-color:var(--orange)"/></linearGradient></defs>
+                  <path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="var(--line)" stroke-width="16" stroke-linecap="round" pathLength="100"/>
+                  <path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="url(#hg)" stroke-width="16" stroke-linecap="round" pathLength="100" stroke-dasharray="80 100"/>
+                  <text x="100" y="88" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-weight="800" font-size="30" fill="var(--ink)">80%</text></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="float f1"><span class="tile t-or"><svg class="ic"><use href="#i-star"/></svg></span><div><b>Grace joined the team</b><small>Sponsored by Femi Adeyemi</small></div></div>
+        <div class="float f2"><span class="tile t-tl"><svg class="ic"><use href="#i-wallet"/></svg></span><div><b>$380 drops on 22 Nov</b><small>Plan Adaeze's PPV order</small></div></div>
+        <div class="float f3"><span class="tile t-acc"><svg class="ic"><use href="#i-rank"/></svg></span><div><b>Rank-up ready</b><small>Kelechi reached 520 QPV</small></div></div>
+      </div>
+    </div>
+
+    <div class="strip" role="list" aria-label="TeamPulse at a glance">
+      <div class="fact" role="listitem"><span class="tile t-acc"><svg class="ic"><use href="#i-cal"/></svg></span><div><b>5</b><span>check-ins every month</span></div></div>
+      <div class="fact" role="listitem"><span class="tile t-or"><svg class="ic"><use href="#i-clock"/></svg></span><div><b>2 + 3</b><span>days before and after each date to answer</span></div></div>
+      <div class="fact" role="listitem"><span class="tile t-tl"><svg class="ic"><use href="#i-user"/></svg></span><div><b>1</b><span>profile per distributor, with full history</span></div></div>
+      <div class="fact" role="listitem"><span class="tile t-bl"><svg class="ic"><use href="#i-shield"/></svg></span><div><b>3</b><span>roles: Admin, QSM and member</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="month">
+  <div class="in">
+    <div class="sec-head"><span class="eyebrow">One month in TeamPulse</span><h2>The right question, on the right day.</h2><p class="lead">Each check-in opens two days before its date and stays open for three days after. Your team answers when it matters, not all at once.</p></div>
+    <div class="month">
+      <div class="day"><div class="d"><b>10</b><span>th</span></div><h3>Earnings and payouts</h3><p>Money made, active orders, delivered orders, the amount that will drop and the date you can withdraw it.</p><span class="win t-acc"><svg class="ic" style="width:14px;height:14px"><use href="#i-clock"/></svg>Open 8th to 13th</span></div>
+      <div class="day"><div class="d"><b>14</b><span>th</span></div><h3>PPV and QPV</h3><p>Your affirmation plan: PPV for the month and your team's QPV. TeamPulse checks the 100 PPV minimum.</p><span class="win t-or"><svg class="ic" style="width:14px;height:14px"><use href="#i-clock"/></svg>Open 12th to 17th</span></div>
+      <div class="day"><div class="d"><b>15</b><span>th</span></div><h3>Plan for next month</h3><p>Goals that start with "I will" or "I must", planned sign-ups and your income target.</p><span class="win t-tl"><svg class="ic" style="width:14px;height:14px"><use href="#i-clock"/></svg>Open 13th to 18th</span></div>
+      <div class="day"><div class="d"><b>25</b><span>th</span></div><h3>Sign-ups and step-ups</h3><p>Who you signed, the step-ups in your team and any tools you bought.</p><span class="win t-bl"><svg class="ic" style="width:14px;height:14px"><use href="#i-clock"/></svg>Open 23rd to 28th</span></div>
+      <div class="day"><div class="d"><b>28</b><span>th</span></div><h3>Monthly responsibility</h3><p>One tap: have you paid it this month, yes or no?</p><span class="win t-pk"><svg class="ic" style="width:14px;height:14px"><use href="#i-clock"/></svg>Open 26th to 31st</span></div>
+    </div>
+    <div class="note-row"><span><svg class="ic" aria-hidden="true"><use href="#i-lock"/></svg>Not open yet? The question shows when it opens.</span><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>Missed one? It is marked Missed, and next month's opens on its own.</span></div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="in">
+    <div class="sec-head c"><span class="eyebrow">What you get</span><h2>Everything your team reports, in one place.</h2><p class="lead">No more chasing answers one by one on WhatsApp or collecting charts on paper.</p></div>
+    <div class="feats">
+      <article class="feat"><span class="tile t-acc"><svg class="ic"><use href="#i-cal"/></svg></span><h3>Check-ins on a schedule</h3><p>Questions go out on their dates and reminders follow up, so you stop asking the same thing every month.</p></article>
+      <article class="feat"><span class="tile t-tl"><svg class="ic"><use href="#i-user"/></svg></span><h3>A profile for everyone</h3><p>Every answer is saved with the month it belongs to. Members see their own history and progress.</p></article>
+      <article class="feat"><span class="tile t-or"><svg class="ic"><use href="#i-rank"/></svg></span><h3>Rank progress</h3><p>PPV and QPV are checked against the NeoLife plan, and TeamPulse recommends a rank-up when someone reaches a threshold.</p></article>
+      <article class="feat"><span class="tile t-bl"><svg class="ic"><use href="#i-wallet"/></svg></span><h3>Money dropping soon</h3><p>See each person's payout amount and date, so you can plan the days they place their PPV order.</p></article>
+      <article class="feat"><span class="tile t-pk"><svg class="ic"><use href="#i-star"/></svg></span><h3>Welcome and celebration</h3><p>New sign-ups get a welcome email and the whole team sees who stepped up and who sponsored them.</p></article>
+      <article class="feat"><span class="tile t-acc"><svg class="ic"><use href="#i-shield"/></svg></span><h3>Clear roles</h3><p>Admins manage the team. A QSM sees only their own downline. Members see only themselves.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="in split">
+    <div>
+      <div class="sec-head" style="margin-bottom:22px"><span class="eyebrow">How it works</span><h2>From being added to your first check-in.</h2></div>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><div><h3>Your leader adds you</h3><p>Name, NeoLife ID, sponsor and your first order. You never register yourself.</p></div></div>
+        <div class="step"><span class="n">2</span><div><h3>You get your TeamPulse ID</h3><p>A welcome email brings your ID, like 06OW674, and a link to set your own password. The link works for 7 days.</p></div></div>
+        <div class="step"><span class="n">3</span><div><h3>Sign in</h3><p>Use your TeamPulse ID and your password. After 5 wrong tries the account locks, and you can reset it by email.</p></div></div>
+        <div class="step"><span class="n">4</span><div><h3>Answer when a question opens</h3><p>Short questions on their dates. Your leader sees who is behind and who needs a call.</p></div></div>
+      </div>
+    </div>
+    <div class="ranks" role="group" aria-label="Rank thresholds TeamPulse checks">
+      <h3>Built around the NeoLife plan</h3>
+      <p class="sub" style="color:var(--muted);font-size:.9rem">Monthly QPV needed, with at least 100 PPV.</p>
+      <div class="rk"><b>Manager</b><span class="q">500 QPV</span><div class="bar"><i style="width:12.5%"></i></div></div>
+      <div class="rk"><b>Senior Manager</b><span class="q">1,000 QPV</span><div class="bar"><i style="width:25%"></i></div></div>
+      <div class="rk"><b>Executive Manager</b><span class="q">2,000 QPV</span><div class="bar"><i style="width:50%"></i></div></div>
+      <div class="rk"><b>Director</b><span class="q">4,000 QPV</span><div class="bar"><i style="width:100%"></i></div></div>
+      <p class="foot">TeamPulse recommends. Your leader confirms every rank change.</p>
+    </div>
+  </div>
+</section>
+
+<div class="in">
+  <div class="band" id="join">
+    <div>
+      <span class="eyebrow" style="color:var(--orange)">Sign in</span>
+      <h2 style="margin-top:12px">Sign in to your team.</h2>
+      <p class="lead" style="margin-top:14px">Your team leader adds you and gives you your TeamPulse ID. Set your password from the link in your welcome email, then sign in here.</p>
+      <div class="ticks">
+        <span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>You never register yourself: your leader adds you</span>
+        <span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>You choose your own password</span>
+        <span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Locked after 5 wrong tries, and reset by email</span>
+      </div>
+    </div>
+    <div class="formcard">
+      <form id="si" novalidate>
+        <h3>Sign in</h3>
+        <p class="sub">Enter your TeamPulse ID. You type your password on the next screen.</p>
+        <div class="field"><label for="s-id">TeamPulse ID</label><input id="s-id" name="id" type="text" autocomplete="username" placeholder="06OW674" maxlength="7"><span class="err" id="se-id" role="alert"></span></div>
+        <button class="btn primary" type="submit" style="width:100%;justify-content:center">Continue <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <p class="hint" style="margin-top:14px;font-size:.84rem;color:var(--muted)">First time? Open the "Set your password" link in your welcome email. <button class="link" type="button" id="forgot">Forgot your password?</button></p>
+        <p class="hint" style="margin-top:10px;font-size:.82rem;color:var(--muted)">Trying the demo? Use <b style="font-family:var(--mono);color:var(--ink)">06OW209</b> with the password <b style="font-family:var(--mono);color:var(--ink)">demo1234</b>.</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<section id="leaders">
+  <div class="in">
+    <div class="sec-head c"><span class="eyebrow">For team leaders</span><h2>Register once. Add your whole team.</h2><p class="lead">Only team leaders register. Everyone else is added by their leader, so each team's data stays its own.</p></div>
+    <div class="feats">
+      <article class="feat"><span class="tile t-acc"><svg class="ic"><use href="#i-user"/></svg></span><h3>1. Register as a team leader</h3><p>Create your account with your email and a password. You get your own TeamPulse ID and your team's space.</p></article>
+      <article class="feat"><span class="tile t-tl"><svg class="ic"><use href="#i-users"/></svg></span><h3>2. Add your members</h3><p>Enter each person's name, NeoLife ID, sponsor and first order. Every member gets a TeamPulse ID automatically.</p></article>
+      <article class="feat"><span class="tile t-or"><svg class="ic"><use href="#i-lock"/></svg></span><h3>3. Members set their password</h3><p>Each member gets a welcome email with a link that works for 7 days. After that they sign in with their TeamPulse ID and password.</p></article>
+    </div>
+    <div class="note-row" style="justify-content:center"><span><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>Registration for new team leaders opens with the first release.</span></div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="in">
+    <div class="sec-head c"><span class="eyebrow">Questions</span><h2>Before you sign in.</h2></div>
+    <div class="faq">
+      <details><summary>Who sees my numbers?</summary><p>Your team leader, who is the Admin. If you are in a QSM's downline, that QSM sees your answers too. Other members never see them.</p></details>
+      <details><summary>What if I miss a question?</summary><p>Each question stays open for three days after its date. After that it is marked Missed. Next month's question opens on its own, and you never have to answer several months at once.</p></details>
+      <details><summary>Can I change my NeoLife ID?</summary><p>No. It is your official number, so only your team leader can correct it, and every correction is logged. You can change your name, picture and other details yourself.</p></details>
+      <details><summary>How do I get an account?</summary><p>Your team leader adds you. You do not register yourself. You then get a welcome email with your TeamPulse ID and a link to set your own password. The link works for 7 days.</p></details>
+      <details><summary>I forgot my password.</summary><p>Choose "Forgot your password?" on the sign-in screen and enter your TeamPulse ID. We email a reset link to the address your team leader has on file. Your team leader can also reset it for you.</p></details>
+      <details><summary>Do I need to install an app?</summary><p>No. TeamPulse runs in your phone's browser. You sign in with your TeamPulse ID and your password.</p></details>
+      <details><summary>Is this official NeoLife software?</summary><p>No. TeamPulse is an independent tool for one NeoLife team. It is not affiliated with or endorsed by NeoLife International.</p></details>
+      <details><summary>Why does my team use the 15th as a start date?</summary><p>Your team treats the 15th as day one of the next month to keep a sense of urgency toward each month's target. TeamPulse shows that countdown, but all numbers and ranks follow the normal calendar month, like NeoLife does.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="in foot-in">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <a class="brand" href="#top" data-go="top"><svg viewBox="0 0 28 28" aria-hidden="true"><use href="#i-pulse"/></svg>TeamPulse</a>
+      <p>Prototype with example people and numbers. TeamPulse is an independent team tool and is not affiliated with or endorsed by NeoLife International.</p>
+    </div>
+    <nav class="links" aria-label="Footer"><a href="#month" data-go="month">A month</a><a href="#features" data-go="features">Features</a><a href="#faq" data-go="faq">Questions</a><a href="#join" data-go="join">Sign in</a></nav>
+  </div>
+</footer>
+<div class="copy-toast" id="toast" role="status" hidden></div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+document.querySelectorAll('[data-go]').forEach(a=>a.addEventListener('click',e=>{
+  const el=document.getElementById(a.dataset.go);if(!el)return;e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});
+}));
+const nav=$('#nav');
+const onScroll=()=>nav.classList.toggle('stuck',window.scrollY>8);
+window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+const form=$('#si');
+const setErr=(id,msg,inputId)=>{$('#'+id).textContent=msg||'';const i=$('#'+inputId);if(i){if(msg)i.setAttribute('aria-invalid','true');else i.removeAttribute('aria-invalid')}};
+const normId=s=>s.trim().toUpperCase().replace(/\s/g,'').replace(/0W/,'OW');
+form.addEventListener('submit',e=>{
+  e.preventDefault();
+  const id=normId(form.elements.id.value),ok=/^0\dOW\d{3}$/.test(id);
+  setErr('se-id',ok?'':'Use the format 06OW674: a zero, one digit, OW and three digits.','s-id');
+  if(!ok){$('#s-id').focus();return}
+  try{sessionStorage.setItem('tp_id',id)}catch(_){}
+  location.href='app.html#signin';
+});
+let tt;const toast=t=>{const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>{el.hidden=true},3200)};
+$('#forgot').addEventListener('click',()=>toast('In the real app we email a reset link to the address on file. Your team leader can also reset it.'));
+</script>
+</body></html>
