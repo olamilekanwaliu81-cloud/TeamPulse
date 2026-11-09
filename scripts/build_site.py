@@ -61,7 +61,7 @@ ROUTER_JS = r"""<script>
   let loaded=false;
   function check(){
     let ok=false;
-    try{ok=!!(frame.contentDocument&&frame.contentDocument.getElementById('main'))}catch(_){}
+    try{const r=frame.contentDocument&&frame.contentDocument.getElementById('root');ok=!!(r&&r.children.length)}catch(_){}
     fail.hidden=ok;
   }
   function load(){
