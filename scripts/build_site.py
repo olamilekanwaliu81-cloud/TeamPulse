@@ -102,6 +102,20 @@ def read(path: pathlib.Path) -> str:
     return text
 
 
+def human_size(path: pathlib.Path, fallback: str) -> str:
+    """Size of a download for the website text, for example "0.3 MB"."""
+    if not path.exists():
+        return fallback
+    kb = path.stat().st_size / 1024
+    return f"{kb / 1024:.1f} MB" if kb >= 1024 else f"{max(1, round(kb))} KB"
+
+
+def fill_downloads(landing: str) -> str:
+    downloads = SITE / "downloads"
+    landing = landing.replace("{{MAC_SIZE}}", human_size(downloads / "TeamPulse-mac.zip", "under 1 MB"))
+    return landing.replace("{{WIN_SIZE}}", human_size(downloads / "TeamPulse-windows.zip", "under 1 MB"))
+
+
 def combine(landing: str, app: str, fallback: str) -> str:
     """The landing page with the app tucked inside an inert <template>, shown in a full-screen frame."""
     return (
@@ -119,7 +133,7 @@ def combine(landing: str, app: str, fallback: str) -> str:
 
 
 def main() -> None:
-    landing = read(ROOT / "landing" / "index.html")
+    landing = fill_downloads(read(ROOT / "landing" / "index.html"))
     app = read(ROOT / "prototype" / "index.html")
 
     COMBINED.mkdir(exist_ok=True)

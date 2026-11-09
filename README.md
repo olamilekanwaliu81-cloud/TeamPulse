@@ -1,18 +1,17 @@
 # TeamPulse prototype
 
-A clickable prototype of TeamPulse, a monthly check-in system for a NeoLife team. It has a landing page and the app in one site, with example people and numbers.
+A working prototype of TeamPulse, a monthly check-in system for a NeoLife team. It has a landing page and the app in one site, and it behaves like the real product: accounts, sign-in, check-ins and a dashboard, with no sample data.
 
-**It stores nothing.** Each visitor sees their own copy of the example data in their own browser, and a refresh resets it.
+**Everything you enter is stored in your own browser only.** Nothing is sent anywhere, and there is no server. The real app (next step) uses a database and sends real emails.
 
-Try it with these example accounts (password `demo1234`):
+## Try it
 
-| TeamPulse ID | Who |
-|---|---|
-| `04OW000` | Team leader (Admin) |
-| `04OW558` | Tunde, a QSM (sees only his downline) |
-| `06OW209` | Blessing, a member |
+1. Open the site and choose **Register as a team leader**. Fill in the form.
+2. The app "sends" a confirmation email. Open **Test tools** (bottom right) to read it and click its link.
+3. You land in your own empty team. Choose **Add a member** and fill in the form. That member's welcome email appears in the test mailbox, with a **Set my password** button.
+4. Sign out, open that link, set the member's password, and see the member's side. Sign out again and sign in as the team leader with your TeamPulse ID and password.
 
-You can also choose **Register as a team leader** to create your own empty team and add a first member.
+**Test tools** is only for this prototype. It shows the emails the app sends, lets you move the date (check-ins open on set days) and deletes all data. The real app does these things by itself.
 
 ## Folders
 
@@ -79,6 +78,37 @@ Or deploy from this computer without GitHub:
 ```bash
 cd site && npx vercel
 ```
+
+## Mac app
+
+`macos/` builds **TeamPulse.app**, a small native Mac app that opens this site in its own window, works without internet (it uses system fonts when offline) and runs on Intel and Apple Silicon Macs (macOS 12 or newer).
+
+```bash
+bash macos/build_mac.sh
+```
+
+It needs only Apple's Command Line Tools and takes under a minute. It creates `macos/dist/TeamPulse.app` and `macos/dist/TeamPulse-prototype.dmg`. To install, open the DMG and drag TeamPulse to Applications.
+
+Check the built app without opening a window:
+
+```bash
+macos/dist/TeamPulse.app/Contents/MacOS/TeamPulse --selftest
+```
+
+The app is signed for the Mac that built it. On another Mac the first open needs one extra step because the app is not notarized by Apple: macOS 15 asks you to open System Settings > Privacy & Security and choose "Open Anyway"; macOS 14 or older: Control-click the app, choose Open.
+
+## Downloads on the website
+
+The landing page has a **Download** section with one file for Mac and one for Windows (the page highlights the one that matches the visitor's computer). The files live in `site/downloads/` and are built by:
+
+```bash
+bash scripts/build_all.sh
+```
+
+- `TeamPulse-mac.zip`: TeamPulse.app (Intel + Apple Silicon) with a short read-me.
+- `TeamPulse-windows.zip`: an installer script that opens TeamPulse in its own Edge/Chrome app window, plus uninstaller. It is not a compiled .exe and has not been tested on a real Windows PC yet.
+- Both are unsigned, so Mac and Windows show a warning the first time. The read-me inside each zip explains the click-through.
+- Inside the desktop app the download section is hidden.
 
 ## Before going public
 

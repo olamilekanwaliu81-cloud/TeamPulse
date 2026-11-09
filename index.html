@@ -215,6 +215,25 @@ section{padding-block:76px 0}
 .pw input{padding-right:74px}
 .eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--accent);font-weight:700;cursor:pointer;padding:8px 10px;border-radius:8px}
 .link{background:none;border:0;color:var(--accent);font-weight:600;cursor:pointer;padding:0;text-decoration:underline;font-size:inherit}
+/* downloads */
+.dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:820px){.dl{grid-template-columns:minmax(0,1fr)}}
+.dl-card{position:relative;background:var(--surface);border-radius:26px;box-shadow:var(--shadow);padding:28px;display:flex;flex-direction:column;gap:16px}
+.dl-card.rec{outline:2px solid var(--accent);outline-offset:0}
+.rec-tag{position:absolute;top:-13px;left:24px;background:var(--accent);color:var(--accent-ink);font-size:.76rem;font-weight:700;border-radius:99px;padding:4px 14px}
+.dl-top{display:flex;gap:16px;align-items:center}
+.dl-top .tile{width:58px;height:58px;border-radius:19px;display:grid;place-items:center;flex:none}
+.dl-top .tile .ic{width:30px;height:30px}
+.dl-card h3{font-size:1.3rem}
+.dl-meta{color:var(--muted);font-size:.9rem}
+.dl-card .btn{align-self:flex-start}
+.dl-steps{margin:0;padding-left:20px;color:var(--muted);font-size:.94rem;display:flex;flex-direction:column;gap:6px}
+.dl-steps b{color:var(--ink)}
+.dl-note{background:var(--surface2);border-radius:16px;padding:14px 16px;font-size:.86rem;color:var(--muted)}
+.dl-note b{color:var(--ink)}
+.dl-foot{text-align:center;color:var(--muted);font-size:.9rem;margin-top:20px}
+.dl-foot a,.sec-head .lead a,.sub-link a{color:var(--accent);font-weight:700}
+.sub-link{font-size:.95rem}
 /* faq */
 .faq{max-width:780px;margin-inline:auto;display:flex;flex-direction:column;gap:12px}
 details{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:4px 22px}
@@ -248,12 +267,14 @@ footer .links a{color:var(--foot-ink)}
   <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 017 0v2.5"/></symbol>
   <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></symbol>
   <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></symbol>
+  <symbol id="i-laptop" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M2 19h20"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v10M7.5 10l4.5 4.5 4.5-4.5"/><path d="M5 19h14"/></symbol>
 </svg>
 
 <header class="nav" id="nav">
   <div class="in nav-in">
     <a class="brand" href="#top" data-go="top"><svg viewBox="0 0 28 28" aria-hidden="true"><use href="#i-pulse"/></svg>TeamPulse</a>
-    <nav class="links" aria-label="Page sections"><a href="#month" data-go="month">A month</a><a href="#features" data-go="features">Features</a><a href="#how" data-go="how">How it works</a><a href="#leaders" data-go="leaders">For leaders</a><a href="#faq" data-go="faq">Questions</a></nav>
+    <nav class="links" aria-label="Page sections"><a href="#month" data-go="month">A month</a><a href="#features" data-go="features">Features</a><a href="#how" data-go="how">How it works</a><a href="#leaders" data-go="leaders">For leaders</a><a href="#download" data-go="download" data-dl-link>Download</a><a href="#faq" data-go="faq">Questions</a></nav>
     <div class="nav-cta"><a class="btn ghost sm" href="app.html">Try the app</a><a class="btn primary sm" href="#join" data-go="join">Sign in</a></div>
   </div>
 </header>
@@ -275,11 +296,12 @@ footer .links a{color:var(--foot-ink)}
           <span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Two minutes per question</span>
           <span><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>No spreadsheets</span>
         </div>
+        <p class="sub-link" data-dl-link><a href="#download" data-go="download">Download for Mac or Windows</a></p>
       </div>
 
       <div class="visual" role="img" aria-label="Example TeamPulse dashboard with a team progress gauge, a new-member celebration and a payout reminder">
         <svg class="blob" viewBox="0 0 600 480" preserveAspectRatio="none" aria-hidden="true"><path d="M70 120C110 20 280-10 400 30c120 40 200 120 190 240-10 120-110 190-240 190S60 430 30 320C10 250 30 190 70 120z" fill="currentColor"/></svg>
-        <span class="ex">Example data</span>
+        <span class="ex">Preview</span>
         <div class="mock">
           <div class="mock-side" aria-hidden="true">
             <svg class="ic logo" viewBox="0 0 28 28" style="width:24px;height:24px;stroke:none;fill:none"><use href="#i-pulse"/></svg>
@@ -397,7 +419,6 @@ footer .links a{color:var(--foot-ink)}
         <button class="btn primary" type="submit" style="width:100%;justify-content:center">Continue <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
         <p class="hint" style="margin-top:14px;font-size:.84rem;color:var(--muted)">First time? Open the "Set your password" link in your welcome email. <button class="link" type="button" id="forgot">Forgot your password?</button></p>
         <p class="hint" style="margin-top:10px;font-size:.84rem;color:var(--muted)">New team leader? <a class="link" href="app.html#register" data-reg>Register your team</a></p>
-        <p class="hint" style="margin-top:10px;font-size:.82rem;color:var(--muted)">Trying the demo? Use <b style="font-family:var(--mono);color:var(--ink)">06OW209</b> with the password <b style="font-family:var(--mono);color:var(--ink)">demo1234</b>.</p>
       </form>
     </div>
   </div>
@@ -412,6 +433,25 @@ footer .links a{color:var(--foot-ink)}
       <article class="feat"><span class="tile t-or"><svg class="ic"><use href="#i-lock"/></svg></span><h3>3. Members set their password</h3><p>Each member gets a welcome email with a link that works for 7 days. After that they sign in with their TeamPulse ID and password.</p></article>
     </div>
     <div class="hero-cta" style="justify-content:center;margin-top:28px"><a class="btn primary" href="app.html#register" data-reg>Register as a team leader <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="in">
+    <div class="sec-head c"><span class="eyebrow">Download</span><h2>Use TeamPulse as an app on your computer.</h2><p class="lead">The same TeamPulse in a window of its own. Your data stays on your computer. Prefer no download? <a href="app.html">Use it in your browser</a>.</p></div>
+    <div class="dl">
+      <article class="dl-card" id="dl-mac"><span class="rec-tag" hidden>Recommended for your computer</span>
+        <div class="dl-top"><span class="tile t-acc"><svg class="ic" aria-hidden="true"><use href="#i-laptop"/></svg></span><div><h3>TeamPulse for Mac</h3><div class="dl-meta">macOS 12 or newer · Intel and Apple Silicon · 179 KB</div></div></div>
+        <a class="btn primary" href="downloads/TeamPulse-mac.zip" download="TeamPulse-mac.zip" data-dl data-file="TeamPulse-mac.zip">Download for Mac <svg class="ic" aria-hidden="true"><use href="#i-down"/></svg></a>
+        <ol class="dl-steps"><li>Open the downloaded zip file.</li><li>Drag <b>TeamPulse</b> into your <b>Applications</b> folder.</li><li>Open TeamPulse from Applications or Launchpad.</li></ol>
+        <div class="dl-note"><b>If your Mac says it cannot check the app:</b> it is not from the App Store yet. On macOS 15, open <b>System Settings</b>, then <b>Privacy &amp; Security</b>, scroll down and choose <b>Open Anyway</b>. On macOS 14 or older, Control-click the app and choose <b>Open</b>. You only do this once.</div></article>
+      <article class="dl-card" id="dl-win"><span class="rec-tag" hidden>Recommended for your computer</span>
+        <div class="dl-top"><span class="tile t-bl"><svg class="ic" aria-hidden="true"><use href="#i-laptop"/></svg></span><div><h3>TeamPulse for Windows</h3><div class="dl-meta">Windows 10 and 11 · 90 KB</div></div></div>
+        <a class="btn primary" href="downloads/TeamPulse-windows.zip" download="TeamPulse-windows.zip" data-dl data-file="TeamPulse-windows.zip">Download for Windows <svg class="ic" aria-hidden="true"><use href="#i-down"/></svg></a>
+        <ol class="dl-steps"><li>Right-click the downloaded zip file and choose <b>Extract All</b>.</li><li>Open the folder and double-click <b>Install TeamPulse</b>.</li><li>Open TeamPulse from the Start menu or the desktop icon.</li></ol>
+        <div class="dl-note"><b>If Windows shows a warning:</b> the app is not signed by Microsoft yet. Choose <b>Run</b>, or <b>More info</b> and then <b>Run anyway</b>. TeamPulse opens in its own window using Microsoft Edge, which is already on Windows 10 and 11. Google Chrome works too.</div></article>
+    </div>
+    <p class="dl-foot" id="dl-other" hidden>Downloads are for computers. On a phone, use TeamPulse in your browser: <a href="app.html">open the app</a>.</p>
   </div>
 </section>
 
@@ -437,9 +477,9 @@ footer .links a{color:var(--foot-ink)}
   <div class="in foot-in">
     <div style="display:flex;flex-direction:column;gap:10px">
       <a class="brand" href="#top" data-go="top"><svg viewBox="0 0 28 28" aria-hidden="true"><use href="#i-pulse"/></svg>TeamPulse</a>
-      <p>Prototype with example people and numbers. TeamPulse is an independent team tool and is not affiliated with or endorsed by NeoLife International.</p>
+      <p>Prototype: what you enter stays in your own browser. TeamPulse is an independent team tool and is not affiliated with or endorsed by NeoLife International.</p>
     </div>
-    <nav class="links" aria-label="Footer"><a href="#month" data-go="month">A month</a><a href="#features" data-go="features">Features</a><a href="#faq" data-go="faq">Questions</a><a href="#join" data-go="join">Sign in</a></nav>
+    <nav class="links" aria-label="Footer"><a href="#month" data-go="month">A month</a><a href="#features" data-go="features">Features</a><a href="#download" data-go="download" data-dl-link>Download</a><a href="#faq" data-go="faq">Questions</a><a href="#join" data-go="join">Sign in</a></nav>
   </div>
 </footer>
 <div class="copy-toast" id="toast" role="status" hidden></div>
@@ -469,6 +509,33 @@ form.addEventListener('submit',e=>{
 });
 let tt;const toast=t=>{const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>{el.hidden=true},3200)};
 $('#forgot').addEventListener('click',()=>toast('In the real app we email a reset link to the address on file. Your team leader can also reset it.'));
+
+/* downloads: recommend the visitor's system, hide the section inside the desktop apps */
+(function(){
+  const desktopApp=!!window.TP_DESKTOP||/[?&]desktop=/.test(location.search);
+  const section=document.getElementById('download');
+  if(desktopApp){if(section)section.hidden=true;document.querySelectorAll('[data-dl-link]').forEach(el=>{el.hidden=true});return}
+  const ua=navigator.userAgent||'';
+  const os=/iPhone|iPad|Android/i.test(ua)?'other':/Windows/i.test(ua)?'win':/Mac/i.test(ua)?'mac':'other';
+  const rec=document.getElementById(os==='win'?'dl-win':os==='mac'?'dl-mac':'');
+  if(rec){rec.classList.add('rec');const tag=rec.querySelector('.rec-tag');if(tag)tag.hidden=false}
+  else{const o=document.getElementById('dl-other');if(o)o.hidden=false}
+  /* In a normal browser the link downloads the file. Inside claude.ai, where links cannot download, use the viewer's save prompt. */
+  document.querySelectorAll('a[data-dl]').forEach(a=>a.addEventListener('click',async e=>{
+    let dl=null;
+    try{dl=window.claude&&window.claude.use?await window.claude.use('downloads'):null}catch(_){}
+    if(!dl)return;
+    e.preventDefault();
+    try{
+      let blob;
+      const emb=window.__TP_FILES&&window.__TP_FILES[a.dataset.file];
+      if(emb){const bin=atob(emb),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);blob=new Blob([u],{type:'application/zip'})}
+      else{const r=await fetch(a.getAttribute('href'));if(!r.ok)throw new Error('the file is missing');blob=await r.blob()}
+      await dl.save({filename:a.dataset.file,data:blob});
+      toast('Download ready');
+    }catch(err){if(!(err&&err.code==='declined'))toast('The download could not start. Try again.')}
+  }));
+})();
 </script>
 <style>
 /* The app opens full screen on top of the landing page. */
@@ -482,7 +549,7 @@ $('#forgot').addEventListener('click',()=>toast('In the real app we email a rese
   <div id="appfail" hidden role="alert"><p>The app could not open inside this page.</p><p><a href="app.html" target="_blank" rel="noopener">Open the app on its own</a> &nbsp;·&nbsp; <a href="#" id="appback">Back to the landing page</a></p></div>
 </div>
 <template id="app-tpl">
-<title>TeamPulse Prototype</title>
+<title>TeamPulse App</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='8' fill='%236A5AE0'/%3E%3Cpath d='M3 15h5l3-8 5 14 3-7h6' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -690,7 +757,10 @@ form label,.lbl{font-size:.85rem;font-weight:600}
 .axis span{flex:1;text-align:center}
 .legend{display:flex;gap:14px;font-size:.78rem;color:var(--muted)}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
-.lock{display:inline-flex;align-items:center;gap:6px}
+.lock{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+input[type=file]{max-width:100%;min-width:0;font-size:.85rem}
+.inline .field{min-width:0;flex:1 1 160px}
+.lock input{flex:1 1 150px;min-width:0}
 .overlay{position:fixed;inset:0;z-index:40;background:rgba(13,15,40,.55);display:grid;place-items:start center;padding:24px 16px;overflow-y:auto}
 .modal{background:var(--surface);border-radius:24px;padding:24px;width:min(680px,100%);margin-block:auto;box-shadow:var(--shadow)}
 .modal .x{float:right}
@@ -707,164 +777,206 @@ form label,.lbl{font-size:.85rem;font-weight:600}
   .cyclecard{display:none}
 }
 @media (prefers-reduced-motion:no-preference){.meter i{transition:width .3s}}
+
+/* ---------- sign-in, registration and other pages that stand on their own ---------- */
+.auth{min-height:100vh;display:grid;place-content:center;justify-items:center;gap:18px;padding:32px 0}
+.auth-card{width:min(480px,100%);background:var(--surface);border-radius:28px;padding:34px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.auth-card .brand{margin-bottom:12px;padding:0}
+.auth-card h1{font-size:1.65rem;line-height:1.15}
+.auth-card .sub{margin-bottom:10px}
+.auth-card form{margin-top:10px}
+.auth-card .big{font-family:var(--mono);font-size:1.6rem;font-weight:500;letter-spacing:.04em;background:var(--accent-soft);color:var(--accent);border-radius:16px;padding:14px 18px;text-align:center;margin:12px 0}
+.auth-foot{font-size:.88rem;color:var(--muted)}
+.auth-foot a{color:var(--accent);font-weight:600}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media (max-width:560px){.f2{grid-template-columns:1fr}.auth-card{padding:26px 22px}}
+
+/* ---------- getting started ---------- */
+.start{display:grid;gap:14px}
+.start li{list-style:none;display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.start li:first-child{border-top:0}
+.start .n{width:36px;height:36px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:800}
+.start .done .n{background:var(--good-soft);color:var(--good)}
+.start ul{margin:0;padding:0}
+.start p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+
+/* ---------- check-in list on the member home ---------- */
+.todo{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 0;border-top:1px solid var(--line)}
+.todo:first-child{border-top:0;padding-top:0}
+.todo .grow{flex:1 1 170px;min-width:0}
+
+/* ---------- prototype test tools (not part of the product) ---------- */
+.tt-btn{position:fixed;right:14px;bottom:14px;z-index:60;border:2px dashed var(--orange);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font-weight:700;font-size:.82rem;cursor:pointer;box-shadow:var(--shadow);display:inline-flex;gap:8px;align-items:center}
+.tt-badge{background:var(--orange);color:#fff;border-radius:99px;font-size:.7rem;padding:1px 7px}
+.tt{position:fixed;right:14px;bottom:62px;z-index:60;width:min(430px,calc(100vw - 28px));max-height:72vh;overflow:auto;background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:18px;border:2px dashed var(--orange)}
+.tt h3{margin:0 0 4px}
+.tt h4{margin:16px 0 6px;font-size:.85rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.tt .mailrow{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-top:1px solid var(--line)}
+.tt .mailrow:first-of-type{border-top:0}
+.tt .mailrow b{font-size:.9rem}
+.tt .mailrow small{color:var(--muted)}
+.tt .mailrow.unread b::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--orange);margin-right:7px}
+.tt-only{display:inline}
+.mailbody{border-radius:16px;background:var(--surface2);padding:16px 18px}
+.mailbody p{margin:6px 0}
+.mailbody ol{margin:6px 0 6px 18px;padding:0}
 </style>
 
-<div class="shell">
-  <aside class="side">
-    <a class="brand" href="./" title="Back to the landing page">
-      <svg width="30" height="30" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M2 15h6l3-9 5 17 3-8h7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      TeamPulse
-    </a>
-    <nav id="tabs" aria-label="Sections"></nav>
-    <div class="cyclecard" id="cyclecard"></div>
-  </aside>
-  <div class="content">
-    <header class="top">
-      <label class="search" id="searchbox"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input id="q" type="search" placeholder="Search members, TeamPulse ID or NeoLife ID" aria-label="Search members"></label>
-      <div class="top-right">
-        <button class="iconbtn" type="button" data-act="bell" aria-label="Notifications"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 17h12l-1.5-2V10.5a4.5 4.5 0 10-9 0V15z"/><path d="M10 20a2 2 0 004 0"/></svg><i id="bell-dot" hidden></i></button>
-        <div class="me" id="me"></div>
-      </div>
-    </header>
-    <div class="proto"><span class="grow">Prototype with example people and numbers. Nothing is saved or emailed.</span>
-      <label class="as" for="today">Pretend today is <input type="date" id="today"></label>
-      <label class="as" for="role">View as
-        <select id="role">
-          <option value="admin">Admin · Team Leader</option>
-          <option value="qsm">QSM · Tunde Bakare</option>
-          <option value="member">Member · Blessing Udoh</option>
-        </select>
-      </label>
-      <a class="btn sm" href="./" style="text-decoration:none">Landing page</a>
-      <button class="btn sm" data-act="signin" type="button">Sign in</button>
-      <button class="btn sm" data-act="register" type="button">Register as team leader</button>
-      <button class="btn sm" data-act="reset" type="button">Reset example data</button>
-    </div>
-    <main id="main"></main>
-  </div>
-</div>
+<div id="root"></div>
 <div id="modal"></div>
 <div id="toast" role="status" hidden></div>
+<button class="tt-btn" id="ttbtn" type="button" data-act="tt" aria-expanded="false">Test tools<span class="tt-badge" id="ttbadge" hidden>0</span></button>
+<aside class="tt" id="tt" hidden aria-label="Prototype test tools"></aside>
 
 <script>
+'use strict';
+/* TeamPulse app prototype. Everything is stored in this browser only (localStorage).
+   The "Test tools" button stands in for things the real app does by itself (sending email, passing time). */
+
+/* ============================== data and storage ============================== */
 const RANKS=[{n:'Distributor',q:0},{n:'Manager',q:500},{n:'Senior Manager',q:1000},{n:'Executive Manager',q:2000},{n:'Director',q:4000}];
+const KEYS=['earn','ppv','plan','signup','paid'];
 const CI={
   earn:{d:10,day:'10th',title:'Earnings and orders',subject:'How much have you made this month?',body:'Tell us your earnings, your active orders, the orders delivered and accepted, and when your money drops.'},
   ppv:{d:14,day:'14th',title:'PPV and QPV',subject:'Your affirmation plan: PPV and QPV',body:'How many PPV will you finish this month? How much QPV is your team building?'},
   plan:{d:15,day:'15th',title:'New-month plan',subject:'Your new-month plan starts today',body:'Write what you will do next month. Every goal starts with "I will" or "I must".'},
-  paid:{d:28,day:'28th',title:'Monthly responsibility',subject:'Have you paid your monthly responsibility?',body:'One tap: yes or no.'},
-  signup:{d:25,day:'25th',title:'Sign-ups and step-ups',subject:'Did you sign anyone this month?',body:'Tell us about new sign-ups, step-ups in your team and any tools you bought.'}
+  signup:{d:25,day:'25th',title:'Sign-ups and step-ups',subject:'Did you sign anyone this month?',body:'Tell us about new sign-ups, step-ups in your team and any tools you bought.'},
+  paid:{d:28,day:'28th',title:'Monthly responsibility',subject:'Have you paid your monthly responsibility?',body:'One tap: yes or no.'}
 };
 const OPEN_BEFORE=2,CLOSE_AFTER=3;
-const SEEDOCC={earn:'2026-11-10',ppv:'2026-11-14',plan:'2026-11-15',paid:'2026-11-28',signup:'2026-11-25'};
+const KEY='teampulse.v2',SKEY='teampulse.session.v2';
+let DB,SESSION=null,R={name:'signin',p:{}},Q='',MAILVIEW=null;
+
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>'$'+Number(n).toLocaleString('en-US');
+const num=n=>Number(n).toLocaleString('en-US');
+const initials=n=>n.split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const hashCode=s=>[...s].reduce((a,c)=>a+c.charCodeAt(0),0)%5;
+const first=u=>u.name.split(' ')[0];
+
+function blank(){return {seq:1,teams:[],users:[],tokens:[],mail:[],feed:[],claims:[],dismissed:[],testDate:null}}
+function load(){try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);if(d&&Array.isArray(d.users))return Object.assign(blank(),d)}}catch(_){}return blank()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(_){}}
+function setSession(id){SESSION=id;try{if(id)localStorage.setItem(SKEY,id);else localStorage.removeItem(SKEY)}catch(_){}}
+function loadSession(){try{return localStorage.getItem(SKEY)}catch(_){return null}}
+const nid=p=>p+(DB.seq++)+Math.random().toString(36).slice(2,6);
+
+/* ============================== time ============================== */
 const pad2=n=>String(n).padStart(2,'0');
 const toISO=dt=>dt.getFullYear()+'-'+pad2(dt.getMonth()+1)+'-'+pad2(dt.getDate());
 const fromISO=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
 const addDays=(dt,n)=>new Date(dt.getFullYear(),dt.getMonth(),dt.getDate()+n);
 const dmy=dt=>dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-const today=()=>fromISO(S.today);
+const fmtISO=iso=>iso?dmy(fromISO(String(iso).slice(0,10))):'—';
 const monthName=(y,m)=>new Date(y,m,1).toLocaleDateString('en-GB',{month:'long'});
 const monthShort=(y,m)=>new Date(y,m,1).toLocaleDateString('en-GB',{month:'short'});
+const nowD=()=>DB.testDate?new Date(DB.testDate+'T12:00:00'):new Date();
+const today=()=>{const n=nowD();return new Date(n.getFullYear(),n.getMonth(),n.getDate())};
+const P=()=>{const t=today();return {y:t.getFullYear(),mo:t.getMonth()}};
+function ago(iso){const d=Math.round((today()-new Date(new Date(iso).getFullYear(),new Date(iso).getMonth(),new Date(iso).getDate()))/864e5);return d<=0?'today':d===1?'yesterday':d<8?d+' days ago':dmy(new Date(iso))}
 function teamLine(T){
   const y=T.getFullYear(),m=T.getMonth(),d=T.getDate();
   if(d<15){const left=15-d;return `Your team's ${monthName(y,m)} ends in ${left} day${left>1?'s':''}. Team ${monthName(y,m+1)} starts on 15 ${monthShort(y,m)}.`}
   return `Team ${monthName(y,m+1)}, day ${d-14}. Team ${monthName(y,m+2)} starts on 15 ${monthShort(y,m+1)}.`;
 }
+
+/* ---------- answer windows: open 2 days before a question's date, close 3 days after ---------- */
 function occ(key,y,m){const q=new Date(y,m,CI[key].d);return {key,date:q,id:key+'@'+toISO(q),open:addDays(q,-OPEN_BEFORE),close:addDays(q,CLOSE_AFTER)}}
+const occId=(key,y,m)=>occ(key,y,m).id;
 function ciState(key){
   const T=today(),list=[-1,0,1].map(o=>occ(key,T.getFullYear(),T.getMonth()+o));
   const open=list.find(o=>o.open<=T&&T<=o.close);
   if(open)return {state:'open',o:open};
   return {state:'locked',o:list.find(o=>o.open>T),last:[...list].reverse().find(o=>o.close<T)};
 }
-function cycleStart(T){return new Date(T.getFullYear(),T.getMonth(),1)}
-function cycleOccs(){
-  const s=cycleStart(today());
-  return Object.keys(CI).map(k=>{const D=CI[k].d,q=new Date(s.getFullYear(),s.getMonth(),D);return {key:k,date:q,id:k+'@'+toISO(q),open:addDays(q,-OPEN_BEFORE),close:addDays(q,CLOSE_AFTER)}});
-}
-function prog(m){const T=today(),due=cycleOccs().filter(o=>o.open<=T);return {due:due.length,done:due.filter(o=>m.ans.includes(o.id)).length,missed:due.filter(o=>o.close<T&&!m.ans.includes(o.id)).length}}
-const $=(s,r=document)=>r.querySelector(s);
-const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmtDate=iso=>iso?new Date(iso+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
-const money=n=>'$'+Number(n).toLocaleString('en-US');
-const num=n=>Number(n).toLocaleString('en-US');
-const initials=n=>n.split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
-const hash=s=>[...s].reduce((a,c)=>a+c.charCodeAt(0),0)%5;
-let S,toastTimer;
+const monthOccs=()=>{const {y,mo}=P();return KEYS.map(k=>occ(k,y,mo))};
+function prog(u){const T=today(),due=monthOccs().filter(o=>o.open<=T);return {due:due.length,done:due.filter(o=>u.answers[o.id]).length,missed:due.filter(o=>o.close<T&&!u.answers[o.id]).length}}
 
-function seed(){
-  const B=o=>Object.assign({status:'active',ppv:null,qpv:null,earn:null,orders:null,clears:null,paid:null,done:[],plan:null,phone:'',city:'',bio:'',photo:null,idHrs:300,pendingHrs:0,history:[],pw:'demo1234',tries:0,locked:false},o);
-  const members=[
-    B({id:'leader',leader:true,name:'Olamilekan Waliu',rank:null,sponsor:null,teamId:'04OW000',neoId:'063-7710452',city:'Lagos'}),
-    B({id:'m_adaeze',name:'Adaeze Okafor',rank:3,sponsor:'leader',teamId:'04OW231',neoId:'063-4410287',ppv:310,qpv:2150,earn:420,orders:3,clears:'2026-11-22',paid:true,done:['earn','ppv','plan','paid','signup'],city:'Abuja',plan:{goals:[['I will','help 2 people place their first 100 PV order'],['I must','hold a team call every Saturday']],signups:2,target:'$1,000 and above'},history:[{from:2,to:3,cycle:'July'}]}),
-    B({id:'m_tunde',name:'Tunde Bakare',rank:2,sponsor:'leader',teamId:'04OW558',neoId:'063-4410911',ppv:180,qpv:1128,earn:210,orders:2,clears:'2026-11-19',paid:true,done:['earn','ppv','plan','paid','signup'],city:'Ibadan',plan:{goals:[['I will','sign 1 new distributor']],signups:1,target:'$300 to $1,000'},history:[{from:1,to:2,cycle:'May'}]}),
-    B({id:'m_chioma',name:'Chioma Eze',rank:2,sponsor:'m_adaeze',teamId:'05OW190',neoId:'063-5102338',ppv:265,qpv:1066,earn:160,orders:1,clears:'2026-11-25',paid:true,done:['earn','ppv','plan','paid','signup'],city:'Enugu',plan:{goals:[['I must','reach 1,000 QPV again']],signups:1,target:'$300 to $1,000'},history:[{from:1,to:2,cycle:'October'}]}),
-    B({id:'m_femi',name:'Femi Adeyemi',rank:1,sponsor:'m_tunde',teamId:'05OW774',neoId:'063-5203019',ppv:250,qpv:1010,earn:85,orders:2,clears:'2026-11-20',paid:true,done:['earn','ppv','plan','paid','signup'],city:'Lagos',plan:{goals:[['I will','sponsor 1 person and reach Senior Manager']],signups:1,target:'$300 to $1,000'},history:[{from:0,to:1,cycle:'September'}]}),
-    B({id:'m_sade',name:'Sade Ogunleye',rank:1,sponsor:'m_chioma',teamId:'05OW336',neoId:'063-5304470',ppv:136,qpv:136,earn:'none',orders:0,clears:null,paid:false,done:['earn','ppv','paid'],city:'Lagos',history:[{from:0,to:1,cycle:'August'}]}),
-    B({id:'m_ngozi',name:'Ngozi Nwosu',rank:0,sponsor:'m_tunde',teamId:'05OW812',neoId:'063-5405521',ppv:100,qpv:100,earn:40,orders:1,clears:'2026-11-18',paid:true,done:['earn','ppv','paid'],city:'Onitsha'}),
-    B({id:'m_ibrahim',name:'Ibrahim Musa',rank:0,sponsor:'m_tunde',teamId:'05OW447',neoId:'063-5506632',ppv:90,qpv:90,earn:'none',orders:0,clears:null,paid:false,done:['earn','ppv','plan','paid','signup'],city:'Kano',plan:{goals:[['I will','raise my PPV to 100']],signups:0,target:'$0 to $300'}}),
-    B({id:'m_blessing',name:'Blessing Udoh',rank:0,sponsor:'m_femi',teamId:'06OW209',neoId:'063-5607743',ppv:272,qpv:272,earn:60,orders:2,clears:'2026-11-21',paid:true,done:['earn','ppv','plan','paid','signup'],city:'Uyo',idHrs:20,plan:{goals:[['I will','invite 5 people to a product demo']],signups:1,target:'$0 to $300'}}),
-    B({id:'m_kelechi',name:'Kelechi Obi',rank:0,sponsor:'m_femi',teamId:'06OW661',neoId:'063-5708854',ppv:136,qpv:520,earn:25,orders:1,clears:'2026-11-24',paid:null,done:['earn','ppv','plan','signup'],city:'Owerri',plan:{goals:[['I will','sign 2 distributors']],signups:2,target:'$0 to $300'}}),
-    B({id:'m_emeka',name:'Emeka Nnamdi',rank:0,sponsor:'m_chioma',teamId:'05OW905',neoId:'063-5809965',ppv:125,qpv:125,earn:'none',orders:0,clears:null,paid:true,done:['earn','ppv','paid'],city:'Enugu'}),
-    B({id:'m_funke',name:'Funke Alabi',rank:0,sponsor:'m_adaeze',teamId:'06OW118',neoId:'063-5910076',city:'Abuja'}),
-    B({id:'m_yusuf',name:'Yusuf Danjuma',rank:0,sponsor:'m_adaeze',teamId:'06OW334',neoId:'063-6011187',ppv:150,qpv:150,earn:30,orders:1,clears:'2026-11-23',paid:true,done:['earn','ppv','plan','paid','signup'],city:'Kaduna',plan:{goals:[['I will','keep my 150 PPV every month']],signups:0,target:'$0 to $300'}}),
-    B({id:'m_grace',name:'Grace Ibe',rank:0,sponsor:'m_femi',teamId:'06OW305',neoId:'063-5521904',status:'pending',pw:null,pendingHrs:3,idHrs:3,city:'Port Harcourt',ppv:136,qpv:136,firstPv:136})
-  ];
-  const extra={m_adaeze:[6,380],m_tunde:[4,150],m_chioma:[3,120],m_femi:[2,60],m_sade:[1,0],m_ngozi:[1,40],m_ibrahim:[0,0],m_blessing:[2,45],m_kelechi:[1,25],m_emeka:[0,0],m_yusuf:[1,30]};
-  members.forEach(m=>{const e=extra[m.id];if(e){m.delivered=e[0];m.drop=e[1]}});
-  members.forEach(m=>{m.ans=(m.done||[]).flatMap(k=>{const o=SEEDOCC[k],[y,mo,d]=o.split('-').map(Number);return [k+'@'+o,k+'@'+toISO(new Date(y,mo-2,d))]})});
-  members.forEach(m=>{m.email=m.email||m.name.toLowerCase().replace(/[^a-z ]/g,'').split(' ').join('.')+'@example.com'});
-  return {
-    members,
-    claims:[
-      {id:'c1',by:'m_blessing',count:1,planned:1,src:'25th check-in',state:'review'},
-      {id:'c2',by:'m_kelechi',count:2,planned:2,src:'25th check-in',state:'review'},
-      {id:'c3',by:'m_femi',count:1,planned:1,src:'Reported to Admin on 9 Nov',state:'review'}
-    ],
-    feed:[
-      {id:'f1',kind:'join',who:'m_yusuf',by:'m_adaeze',when:'12 days ago'},
-      {id:'f2',kind:'rank',who:'m_chioma',to:'Senior Manager',when:'3 weeks ago'},
-      {id:'f3',kind:'join',who:'m_emeka',by:'m_chioma',when:'5 weeks ago'}
-    ],
-    dismissed:[],n:10
-  };
-}
-function fresh(keep){
-  S=Object.assign(seed(),{role:keep?keep.role:'admin',view:keep?keep.view:'dashboard',filter:'all',today:(keep&&keep.today)||'2026-11-26',ci:'earn',asId:keep?keep.asId:'m_adaeze',userId:keep?keep.userId:null,modal:null});
-}
-const NAV={admin:['dashboard','team','signups','checkins','feed','profile'],qsm:['dashboard','team','signups','checkins','feed','profile'],member:['checkins','signups','feed','profile']};
-const NAVL=r=>({dashboard:'Dashboard',team:'Team',signups:r==='admin'?'Sign-ups':'Report a sign-up',checkins:'Check-ins',feed:'Team feed',profile:'My profile'});
-const ME={admin:'leader',qsm:'m_tunde',member:'m_blessing'};
-const meId=()=>S.userId||ME[S.role];
-function asMember(){if(S.role!=='admin')return byId(meId());const a=byId(S.asId);if(a&&!a.leader&&a.status==='active')return a;return S.members.find(x=>!x.leader&&x.status==='active')||null}
-const YEAR=2026;
-
-const byId=id=>S.members.find(m=>m.id===id);
-const rankName=m=>m.leader?'Team Leader':RANKS[m.rank].n;
-const kids=id=>S.members.filter(x=>x.sponsor===id);
-function subtreeIds(id){return [id].concat(...kids(id).map(k=>subtreeIds(k.id)))}
-function visible(){
-  if(S.role==='admin')return S.members.filter(m=>!m.leader);
-  if(S.role==='qsm')return subtreeIds(meId()).map(byId);
-  return [byId(meId())];
-}
-function calcQ(m){
-  return (m.ppv||0)+kids(m.id).filter(k=>k.status==='active'&&k.rank!==4).reduce((s,k)=>s+calcQ(k),0);
-}
-function recommend(m){
-  if(m.leader||m.status!=='active'||m.ppv==null||m.ppv<100||m.qpv==null)return null;
-  let best=0;for(let i=1;i<=3;i++)if(m.qpv>=RANKS[i].q)best=i;
-  return best>m.rank?best:null;
-}
-function qualified(m){return m.rank>=1&&m.ppv!=null&&m.ppv>=100&&m.qpv!=null&&m.qpv>=RANKS[m.rank].q}
-const pill=(t,k='')=>`<span class="pill ${k}">${esc(t)}</span>`;
-const av=(m,c='')=>m.photo?`<img class="av ${c}" src="${m.photo}" alt="">`:`<span class="av a${hash(m.id)} ${c}" aria-hidden="true">${esc(initials(m.name))}</span>`;
-const incomeTxt=m=>m.earn==null?'<span class="sub">No reply</span>':m.earn==='none'?'<span class="sub">Not yet</span>':money(m.earn);
-function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{el.hidden=true},3600)}
-function teamId(){let t;do{t='0'+String(YEAR).slice(-1)+'OW'+String(Math.floor(Math.random()*1000)).padStart(3,'0')}while(S.members.some(m=>m.teamId===t));return t}
+/* ============================== people ============================== */
+const U=id=>DB.users.find(u=>u.id===id);
+const me=()=>SESSION?U(SESSION):null;
+const kids=id=>DB.users.filter(x=>x.sponsorId===id&&x.status!=='inactive');
+function downline(id){const out=[];const walk=i=>kids(i).forEach(k=>{out.push(k);walk(k.id)});walk(id);return out}
+const teamMembers=u=>DB.users.filter(x=>x.teamId===u.teamId&&x.role==='member');
+const liveMembers=u=>teamMembers(u).filter(x=>x.status!=='inactive');
+const canSeeTeam=u=>u.role==='admin'||u.rank>=2;
+const scopeOf=u=>u.role==='admin'?liveMembers(u):downline(u.id);
+const rankName=u=>u.role==='admin'?'Team leader':RANKS[u.rank].n;
+function newTP(){let t;do{t='0'+String(nowD().getFullYear()).slice(-1)+'OW'+String(Math.floor(Math.random()*1000)).padStart(3,'0')}while(DB.users.some(u=>u.tp===t));return t}
 const validNeo=v=>/^\d{3}-\d{7}$/.test(v);
+const normTP=s=>String(s||'').trim().toUpperCase().replace(/\s/g,'').replace(/0W/,'OW');
+const strongPw=p=>p.length>=8&&/[A-Za-z]/.test(p)&&/\d/.test(p);
+const PWRULE='At least 8 characters, with a letter and a number.';
 
-/* ---------- chrome ---------- */
+/* month figures, read from what each person answered */
+const ansM=(u,key)=>{const {y,mo}=P();return u.answers[occId(key,y,mo)]||null};
+const ppvNow=u=>{const a=ansM(u,'ppv');if(a&&a.ppv!=null)return a.ppv;const j=new Date(u.joinedAt),{y,mo}=P();return(j.getFullYear()===y&&j.getMonth()===mo&&u.firstPv!=null)?u.firstPv:null};
+const qpvRep=u=>{const a=ansM(u,'ppv');return a?a.qpv:null};
+const earnNow=u=>{const a=ansM(u,'earn');return a?a.earn:null};
+const paidNow=u=>{const a=ansM(u,'paid');return a?a.paid:null};
+function calcQ(u){return (ppvNow(u)||0)+kids(u.id).filter(k=>k.rank!==4).reduce((s,k)=>s+calcQ(k),0)}
+function recommend(u){
+  const p=ppvNow(u),q=qpvRep(u);
+  if(u.role!=='member'||u.status!=='active'||p==null||p<100||q==null)return null;
+  let best=0;for(let i=1;i<=3;i++)if(q>=RANKS[i].q)best=i;
+  return best>u.rank?best:null;
+}
+const qualified=u=>{const p=ppvNow(u),q=qpvRep(u);return u.rank>=1&&p!=null&&p>=100&&q!=null&&q>=RANKS[u.rank].q};
+function series(users,n){
+  const t=today(),out=[];
+  for(let i=n-1;i>=0;i--){const d=new Date(t.getFullYear(),t.getMonth()-i,1),y=d.getFullYear(),mo=d.getMonth();
+    out.push({label:monthShort(y,mo),v:users.reduce((s,u)=>{const a=u.answers[occId('earn',y,mo)];return s+(a&&typeof a.earn==='number'?a.earn:0)},0)})}
+  return out;
+}
+function dropsOf(users){
+  const T=today(),out=[];
+  users.forEach(u=>Object.entries(u.answers).forEach(([id,a])=>{if(id.startsWith('earn@')&&a.drop>0&&a.clears&&fromISO(a.clears)>=T)out.push({u,amount:a.drop,date:a.clears})}));
+  return out.sort((a,b)=>a.date<b.date?-1:1);
+}
+
+/* ============================== passwords, email and links ============================== */
+async function hashPw(salt,pw){
+  const s=salt+':'+pw;
+  try{if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}}catch(_){}
+  let h1=0xdeadbeef,h2=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}
+  h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+  return (h2>>>0).toString(16)+(h1>>>0).toString(16);
+}
+const newSalt=()=>Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2);
+async function setPassword(u,pw){u.salt=newSalt();u.pwHash=await hashPw(u.salt,pw);u.tries=0;u.locked=false}
+function sendMail(to,subject,html,cta){DB.mail.unshift({id:nid('m'),to:to.email,toName:to.name,subject,html,cta:cta||null,at:nowD().toISOString(),read:false});save();updateTT()}
+function makeToken(type,data){const t={id:nid('t'),type,data:data||{},exp:addDays(today(),7).toISOString(),used:false};DB.tokens.push(t);save();return t}
+const tokenOk=t=>t&&!t.used&&new Date(t.exp)>=today();
+
+function mailFrame(u,inner){return `<p>Hi ${esc(first(u))},</p>${inner}<p class="sub">TeamPulse · monthly check-ins for your team</p>`}
+function inviteMail(m,token,leader){
+  const sp=U(m.sponsorId)||leader;
+  sendMail(m,`Welcome to the family, ${first(m)}!`,
+   `<p>Congratulations, ${esc(first(m))}, and welcome to the family! ${esc(sp.name)} is proud of you for stepping up and joining the business. Your first order of ${m.firstPv||0} PV makes you a NeoLife Distributor today.</p>
+    <p><b>Set your password to get started.</b> Your TeamPulse ID is <b class="mono">${esc(m.tp)}</b>. Use the button below to choose your own password. The link works for 7 days. After that, you sign in with your TeamPulse ID and your password.</p>
+    <p>Now the real work starts:</p>
+    <ol><li><b>Build your business actively.</b> Work it every week, not once in a while.</li><li><b>Start calling people.</b> Write a list of names today and reach out about your business.</li><li><b>Start recruiting.</b> Invite people to look at what you are doing.</li><li><b>Train your team.</b> Show them to do what you do, and how to earn with their own skills. Help them place their first order.</li><li><b>Grow through them.</b> When your team signs people, you sign more people too.</li><li><b>Stay close to ${esc(sp.name)}.</b> Book a call to plan your first 30 days.</li></ol>`,
+   {label:'Set my password',token:token.id});
+}
+
+/* check-in emails go out by themselves when a window opens */
+function scheduleMail(){
+  let changed=false;
+  DB.users.filter(u=>u.role==='member'&&u.status==='active').forEach(u=>{
+    u.sent=u.sent||{};
+    KEYS.forEach(k=>{
+      const st=ciState(k);
+      if(st.state==='open'&&!u.answers[st.o.id]&&!u.sent[st.o.id]){
+        u.sent[st.o.id]=1;changed=true;
+        sendMail(u,`${CI[k].title}: your check-in is open`,`<p>Hi ${esc(first(u))}, ${esc(CI[k].body)}</p><p>It takes about two minutes. You can answer until ${dmy(st.o.close)}.</p>`,{label:'Answer now',route:'checkins',p:{key:k}});
+      }
+    });
+  });
+  if(changed)save();
+}
+
+/* ============================== screens that stand on their own ============================== */
 const IC=p=>`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 const ICON={
   dashboard:IC('<rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/>'),
@@ -874,404 +986,437 @@ const ICON={
   feed:IC('<path d="M12 3l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6L12 15.4 7 18.2l1.2-5.6L4 8.8l5.6-.6z"/>'),
   profile:IC('<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4 3.4-7 7.5-7s7.5 3 7.5 7"/>')
 };
-function bellCount(){
-  if(S.role!=='admin')return 0;
-  return S.claims.filter(c=>c.state==='review').length+S.members.filter(m=>m.status==='pending').length+S.members.map(recommend).filter((r,i)=>r!=null&&!S.dismissed.includes(S.members[i].id)).length;
+const BRAND='<a class="brand" href="./" title="Back to the landing page"><svg width="30" height="30" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M2 15h6l3-9 5 17 3-8h7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>TeamPulse</a>';
+const authShell=inner=>`<div class="auth"><div class="auth-card">${BRAND}${inner}</div><p class="auth-foot"><a href="./">Back to the landing page</a></p></div>`;
+const errLine=(id,msg)=>`<p class="hint ${msg?'bad':''}" id="${id}" role="alert">${esc(msg||'')}</p>`;
+const maskEmail=e=>e.replace(/^(.).*(@.*)$/,'$1***$2');
+const testHint=t=>`<p class="hint tt-only" style="margin-top:12px;padding:8px 12px;background:var(--orange-soft);border-radius:10px;color:var(--warn)">Prototype: ${t}</p>`;
+
+const AUTH={
+  signin(){const p=R.p;return authShell(`<h1>Sign in</h1><p class="sub">Use your TeamPulse ID and your password.</p>
+    <form data-form="signin" novalidate>
+      <div class="field"><label for="si-id">TeamPulse ID</label><input id="si-id" name="id" type="text" autocomplete="username" placeholder="06OW674" maxlength="7" value="${esc(p.prefill||'')}"></div>
+      <div class="field"><label for="si-pw">Password</label><input id="si-pw" name="pw" type="password" autocomplete="current-password"></div>
+      ${errLine('si-err',p.err)}
+      <button class="btn primary" type="submit" style="width:100%;justify-content:center">Sign in</button>
+    </form>
+    <p class="hint" style="margin-top:16px"><button class="link" type="button" data-act="go" data-r="forgot">Forgot your password?</button></p>
+    <p class="hint" style="margin-top:8px">New team leader? <button class="link" type="button" data-act="go" data-r="register">Register your team</button></p>
+    <p class="hint" style="margin-top:8px">First time as a member? Open the "Set your password" link in your welcome email.</p>`)},
+  register(){const p=R.p;return authShell(`<h1>Register as a team leader</h1><p class="sub">Only team leaders register. You add your own members afterwards, and they never register themselves.</p>
+    <form data-form="register" novalidate>
+      <div class="f2"><div class="field"><label for="rg-name">Full name</label><input id="rg-name" name="name" type="text" autocomplete="name" value="${esc(p.name||'')}"></div>
+      <div class="field"><label for="rg-team">Team name</label><input id="rg-team" name="team" type="text" placeholder="Team OW" value="${esc(p.team||'')}"></div></div>
+      <div class="field"><label for="rg-email">Email</label><input id="rg-email" name="email" type="email" autocomplete="email" value="${esc(p.email||'')}"><span class="hint">We send a confirmation link here, and password resets go here.</span></div>
+      <div class="field"><label for="rg-neo">Your NeoLife ID</label><input id="rg-neo" name="neo" type="text" inputmode="numeric" maxlength="11" placeholder="063-9262173" value="${esc(p.neo||'')}"></div>
+      <div class="f2"><div class="field"><label for="rg-p1">Password</label><input id="rg-p1" name="p1" type="password" autocomplete="new-password"></div>
+      <div class="field"><label for="rg-p2">Repeat password</label><input id="rg-p2" name="p2" type="password" autocomplete="new-password"></div></div>
+      <p class="hint" style="margin-top:-6px">${PWRULE}</p>
+      ${errLine('rg-err',p.err)}
+      <button class="btn primary" type="submit" style="width:100%;justify-content:center">Create my account</button>
+    </form>
+    <p class="hint" style="margin-top:16px">Already have an account? <button class="link" type="button" data-act="go" data-r="signin">Sign in</button></p>`)},
+  verifysent(){const p=R.p;return authShell(`<h1>Check your email</h1><p class="sub">We sent a confirmation link to <b>${esc(maskEmail(p.email))}</b>. Open it to finish creating your account. The link works for 7 days.</p>
+    <p class="hint">Nothing in your inbox? Check your spam folder, or <button class="link" type="button" data-act="resend-verify" data-id="${esc(p.token)}">send the link again</button>.</p>
+    ${testHint('open Test tools at the bottom right to read this email and click its link.')}`)},
+  leaderwelcome(){const u=me();return authShell(`<h1>Your team is ready</h1><p class="sub">Welcome, ${esc(first(u))}. This is your TeamPulse ID. You sign in with it and your password, so write it down.</p>
+    <div class="big">${esc(u.tp)}</div>
+    <p class="sub">Next, add your first member. They get their own TeamPulse ID and an email with a link to set their password.</p>
+    <button class="btn primary" type="button" data-act="go" data-r="dashboard" style="width:100%;justify-content:center;margin-top:6px">Go to my dashboard</button>`)},
+  setpw(){
+    const t=DB.tokens.find(x=>x.id===R.p.token);
+    if(!tokenOk(t))return AUTH.linkbad();
+    const u=U(t.data.userId),reset=t.type==='reset';
+    return authShell(`<h1>${reset?'Choose a new password':'Set your password'}</h1><p class="sub">For ${esc(u.name)}, TeamPulse ID <b class="mono">${esc(u.tp)}</b>.</p>
+    <form data-form="setpw" data-token="${esc(t.id)}" novalidate>
+      <div class="field"><label for="sp1">New password</label><input id="sp1" name="p1" type="password" autocomplete="new-password"><span class="hint">${PWRULE}</span></div>
+      <div class="field"><label for="sp2">Repeat password</label><input id="sp2" name="p2" type="password" autocomplete="new-password"></div>
+      ${errLine('sp-err','')}
+      <button class="btn primary" type="submit" style="width:100%;justify-content:center">Save password and sign in</button>
+    </form>`)},
+  forgot(){return authShell(`<h1>Forgot your password?</h1><p class="sub">Enter your TeamPulse ID. We email a reset link to the address on your account.</p>
+    <form data-form="forgot" novalidate><div class="field"><label for="fp-id">TeamPulse ID</label><input id="fp-id" name="id" type="text" placeholder="06OW674" maxlength="7" value="${esc(R.p.prefill||'')}"></div>
+    ${errLine('fp-err','')}<button class="btn primary" type="submit" style="width:100%;justify-content:center">Send reset link</button></form>
+    <p class="hint" style="margin-top:16px"><button class="link" type="button" data-act="go" data-r="signin">Back to sign in</button></p>`)},
+  forgotsent(){return authShell(`<h1>Check your email</h1><p class="sub">If that TeamPulse ID exists, we sent a reset link to the email on the account. The link works for 7 days.</p>
+    <button class="btn" type="button" data-act="go" data-r="signin" style="margin-top:10px">Back to sign in</button>
+    ${testHint('open Test tools to read the email.')}`)},
+  linkbad(){const p=R.p;return authShell(`<h1>This link does not work</h1><p class="sub">${esc(p.why||'This link is not valid or has expired.')} Links last 7 days and work once.</p>
+    <p class="sub">You can ask for a new one with "Forgot your password?".</p>
+    <div class="inline" style="margin-top:12px"><button class="btn primary" type="button" data-act="go" data-r="forgot">Get a new link</button><button class="btn" type="button" data-act="go" data-r="signin">Back to sign in</button></div>`)}
+};
+const AUTH_ROUTES=Object.keys(AUTH);
+
+/* ============================== signed-in shell ============================== */
+const NAVL={dashboard:'Dashboard',team:'Team',signups:'Sign-ups',feed:'Team feed',profile:'Settings',home:'Home',checkins:'Check-ins'};
+function navFor(u){
+  if(u.role==='admin')return [['dashboard','Dashboard','dashboard'],['team','Team','team'],['signups','Sign-ups','signups'],['feed','Team feed','feed'],['profile','Settings','profile']];
+  const n=[['home','Home','dashboard'],['checkins','Check-ins','checkins']];
+  if(u.rank>=2)n.push(['team','My team','team']);
+  n.push(['signups','Report a sign-up','signups'],['feed','Team feed','feed'],['profile','My profile','profile']);
+  return n;
 }
-function badgeCount(){
-  const n=S.claims.filter(c=>c.state==='review').length+S.members.filter(m=>m.status==='pending').length;
-  return n?`<span class="pill warn">${n}</span>`:'';
+const homeRoute=u=>u.role==='admin'?'dashboard':'home';
+function bellCount(u){
+  if(u.role!=='admin')return 0;
+  const mem=liveMembers(u);
+  return mem.filter(m=>m.status==='invited').length+mem.map(recommend).filter((r,i)=>r!=null&&!DB.dismissed.includes(mem[i].id)).length+DB.claims.filter(c=>c.teamId===u.teamId&&['review','ready'].includes(c.state)).length;
 }
-function renderChrome(){
-  $('#role').value=S.role;
-  $('#today').value=S.today;
-  const rl=$('#role').closest('label');if(rl)rl.hidden=!!S.custom;
-  const T0=today(),ms=cycleStart(T0),mEnd=new Date(ms.getFullYear(),ms.getMonth()+1,0);
-  $('#cyclecard').innerHTML=`This month<b>${dmy(ms)} – ${dmy(mEnd)} ${mEnd.getFullYear()}</b>NeoLife counts PV by the normal calendar month.<br><br>${teamLine(T0)}`;
-  const me=byId(meId());
-  $('#role').options[1].textContent='QSM · '+(S.role==='qsm'?me.name:'Tunde Bakare');
-  $('#role').options[2].textContent='Member · '+(S.role==='member'?me.name:'Blessing Udoh');
-  $('#me').innerHTML=`${av(me)}<div><div class="me-n">${esc(me.name)}</div><div class="sub">${S.role==='admin'?'Team Leader · Admin':S.role==='qsm'?'QSM · '+esc(rankName(me)):'Member · '+esc(rankName(me))}</div></div>`;
-  $('#searchbox').hidden=S.role==='member';
-  $('#bell-dot').hidden=!(bellCount()>0);
-  const L=NAVL(S.role);
-  $('#tabs').innerHTML=NAV[S.role].map(v=>`<button class="nav-item" type="button" data-act="nav" data-v="${v}" ${S.view===v?'aria-current="page"':''}>${ICON[v]}<span>${L[v]}</span>${v==='signups'&&S.role==='admin'?badgeCount():''}</button>`).join('');
+const av=(u,c='')=>u.photo?`<img class="av ${c}" src="${u.photo}" alt="">`:`<span class="av a${hashCode(u.id)} ${c}" aria-hidden="true">${esc(initials(u.name))}</span>`;
+const pill=(t,k='')=>`<span class="pill ${k}">${esc(t)}</span>`;
+function shell(u){
+  const nav=navFor(u).map(([r,l,ic])=>{
+    const badge=r==='signups'&&u.role==='admin'?(()=>{const n=DB.claims.filter(c=>c.teamId===u.teamId&&['review','ready'].includes(c.state)).length;return n?`<span class="pill warn">${n}</span>`:''})():'';
+    return `<button class="nav-item" type="button" data-act="go" data-r="${r}" ${R.name===r||(R.name==='addmember'&&r==='team')||(R.name==='memberadded'&&r==='team')?'aria-current="page"':''}>${ICON[ic]}<span>${l}</span>${badge}</button>`}).join('');
+  const T=today(),ms=new Date(T.getFullYear(),T.getMonth(),1),mEnd=new Date(T.getFullYear(),T.getMonth()+1,0);
+  const showSearch=(u.role==='admin'&&['dashboard','team'].includes(R.name))||(u.role==='member'&&R.name==='team');
+  const bc=bellCount(u);
+  const view=(VIEWS[R.name]||VIEWS[homeRoute(u)])(u);
+  return `<div class="shell">
+    <aside class="side"><a class="brand" href="./" title="Back to the landing page"><svg width="30" height="30" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M2 15h6l3-9 5 17 3-8h7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>TeamPulse</a>
+      <nav aria-label="Sections">${nav}</nav>
+      <div class="cyclecard">This month<b>${dmy(ms)} – ${dmy(mEnd)} ${mEnd.getFullYear()}</b>NeoLife counts PV by the normal calendar month.<br><br>${teamLine(T)}</div></aside>
+    <div class="content">
+      <header class="top">
+        <label class="search" ${showSearch?'':'style="visibility:hidden"'}><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input id="q" type="search" placeholder="Search members, TeamPulse ID or NeoLife ID" aria-label="Search members" value="${esc(Q)}"></label>
+        <div class="top-right">
+          ${u.role==='admin'?`<button class="iconbtn" type="button" data-act="bell" aria-label="Notifications"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 17h12l-1.5-2V10.5a4.5 4.5 0 10-9 0V15z"/><path d="M10 20a2 2 0 004 0"/></svg>${bc?'<i></i>':''}</button>`:''}
+          <div class="me">${av(u)}<div><div class="me-n">${esc(u.name)}</div><div class="sub">${u.role==='admin'?'Team leader · '+esc((DB.teams.find(t=>t.id===u.teamId)||{}).name||''):esc(rankName(u))}</div></div></div>
+          <button class="btn sm" type="button" data-act="signout">Sign out</button>
+        </div>
+      </header>
+      <main id="main">${view}</main>
+    </div></div>`;
 }
 
-/* ---------- dashboard ---------- */
+/* ============================== shared pieces ============================== */
 function gauge(pct){
   return `<svg class="gauge" viewBox="0 0 200 120" role="img" aria-label="${pct} percent of check-ins answered">
     <defs><linearGradient id="gg" x1="0" x2="1" y1="0" y2="0"><stop offset="0" style="stop-color:var(--teal)"/><stop offset="1" style="stop-color:var(--orange)"/></linearGradient></defs>
     <path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="var(--surface2)" stroke-width="16" stroke-linecap="round" pathLength="100"/>
     <path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="url(#gg)" stroke-width="16" stroke-linecap="round" pathLength="100" stroke-dasharray="${pct} 100"/>
-    <text x="100" y="82" text-anchor="middle" class="g-num">${pct}%</text>
-    <text x="100" y="100" text-anchor="middle" class="g-sub">Check-ins answered</text>
+    <text x="100" y="82" text-anchor="middle" class="g-num">${pct}%</text><text x="100" y="100" text-anchor="middle" class="g-sub">Check-ins answered</text>
     <text x="20" y="118" text-anchor="middle" class="g-end">0</text><text x="180" y="118" text-anchor="middle" class="g-end">100</text></svg>`;
 }
-function feedText(f){
-  const w=byId(f.who);
-  return f.kind==='join'?{who:w,t:`<b>${esc(w.name)}</b> joined the team`,s:`Sponsored by ${esc(byId(f.by).name)}`,rank:false}
-    :{who:w,t:`<b>${esc(w.name)}</b> stepped up to ${esc(f.to)}`,s:'Congratulations on the new rank',rank:true};
+const incomeTxt=v=>v==null?'<span class="sub">No reply</span>':v==='none'?'<span class="sub">Not yet</span>':money(v);
+const statusPill=u=>u.status==='invited'?pill('Invited','warn'):u.status==='inactive'?pill('Inactive','bad'):'';
+function feedItem(f){
+  const w=U(f.who);if(!w)return null;
+  return f.kind==='join'?{who:w,t:`<b>${esc(w.name)}</b> joined the team`,s:`Sponsored by ${esc((U(f.by)||{name:'the team leader'}).name)}`,rank:false,at:f.at}
+    :{who:w,t:`<b>${esc(w.name)}</b> stepped up to ${esc(f.to)}`,s:'Congratulations on the new rank',rank:true,at:f.at};
 }
-function dashboard(){
-  const isAdmin=S.role==='admin';
-  const me=byId(meId());
-  const vis=visible().filter(m=>m.status==='active');
-  const P=Object.fromEntries(vis.map(m=>[m.id,prog(m)]));
-  const slots=vis.reduce((s,m)=>s+P[m.id].due,0),done=vis.reduce((s,m)=>s+P[m.id].done,0),pct=slots?Math.round(done/slots*100):0;
-  const activeP=vis.filter(m=>m.ppv!=null&&m.ppv>=100).length;
-  const unpaid=vis.filter(m=>m.paid===false).length;
-  const pend=S.members.filter(m=>m.status==='pending'&&(isAdmin||vis.some(v=>v.id===m.sponsor)));
-  const recs=vis.map(m=>[m,recommend(m)]).filter(([m,r])=>r!=null&&!S.dismissed.includes(m.id));
-  const late=vis.filter(m=>P[m.id].done<P[m.id].due);
-  const f=S.filter,q=(S.q||'').trim().toLowerCase();
-  const filt={all:()=>true,late:m=>P[m.id].done<P[m.id].due,unpaid:m=>m.paid!==true,noinc:m=>m.earn==='none',low:m=>m.ppv==null||m.ppv<100}[f];
+const feedFor=u=>DB.feed.filter(f=>f.teamId===u.teamId).map(feedItem).filter(Boolean);
+function feedList(items,limit){
+  return items.slice(0,limit||99).map(p=>`<div class="post"><div class="spark ${p.rank?'rank':''}" aria-hidden="true">${p.rank?IC('<path d="M12 19V5M5 12l7-7 7 7"/>'):IC('<path d="M12 3l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6L12 15.4 7 18.2l1.2-5.6L4 8.8l5.6-.6z"/>')}</div><div style="flex:1;min-width:0"><div>${p.t}</div><div class="sub">${p.s} · ${ago(p.at)}</div></div></div>`).join('');
+}
+
+/* ============================== team leader: dashboard ============================== */
+function dashboard(u){
+  const mem=liveMembers(u),act=mem.filter(x=>x.status==='active');
+  const P_=Object.fromEntries(mem.map(m=>[m.id,prog(m)]));
+  const slots=mem.reduce((s,m)=>s+P_[m.id].due,0),done=mem.reduce((s,m)=>s+P_[m.id].done,0),pct=slots?Math.round(done/slots*100):0;
+  const activeP=act.filter(m=>(ppvNow(m)||0)>=100).length;
+  const unpaid=act.filter(m=>paidNow(m)===false).length;
+  const invited=mem.filter(m=>m.status==='invited');
+  const recs=act.map(m=>[m,recommend(m)]).filter(([m,r])=>r!=null&&!DB.dismissed.includes(m.id));
+  const late=act.filter(m=>P_[m.id].done<P_[m.id].due);
+  const claims=DB.claims.filter(c=>c.teamId===u.teamId&&['review','ready'].includes(c.state));
+  const f=R.p.filter||'all',q=Q.trim().toLowerCase();
+  const filt={all:()=>true,late:m=>P_[m.id].done<P_[m.id].due,unpaid:m=>paidNow(m)!==true,noinc:m=>earnNow(m)==='none',low:m=>ppvNow(m)==null||ppvNow(m)<100}[f];
   const chip=(k,t)=>`<button class="chip" type="button" data-act="filter" data-v="${k}" aria-pressed="${f===k}">${t}</button>`;
   const groups=[[3,'Executive Managers','EM','accent'],[2,'Senior Managers','SM','orange'],[1,'Managers','M','teal'],[0,'Distributors','D','blue'],[4,'Directors','DIR','accent']];
   const crews=groups.map(([r,name,ab,c])=>{
-    const g=vis.filter(m=>m.rank===r);if(!g.length)return '';
-    const d=g.reduce((s,m)=>s+P[m.id].done,0),sl=g.reduce((s,m)=>s+P[m.id].due,0),p=sl?Math.round(d/sl*100):0,fu=g.filter(m=>P[m.id].done<P[m.id].due).length;
+    const g=mem.filter(m=>m.rank===r);if(!g.length)return '';
+    const d=g.reduce((s,m)=>s+P_[m.id].done,0),sl=g.reduce((s,m)=>s+P_[m.id].due,0),p=sl?Math.round(d/sl*100):0,fu=g.filter(m=>P_[m.id].done<P_[m.id].due).length;
     return `<div class="crew"><div class="crew-top"><span class="sq c-${c}">${ab}</span><div><b>${name}</b><span class="sub">${g.length} member${g.length>1?'s':''}</span></div></div>
       <div class="stack">${g.slice(0,4).map(m=>av(m)).join('')}${g.length>4?`<span class="av more">+${g.length-4}</span>`:''}</div>
       <div class="prog"><span>Check-ins answered</span><b>${p}%</b></div><div class="meter c-${c}"><i style="width:${p}%"></i></div>
-      <div class="minis"><span class="mini ${fu?'warn':''}">${fu} to follow up</span><span class="mini">${g.filter(m=>m.ppv!=null&&m.ppv>=100).length} active</span></div></div>`;
+      <div class="minis"><span class="mini ${fu?'warn':''}">${fu} to follow up</span><span class="mini">${g.filter(m=>(ppvNow(m)||0)>=100).length} active</span></div></div>`;
   }).join('');
-  const rows=vis.filter(filt).filter(m=>!q||(m.name+' '+m.teamId+' '+m.neoId).toLowerCase().includes(q)).map(m=>{
-    const calc=calcQ(m),diff=m.qpv!=null&&Math.abs(m.qpv-calc)>0,ql=qualified(m);
+  const rows=mem.filter(filt).filter(m=>!q||(m.name+' '+m.tp+' '+m.neoId).toLowerCase().includes(q)).map(m=>{
+    const p=ppvNow(m),qr=qpvRep(m),calc=calcQ(m),diff=qr!=null&&qr!==calc;
     return `<tr class="click" data-act="member" data-id="${m.id}">
-      <td><div class="who">${av(m)}<div><div style="font-weight:700">${esc(m.name)}</div><div class="mono sub">${esc(m.teamId)}</div></div></div></td>
-      <td>${pill(RANKS[m.rank].n,m.rank>=1?'acc':'')} ${m.rank>=1?(ql?pill('Qualified','good'):pill('Not qualified','warn')):''}</td>
-      <td class="num">${m.ppv==null?'<span class="sub">No reply</span>':num(m.ppv)+(m.ppv<100?' '+pill('Under 100','bad'):'')}</td>
-      <td class="num">${m.qpv==null?'<span class="sub">No reply</span>':num(m.qpv)}${diff?`<span class="diff">System ${num(calc)}</span>`:''}</td>
-      <td class="num">${incomeTxt(m)}</td>
-      <td>${m.paid===true?pill('Paid','good'):m.paid===false?pill('Not paid','bad'):pill('No answer','warn')}</td>
-      <td><span class="dots" title="${P[m.id].done} of ${P[m.id].due} check-ins answered">${P[m.id].due?Array.from({length:P[m.id].due},(_,i)=>`<i class="${i<P[m.id].done?'on':''}"></i>`).join(''):'<span class="sub">None due</span>'}</span></td>
-    </tr>`}).join('');
-  const drops=vis.filter(m=>m.drop>0&&m.clears).sort((a,b)=>a.clears<b.clears?-1:1),dropTotal=drops.reduce((s,m)=>s+m.drop,0);
-  const top=[...vis].filter(m=>m.qpv!=null).sort((a,b)=>b.qpv-a.qpv).slice(0,3);
-  const hist=[0,1,2,3,4].map(i=>vis.reduce((s,m)=>s+incomeHist(m)[i],0)),mx=Math.max(...hist,1);
-  const posts=S.feed.slice(0,3).map(feedText);
-  return `
-  <div class="hello"><div><h1>Welcome, ${isAdmin&&!S.custom?'Team Lead':esc(me.name.split(' ')[0])}!</h1><p class="sub">${S.teamName?esc(S.teamName)+' · ':''}Check-in completion this month: <b>${pct}%</b>. Target 75 to 80%.</p></div>
-    <button class="btn dark" type="button" data-act="report">Monthly report</button></div>
-  ${vis.length===0&&isAdmin?`<section class="card" style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between"><div><h3 style="margin:0">Your team is empty</h3><p class="sub" style="margin:4px 0 0">Add your first member. They get a TeamPulse ID and an email to set their password.</p></div><button class="btn primary" type="button" data-act="nav" data-v="signups">Add my first member</button></section>`:''}
-  <div class="crews">${crews}${isAdmin?`<button class="crew add" type="button" data-act="nav" data-v="signups"><span class="plus">+</span>Add a sign-up</button>`:''}</div>
+      <td><div class="who">${av(m)}<div><div style="font-weight:700">${esc(m.name)} ${statusPill(m)}</div><div class="mono sub">${esc(m.tp)}</div></div></div></td>
+      <td>${pill(RANKS[m.rank].n,m.rank>=1?'acc':'')} ${m.rank>=1&&m.status==='active'?(qualified(m)?pill('Qualified','good'):pill('Not qualified','warn')):''}</td>
+      <td class="num">${p==null?'<span class="sub">No reply</span>':num(p)+(p<100?' '+pill('Under 100','bad'):'')}</td>
+      <td class="num">${qr==null?'<span class="sub">No reply</span>':num(qr)}${diff?`<span class="diff">System ${num(calc)}</span>`:''}</td>
+      <td class="num">${incomeTxt(earnNow(m))}</td>
+      <td>${paidNow(m)===true?pill('Paid','good'):paidNow(m)===false?pill('Not paid','bad'):pill('No answer','warn')}</td>
+      <td><span class="dots" title="${P_[m.id].done} of ${P_[m.id].due} check-ins answered">${P_[m.id].due?Array.from({length:P_[m.id].due},(_,i)=>`<i class="${i<P_[m.id].done?'on':''}"></i>`).join(''):'<span class="sub">None due</span>'}</span></td></tr>`}).join('');
+  const top=[...act].filter(m=>qpvRep(m)!=null).sort((a,b)=>qpvRep(b)-qpvRep(a)).slice(0,3);
+  const hist=series(mem,5),mx=Math.max(...hist.map(h=>h.v),1);
+  const drops=dropsOf(mem),dropTotal=drops.reduce((s,d)=>s+d.amount,0);
+  const posts=feedFor(u).slice(0,3);
+  const header=`<div class="hello"><div><h1>Welcome, ${esc(first(u))}!</h1><p class="sub">${esc((DB.teams.find(t=>t.id===u.teamId)||{}).name||'')}${mem.length?` · Check-in completion this month: <b>${pct}%</b>. Target 75 to 80%.`:''}</p></div>
+    <button class="btn primary" type="button" data-act="go" data-r="addmember">Add a member</button></div>`;
+  if(!mem.length){
+    return header+`<section class="card start"><h2>Get started</h2><p class="sub" style="margin:-6px 0 6px">Three steps and your team is live.</p>
+      <ul>
+        <li class="done"><span class="n">${IC('<path d="M5 12.5l4.5 4.5L19 7.5"/>')}</span><div><b>Create your team</b><p>${esc((DB.teams.find(t=>t.id===u.teamId)||{}).name||'')} is ready, and your TeamPulse ID is <span class="mono">${esc(u.tp)}</span>.</p></div><span></span></li>
+        <li><span class="n">2</span><div><b>Add your first member</b><p>Enter their name, NeoLife ID, sponsor and first order. They get a TeamPulse ID and an email to set their password.</p></div><button class="btn primary sm" type="button" data-act="go" data-r="addmember">Add a member</button></li>
+        <li><span class="n">3</span><div><b>See the check-in calendar</b><p>Five questions a month, each open 2 days before its date and 3 days after. Your members get an email when one opens.</p></div><span></span></li>
+      </ul></section>`;
+  }
+  return header+`
+  <div class="crews">${crews}<button class="crew add" type="button" data-act="go" data-r="addmember"><span class="plus">+</span>Add a member</button></div>
   <div class="grid g-att" id="attn">
-    ${isAdmin?`<section class="card"><h3>Pending activation</h3>
-      ${pend.length?`<div class="rows">${pend.map(m=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">Sponsor ${esc(byId(m.sponsor).name)} · first order ${m.firstPv||0} PV · activates itself in ${Math.max(0,24-m.pendingHrs)}h</div></div><button class="btn sm primary" type="button" data-act="activate" data-id="${m.id}">Activate</button></div>`).join('')}</div>`:'<div class="empty">Nobody is waiting.</div>'}
-    </section>`:''}
+    <section class="card"><h3>Invited, no password yet</h3>
+      ${invited.length?`<div class="rows">${invited.map(m=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">Added ${ago(m.joinedAt)} · ${esc(m.tp)} · first order ${m.firstPv||0} PV</div></div><button class="btn sm" type="button" data-act="resend" data-id="${m.id}">Resend</button></div>`).join('')}</div>`:'<div class="empty">Everyone you added has set a password.</div>'}</section>
+    <section class="card"><h3>Reported sign-ups</h3>
+      ${claims.length?`<div class="rows">${claims.slice(0,4).map(c=>`<div class="row"><div class="grow"><div class="name">${esc((U(c.by)||{name:'Someone'}).name)} reports ${c.count}</div><div class="sub">${c.state==='ready'?'Details received':'Waiting for your review'}</div></div></div>`).join('')}</div><button class="btn sm" type="button" data-act="go" data-r="signups" style="margin-top:10px">Review</button>`:'<div class="empty">No reports waiting.</div>'}</section>
     <section class="card"><h3>Rank-up recommendations</h3>
-      ${recs.length?`<div class="rows">${recs.map(([m,r])=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">PPV ${m.ppv} · QPV ${num(m.qpv)} reaches ${RANKS[r].n} (${num(RANKS[r].q)})</div></div>${isAdmin?`<button class="btn sm good" type="button" data-act="recok" data-id="${m.id}">Confirm</button><button class="btn sm" type="button" data-act="recno" data-id="${m.id}">Dismiss</button>`:pill('Admin confirms')}</div>`).join('')}</div>`:'<div class="empty">No one has reached a new threshold.</div>'}
-    </section>
+      ${recs.length?`<div class="rows">${recs.map(([m,r])=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">PPV ${ppvNow(m)} · QPV ${num(qpvRep(m))} reaches ${RANKS[r].n} (${num(RANKS[r].q)})</div></div><button class="btn sm good" type="button" data-act="recok" data-id="${m.id}">Confirm</button><button class="btn sm" type="button" data-act="recno" data-id="${m.id}">Dismiss</button></div>`).join('')}</div>`:'<div class="empty">No one has reached a new threshold.</div>'}</section>
     <section class="card"><h3>Not fully replied</h3>
-      ${late.length?`<div class="rows">${late.map(m=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">${P[m.id].done===0?'No answers yet':P[m.id].done+' of '+P[m.id].due+' answered'}${P[m.id].missed?' · '+P[m.id].missed+' missed':''}</div></div><button class="btn sm" type="button" data-act="remind" data-id="${m.id}">Remind</button></div>`).join('')}</div>`:'<div class="empty">Everyone has replied.</div>'}
-    </section>
+      ${late.length?`<div class="rows">${late.map(m=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">${P_[m.id].done===0?'No answers yet':P_[m.id].done+' of '+P_[m.id].due+' answered'}${P_[m.id].missed?' · '+P_[m.id].missed+' missed':''}</div></div><button class="btn sm" type="button" data-act="remind" data-id="${m.id}">Remind</button></div>`).join('')}</div>`:'<div class="empty">Everyone has replied.</div>'}</section>
     <section class="card"><h3>Money dropping soon</h3>
-      ${drops.length?`<div class="rows">${drops.map(m=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">${money(m.drop)} on ${fmtDate(m.clears)}</div></div></div>`).join('')}</div><p class="sub" style="margin:10px 0 0">Total ${money(dropTotal)}. Plan PPV orders around these dates.</p>`:'<div class="empty">No payouts reported yet.</div>'}
-    </section>
+      ${drops.length?`<div class="rows">${drops.slice(0,6).map(d=>`<div class="row"><div class="grow"><div class="name">${esc(d.u.name)}</div><div class="sub">${money(d.amount)} on ${fmtISO(d.date)}</div></div></div>`).join('')}</div><p class="sub" style="margin:10px 0 0">Total ${money(dropTotal)}. Plan PPV orders around these dates.</p>`:'<div class="empty">No payouts reported yet.</div>'}</section>
   </div>
   <div class="split">
     <section class="card">
-      <div class="head"><h2>Team this month</h2>
-        <div class="chips">${chip('all','All')}${chip('late','Not replied')}${chip('unpaid','Not paid')}${chip('noinc','No income yet')}${chip('low','Under 100 PPV')}</div></div>
-      <p class="sub">Select a row for a member's plan, history and income. "System count" is the QPV worked out from members in this system. Customers outside the system explain most gaps.</p>
+      <div class="head"><h2>Team this month</h2><div class="chips">${chip('all','All')}${chip('late','Not replied')}${chip('unpaid','Not paid')}${chip('noinc','No income yet')}${chip('low','Under 100 PPV')}</div></div>
+      <p class="sub">Select a row for a member's plan, history and income. "System" is the QPV worked out from the members added here. Customers outside the system explain most gaps.</p>
       <div class="scroll"><table><thead><tr><th>Member</th><th>Rank</th><th class="num">PPV</th><th class="num">QPV</th><th class="num">Income</th><th>Monthly</th><th>Replies</th></tr></thead>
       <tbody>${rows||'<tr><td colspan="7" class="empty">No members match.</td></tr>'}</tbody></table></div>
     </section>
-    <section class="card"><div class="head"><h3 style="margin:0">Overall progress</h3><span class="pill acc">${esc(isAdmin?'Whole team':'Your downline')}</span></div>
+    <section class="card"><div class="head"><h3 style="margin:0">Overall progress</h3><span class="pill acc">Whole team</span></div>
       ${gauge(pct)}
-      <div class="stats4"><div><b class="n1">${vis.length}</b><span>Members</span></div><div><b class="n2">${activeP}</b><span>Active, 100+ PPV</span></div><div><b class="n3">${unpaid}</b><span>Not paid</span></div><div><b class="n4">${recs.length}</b><span>Rank-up checks</span></div></div>
-      <p class="sub" style="text-align:center;margin:14px 0 0">${done} of ${slots} check-in answers received</p>
-    </section>
+      <div class="stats4"><div><b class="n1">${mem.length}</b><span>Members</span></div><div><b class="n2">${activeP}</b><span>Active, 100+ PPV</span></div><div><b class="n3">${unpaid}</b><span>Not paid</span></div><div><b class="n4">${recs.length}</b><span>Rank-up checks</span></div></div>
+      <p class="sub" style="text-align:center;margin:14px 0 0">${done} of ${slots} check-in answers received</p></section>
   </div>
   <div class="trio">
-    <section class="card"><div class="head"><h3 style="margin:0">Rank performance</h3><button class="btn sm" type="button" data-act="nav" data-v="team">See all</button></div>
-      <div class="rows" style="margin-top:12px">${top.map(m=>`<div class="row"><span>${av(m)}</span><div class="grow" style="flex:1 1 90px"><div class="name">${esc(m.name)}</div><div class="sub">${RANKS[m.rank].n}</div></div><b>${num(m.qpv)} <span class="sub" style="font-weight:500">QPV</span></b></div>`).join('')||'<div class="empty">No numbers yet.</div>'}</div></section>
+    <section class="card"><div class="head"><h3 style="margin:0">Rank performance</h3><button class="btn sm" type="button" data-act="go" data-r="team">See all</button></div>
+      <div class="rows" style="margin-top:12px">${top.map(m=>`<div class="row"><span>${av(m)}</span><div class="grow" style="flex:1 1 90px"><div class="name">${esc(m.name)}</div><div class="sub">${RANKS[m.rank].n}</div></div><b>${num(qpvRep(m))} <span class="sub" style="font-weight:500">QPV</span></b></div>`).join('')||'<div class="empty">QPV appears after members answer the 14th check-in.</div>'}</div></section>
     <section class="card"><div class="head"><h3 style="margin:0">Income by month</h3><span class="legend"><span><i style="background:var(--accent-soft)"></i>Earlier</span><span><i style="background:var(--orange)"></i>This month</span></span></div>
-      <p class="sub" style="margin:4px 0 0">Team total in USD. Example history.</p>
-      <div class="bars" style="margin-top:8px">${hist.map((v,i)=>`<div class="${i===4?'now':''}">${money(v)}<i style="height:${Math.round(v/mx*78)}%"></i></div>`).join('')}</div>
-      <div class="axis">${['Jul','Aug','Sep','Oct','Nov'].map(x=>`<span>${x}</span>`).join('')}</div></section>
-    <section class="card feed"><div class="head"><h3 style="margin:0">Team feed</h3><button class="btn sm" type="button" data-act="nav" data-v="feed">See all</button></div>
-      <div style="margin-top:8px">${posts.map(p=>`<div class="post"><div class="spark ${p.rank?'rank':''}" aria-hidden="true">${p.rank?IC('<path d="M12 19V5M5 12l7-7 7 7"/>'):IC('<path d="M12 3l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6L12 15.4 7 18.2l1.2-5.6L4 8.8l5.6-.6z"/>')}</div><div style="flex:1;min-width:0"><div>${p.t}</div><div class="sub">${p.s}</div></div></div>`).join('')||'<div class="empty">Nothing yet.</div>'}</div></section>
+      <p class="sub" style="margin:4px 0 0">Team total in USD, from the 10th check-ins.</p>
+      <div class="bars" style="margin-top:8px">${hist.map((h,i)=>`<div class="${i===4?'now':''}">${h.v?money(h.v):'0'}<i style="height:${Math.round(h.v/mx*78)}%"></i></div>`).join('')}</div>
+      <div class="axis">${hist.map(h=>`<span>${h.label}</span>`).join('')}</div></section>
+    <section class="card feed"><div class="head"><h3 style="margin:0">Team feed</h3><button class="btn sm" type="button" data-act="go" data-r="feed">See all</button></div>
+      <div style="margin-top:8px">${feedList(posts)||'<div class="empty">New members and step-ups appear here.</div>'}</div></section>
   </div>`;
 }
 
-/* ---------- team ---------- */
-function team(){
-  const root=S.role==='admin'?'leader':meId();
-  const node=(m,d)=>{
-    const c=kids(m.id);
-    return `<div class="node ${m.status==='pending'?'dim':''}" data-act="member" data-id="${m.id}">${av(m)}
-      <div class="grow" style="flex:1 1 180px"><div style="font-weight:600">${esc(m.name)}</div><div class="mono sub">${esc(m.teamId)} · ${esc(m.neoId)}</div></div>
-      ${pill(rankName(m),m.leader||m.rank>=1?'acc':'')}${m.status==='pending'?pill('Pending','warn'):''}
-    </div>${c.length?`<div class="lvl">${c.map(k=>node(k,d+1)).join('')}</div>`:''}`;
-  };
-  const r=byId(root);
-  return `<section class="card"><div class="head"><h2>${S.role==='admin'?'Whole team':'Your downline'}</h2><span class="sub">${subtreeIds(root).length-1} people under ${esc(r.name)}${S.role==='qsm'?'. QSMs only see their own downline.':''}</span></div>
-    <div class="tree" style="margin-top:12px">${node(r,0)}</div></section>`;
+/* ============================== team and members ============================== */
+function team(u){
+  const list=scopeOf(u),q=Q.trim().toLowerCase(),mode=R.p.mode||'list';
+  const admin=u.role==='admin';
+  const shown=list.filter(m=>!q||(m.name+' '+m.tp+' '+m.neoId).toLowerCase().includes(q));
+  const node=(m)=>{const c=kids(m.id).filter(k=>list.some(x=>x.id===k.id));
+    return `<div class="node ${m.status==='inactive'?'dim':''}" data-act="member" data-id="${m.id}">${av(m)}<div style="flex:1 1 180px"><div style="font-weight:600">${esc(m.name)} ${statusPill(m)}</div><div class="mono sub">${esc(m.tp)} · ${esc(m.neoId)}</div></div>${pill(rankName(m),m.rank>=1?'acc':'')}</div>${c.length?`<div class="lvl">${c.map(node).join('')}</div>`:''}`};
+  const roots=list.filter(m=>!list.some(x=>x.id===m.sponsorId));
+  const body=!list.length?`<div class="empty" style="padding:26px 0">${admin?'No members yet. Add your first member to start the team.':'Nobody is in your downline yet.'}</div>`
+   :mode==='tree'?`<div class="tree" style="margin-top:12px">${roots.map(node).join('')}</div>`
+   :`<div class="scroll" style="margin-top:12px"><table><thead><tr><th>Member</th><th>Rank</th><th>NeoLife ID</th><th>Sponsor</th><th>Joined</th></tr></thead><tbody>${shown.map(m=>`<tr class="click" data-act="member" data-id="${m.id}"><td><div class="who">${av(m)}<div><div style="font-weight:700">${esc(m.name)} ${statusPill(m)}</div><div class="mono sub">${esc(m.tp)}</div></div></div></td><td>${pill(RANKS[m.rank].n,m.rank>=1?'acc':'')}</td><td class="mono">${esc(m.neoId)}</td><td>${esc((U(m.sponsorId)||{name:'—'}).name)}</td><td>${fmtISO(m.joinedAt)}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">No members match.</td></tr>'}</tbody></table></div>`;
+  return `<div class="head"><div><h2>${admin?'Team':'My team'}</h2><p class="sub" style="margin:2px 0 0">${list.length} member${list.length===1?'':'s'}${admin?'':' in your downline. You see their results, and nobody outside it.'}</p></div>
+    <div class="inline"><div class="chips"><button class="chip" type="button" data-act="mode" data-v="list" aria-pressed="${mode==='list'}">List</button><button class="chip" type="button" data-act="mode" data-v="tree" aria-pressed="${mode==='tree'}">Tree</button></div>${admin?`<button class="btn primary" type="button" data-act="go" data-r="addmember">Add a member</button>`:''}</div></div>
+    <section class="card">${body}</section>`;
+}
+function sponsorOptions(u,sel){return [u,...liveMembers(u)].map(x=>`<option value="${x.id}" ${x.id===sel?'selected':''}>${esc(x.name)}${x.role==='admin'?' (you)':''}</option>`).join('')}
+function addmember(u){
+  const p=R.p,d=p.draft||{};
+  return `<div class="head"><div><h2>Add a member</h2><p class="sub" style="margin:2px 0 0">They never register themselves. They get a TeamPulse ID and an email to set their password.</p></div></div>
+  <section class="card" style="max-width:640px"><form data-form="addmember" novalidate>
+    <div class="f2"><div class="field"><label for="am-name">Full name</label><input id="am-name" name="name" type="text" value="${esc(d.name||'')}"></div>
+    <div class="field"><label for="am-email">Email</label><input id="am-email" name="email" type="email" value="${esc(d.email||'')}"></div></div>
+    <div class="f2"><div class="field"><label for="am-phone">Phone (optional)</label><input id="am-phone" name="phone" type="text" value="${esc(d.phone||'')}"></div>
+    <div class="field"><label for="am-neo">NeoLife ID</label><input id="am-neo" name="neo" type="text" inputmode="numeric" maxlength="11" placeholder="063-9262173" value="${esc(d.neo||'')}"><span class="hint">Check it carefully. Members cannot change it later. Only you can correct it.</span></div></div>
+    <div class="f2"><div class="field"><label for="am-sp">Sponsor</label><select id="am-sp" name="sponsor">${sponsorOptions(u,p.sponsor||d.sponsor||u.id)}</select></div>
+    <div class="field"><label for="am-pv">First-order PV</label><input id="am-pv" name="pv" type="number" min="0" list="pvl" placeholder="136" value="${esc(d.pv||'')}"><datalist id="pvl"><option value="100"><option value="136"><option value="250"><option value="272"></datalist><span class="hint">They already ordered. This counts as their PPV this month and adds to their sponsor's QPV.</span></div></div>
+    ${errLine('am-err','')}
+    <div class="inline"><button class="btn primary" type="submit">Add member and send invitation</button><button class="btn" type="button" data-act="go" data-r="team">Cancel</button></div>
+  </form></section>`;
+}
+function memberadded(u){
+  const m=U(R.p.id);if(!m)return team(u);
+  return `<section class="card" style="max-width:560px"><h2>${esc(first(m))} is added</h2>
+    <p class="sub" style="margin:6px 0 12px">We emailed ${esc(m.email)} a welcome message with a link to set their password. The link works for 7 days.</p>
+    <p class="sub" style="margin:0">Their TeamPulse ID</p><div class="auth-card big" style="padding:12px 18px;margin:6px 0 14px">${esc(m.tp)}</div>
+    <p class="sub">Their first order of ${m.firstPv||0} PV counts as their PPV this month, and the team feed now shows them with ${esc((U(m.sponsorId)||u).name)} as sponsor.</p>
+    <div class="inline" style="margin-top:14px"><button class="btn primary" type="button" data-act="go" data-r="addmember">Add another member</button><button class="btn" type="button" data-act="go" data-r="team">Back to team</button></div></section>`;
 }
 
-/* ---------- sign-ups ---------- */
-function newMemberForm(p,sponsorId){
-  const sel=sponsorId?`<input type="hidden" name="sponsor" value="${sponsorId}">`:
-   `<div class="field"><label for="${p}sp">Sponsor</label><select id="${p}sp" name="sponsor">${S.members.filter(m=>m.status==='active').map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join('')}</select></div>`;
-  return `<form data-form="newmember" novalidate>${sel}
-    <div class="field"><label for="${p}nm">Full name</label><input id="${p}nm" name="name" type="text" required></div>
-    <div class="field"><label for="${p}em">Email</label><input id="${p}em" name="email" type="email" required></div>
-    <div class="field"><label for="${p}ph">Phone</label><input id="${p}ph" name="phone" type="text"></div>
-    <div class="field"><label for="${p}ne">NeoLife ID</label><input id="${p}ne" name="neo" type="text" placeholder="063-9262173" inputmode="numeric" maxlength="11" required>
-      <span class="hint">3 digits, a hyphen, 7 digits. Double-check it. It is the official NeoLife number, and only the Admin can correct it later.</span></div>
-    <div class="field"><label for="${p}pv">First-order PV</label><input id="${p}pv" name="pv" type="number" min="0" list="${p}pvl" placeholder="136" required><datalist id="${p}pvl"><option value="100"><option value="136"><option value="250"><option value="272"></datalist><span class="hint">They have already ordered. This becomes their PPV and counts toward their sponsor's QPV once they are active.</span></div>
-    <p class="hint" id="${p}err" role="alert"></p>
-    <button class="btn primary" type="submit">${sponsorId?'Send sign-up details':'Add as pending'}</button>
-  </form>`;
+/* member detail */
+function memberModal(m,viewer){
+  const admin=viewer.role==='admin',calc=calcQ(m),{y,mo}=P();
+  const a=k=>ansM(m,k),e=a('earn'),pl=a('plan');
+  const h=series([m],5),mx=Math.max(...h.map(x=>x.v),1);
+  const r=recommend(m);
+  return `<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(m.name)}">
+    <button class="btn sm x" type="button" data-act="close">Close</button>
+    <div class="inline">${av(m,'lg')}<div><h2>${esc(m.name)} ${statusPill(m)}</h2><div class="sub">${esc(rankName(m))}${m.sponsorId?' · sponsor '+esc((U(m.sponsorId)||{name:'—'}).name):''}</div><div class="mono sub">${esc(m.tp)} · ${esc(m.neoId)}</div></div></div>
+    <div class="kv"><div><div class="k">PPV</div><div class="v">${ppvNow(m)==null?'No reply':num(ppvNow(m))}</div></div><div><div class="k">QPV reported</div><div class="v">${qpvRep(m)==null?'No reply':num(qpvRep(m))}</div></div><div><div class="k">QPV system</div><div class="v">${num(calc)}</div></div>
+    <div><div class="k">Income</div><div class="v">${e?(e.earn==='none'?'Not yet':money(e.earn)):'No reply'}</div></div><div><div class="k">Active orders</div><div class="v">${e?e.orders:'—'}</div></div><div><div class="k">Delivered and accepted</div><div class="v">${e?e.delivered:'—'}</div></div>
+    <div><div class="k">Money to drop</div><div class="v">${e&&e.drop?money(e.drop):'—'}</div></div><div><div class="k">Drops on</div><div class="v">${e?fmtISO(e.clears):'—'}</div></div><div><div class="k">Joined</div><div class="v">${fmtISO(m.joinedAt)}</div></div></div>
+    <h3>Plan for next month</h3>
+    ${pl?`<div class="rows" style="margin-bottom:6px">${pl.goals.map(([p,t])=>`<div class="row"><b>${esc(p)}</b> ${esc(t)}</div>`).join('')}</div><div class="sub">Plans to sign ${pl.signups} · income target ${esc(pl.target)}</div>`:'<div class="empty">No plan sent yet.</div>'}
+    <h3 style="margin-top:16px">Income by month (USD)</h3>
+    <div class="bars">${h.map(x=>`<div>${x.v?money(x.v):'0'}<i style="height:${Math.round(x.v/mx*80)}%"></i></div>`).join('')}</div>
+    <div class="axis">${h.map(x=>`<span>${x.label}</span>`).join('')}</div>
+    ${m.history.length?`<h3 style="margin-top:16px">Rank history</h3><div class="rows">${m.history.map(x=>`<div class="row"><div class="grow">${RANKS[x.from].n} to <b>${RANKS[x.to].n}</b></div><span class="sub">${fmtISO(x.at)}</span></div>`).join('')}</div>`:''}
+    ${admin?`<h3 style="margin-top:18px">Manage</h3>
+      <div class="inline" style="margin-bottom:12px">
+        ${r!=null?`<button class="btn sm good" type="button" data-act="recok" data-id="${m.id}">Confirm rank-up to ${RANKS[r].n}</button>`:''}
+        ${m.status==='invited'?`<button class="btn sm" type="button" data-act="resend" data-id="${m.id}">Resend invitation</button>`:`<button class="btn sm" type="button" data-act="resetpw" data-id="${m.id}">Send password reset</button>`}
+        ${m.status==='inactive'?`<button class="btn sm" type="button" data-act="reactivate" data-id="${m.id}">Reactivate</button>`:`<button class="btn sm bad" type="button" data-act="deactivate" data-id="${m.id}">Deactivate</button>`}
+      </div>
+      <form data-form="fixneo" data-id="${m.id}" novalidate><label class="lbl" for="fx-neo">Correct NeoLife ID</label><div class="inline"><input id="fx-neo" name="neo" type="text" class="mono" value="${esc(m.neoId)}" maxlength="11"><button class="btn sm" type="submit">Save correction</button></div><p class="hint" id="fx-err" role="alert">Members cannot change this number. Every correction is logged.</p></form>`:''}
+  </div></div>`;
 }
-function signups(){
-  if(S.role!=='admin'){
-    return `<section class="card"><h2>Report a sign-up</h2><p class="sub">Got a new sign-up? Tell your Admin now. You do not need to wait for the 25th.</p>
-      <form data-form="report" novalidate style="margin-top:12px;max-width:460px">
-        <div class="field"><label for="rp-n">Name of the new person</label><input id="rp-n" name="who" type="text"></div>
-        <div class="field"><label for="rp-c">How many people?</label><input id="rp-c" name="count" type="number" min="1" value="1"></div>
-        <button class="btn primary" type="submit">Tell my Admin</button></form></section>`;
+
+/* ============================== sign-ups ============================== */
+function signups(u){
+  if(u.role!=='admin'){
+    const mine=DB.claims.filter(c=>c.by===u.id);
+    return `<section class="card" style="max-width:560px"><h2>Report a sign-up</h2><p class="sub">Got a new sign-up? Tell your team leader now. You do not need to wait for the 25th. Your leader adds them, and they get their own TeamPulse ID.</p>
+      <form data-form="report" novalidate style="margin-top:12px"><div class="field"><label for="rp-n">Name of the new person (if you know it)</label><input id="rp-n" name="who" type="text"></div>
+      <div class="field"><label for="rp-c">How many people?</label><input id="rp-c" name="count" type="number" min="1" value="1"></div><button class="btn primary" type="submit">Tell my team leader</button></form></section>
+      ${mine.length?`<section class="card" style="margin-top:16px;max-width:560px"><h3>Your reports</h3><div class="rows">${mine.map(c=>`<div class="row"><div class="grow"><div class="name">${c.count} sign-up${c.count>1?'s':''}${c.who?' · '+esc(c.who):''}</div><div class="sub">${ago(c.at)}</div></div>${c.state==='details_asked'?`<button class="btn sm primary" type="button" data-act="go" data-r="claimdetails" data-id="${c.id}">Send details</button>`:pill({review:'With your leader',ready:'With your leader',added:'Added',dismissed:'Not added'}[c.state]||c.state,c.state==='added'?'good':'')}</div>`).join('')}</div></section>`:''}`;
   }
-  const review=S.claims.filter(c=>c.state==='review'),details=S.claims.filter(c=>c.state==='details'),pend=S.members.filter(m=>m.status==='pending');
+  const open=DB.claims.filter(c=>c.teamId===u.teamId&&c.state!=='added'&&c.state!=='dismissed');
+  const done=DB.claims.filter(c=>c.teamId===u.teamId&&(c.state==='added'||c.state==='dismissed'));
+  const card=c=>{const by=U(c.by)||{name:'Someone'};
+    return `<div class="row"><div class="grow"><div class="name">${esc(by.name)} reports ${c.count} sign-up${c.count>1?'s':''}${c.who?' · '+esc(c.who):''}</div><div class="sub">${ago(c.at)} · ${c.state==='ready'?'Details received, ready to add':c.state==='details_asked'?'Waiting for '+esc(first(by))+'\'s details':'Waiting for your review'}</div></div>
+      ${c.state==='ready'?`<button class="btn sm primary" type="button" data-act="claimadd" data-id="${c.id}">Add this person</button>`:`<button class="btn sm primary" type="button" data-act="claimadd" data-id="${c.id}">Add this person</button><button class="btn sm" type="button" data-act="claimask" data-id="${c.id}" ${c.state==='details_asked'?'disabled':''}>Ask for details</button>`}<button class="btn sm bad" type="button" data-act="claimno" data-id="${c.id}">Dismiss</button></div>`};
+  return `<div class="head"><div><h2>Sign-ups</h2><p class="sub" style="margin:2px 0 0">Your members report their sign-ups here. You decide who joins the team.</p></div><button class="btn primary" type="button" data-act="go" data-r="addmember">Add a member</button></div>
+  <section class="card"><h3>Waiting for you</h3>${open.length?`<div class="rows">${open.map(card).join('')}</div>`:'<div class="empty">No reports waiting.</div>'}</section>
+  ${done.length?`<section class="card"><h3>Done</h3><div class="rows">${done.slice(0,8).map(c=>`<div class="row"><div class="grow"><div class="name">${esc((U(c.by)||{name:'Someone'}).name)} · ${c.count}</div><div class="sub">${ago(c.at)}</div></div>${pill(c.state==='added'?'Added':'Dismissed',c.state==='added'?'good':'')}</div>`).join('')}</div></section>`:''}`;
+}
+function claimdetails(u){
+  const c=DB.claims.find(x=>x.id===R.p.id);
+  if(!c||c.by!==u.id)return signups(u);
+  return `<div class="head"><div><h2>Details of your new sign-up</h2><p class="sub" style="margin:2px 0 0">Your team leader asked for these so they can add the person.</p></div></div>
+  <section class="card" style="max-width:640px"><form data-form="claimdetails" data-id="${c.id}" novalidate>
+    <div class="f2"><div class="field"><label for="cd-name">Full name</label><input id="cd-name" name="name" type="text"></div><div class="field"><label for="cd-email">Email</label><input id="cd-email" name="email" type="email"></div></div>
+    <div class="f2"><div class="field"><label for="cd-phone">Phone (optional)</label><input id="cd-phone" name="phone" type="text"></div><div class="field"><label for="cd-neo">NeoLife ID</label><input id="cd-neo" name="neo" type="text" inputmode="numeric" maxlength="11" placeholder="063-9262173"></div></div>
+    <div class="field" style="max-width:280px"><label for="cd-pv">First-order PV</label><input id="cd-pv" name="pv" type="number" min="0" placeholder="136"></div>
+    ${errLine('cd-err','')}<button class="btn primary" type="submit">Send to my team leader</button></form></section>`;
+}
+
+/* ============================== feed and profile ============================== */
+function feed(u){
+  const items=feedFor(u);
+  return `<section class="card feed"><div class="head"><h2>Team feed</h2><span class="sub">New members and step-ups, shown to the whole team</span></div><div style="margin-top:8px">${feedList(items)||'<div class="empty" style="padding:16px 0">Nothing yet. When a member joins or steps up to a new rank, it appears here.</div>'}</div></section>`;
+}
+function profile(u){
+  const next=u.role==='member'&&u.rank<3?RANKS[u.rank+1]:null,q=qpvRep(u),pctN=next&&q!=null?Math.min(100,Math.round(q/next.q*100)):0;
+  const team=DB.teams.find(t=>t.id===u.teamId)||{};
   return `<div class="grid g-two">
-    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
-      <section class="card"><h3>Waiting for your confirmation</h3>
-        ${review.length?`<div class="rows">${review.map(c=>{const m=byId(c.by);return `<div class="row"><div class="grow"><div class="name">${esc(m.name)} says ${c.count} sign-up${c.count>1?'s':''}</div><div class="sub">${esc(c.src)} · their plan said ${c.planned}</div></div>
-          <button class="btn sm good" type="button" data-act="confirm" data-id="${c.id}">Confirm</button><button class="btn sm bad" type="button" data-act="reject" data-id="${c.id}">Reject</button></div>`}).join('')}</div>`:'<div class="empty">No claims waiting.</div>'}
-      </section>
-      <section class="card"><h3>Confirmed, waiting for details</h3>
-        ${details.length?`<div class="rows">${details.map(c=>`<div class="row"><div class="grow"><div class="name">${esc(byId(c.by).name)}</div><div class="sub">${c.count} person${c.count>1?'s':''} still to add</div></div><button class="btn sm" type="button" data-act="openmail" data-id="${c.id}">See the mail they got</button></div>`).join('')}</div>`:'<div class="empty">Nothing waiting.</div>'}
-      </section>
-      <section class="card"><h3>Pending activation</h3>
-        ${pend.length?`<div class="rows">${pend.map(m=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub"><span class="mono">${esc(m.teamId)}</span> · sponsor ${esc(byId(m.sponsor).name)} · first order ${m.firstPv||0} PV · activates itself in ${Math.max(0,24-m.pendingHrs)}h</div></div><button class="btn sm primary" type="button" data-act="activate" data-id="${m.id}">Activate</button></div>`).join('')}</div>`:'<div class="empty">Nobody is pending.</div>'}
-      </section>
-    </div>
-    <section class="card"><h3>Add a sign-up</h3><p class="sub" style="margin-top:0">For when a sponsor tells you about a new person. They start as Pending and get a TeamPulse ID automatically.</p>${newMemberForm('add-')}</section>
-  </div>`;
-}
-
-/* ---------- check-ins ---------- */
-function checkins(){
-  const m=asMember();
-  if(!m)return '<section class="card"><h2>Check-ins</h2><p class="sub">Add your first member to preview the check-ins they receive.</p></section>';
-  const asId=m.id;
-  const picker=S.role==='admin'?`<label class="as" for="asid">Answering as <select id="asid">${S.members.filter(x=>!x.leader&&x.status==='active').map(x=>`<option value="${x.id}" ${x.id===asId?'selected':''}>${esc(x.name)}</option>`).join('')}</select></label>`:'';
-  const list=Object.keys(CI).map(k=>{
-    const st=ciState(k),o=st.o,isOpen=st.state==='open',ans=isOpen&&m.ans.includes(o.id);
-    const badge=isOpen?(ans?pill('Answered','good'):pill('Open','warn')):pill('Locked');
-    const when=isOpen?'Open until '+dmy(o.close):'Opens '+dmy(o.open);
-    const missed=!isOpen&&st.last&&!m.ans.includes(st.last.id)?`<span class="sub" style="color:var(--bad)">Missed on ${dmy(st.last.date)}</span>`:'';
-    return `<button class="ci-item" type="button" data-act="ci" data-v="${k}" aria-pressed="${S.ci===k}">${badge}<b>${CI[k].title}</b><span class="sub">The ${CI[k].day} · ${when}</span>${missed}</button>`}).join('');
-  const c=CI[S.ci],st=ciState(S.ci),locked=st.state==='locked',lastMissed=locked&&st.last&&!m.ans.includes(st.last.id);
-  return `<div class="head"><div><h2>Check-ins</h2><p class="sub" style="margin:2px 0 0">What ${esc(m.name.split(' ')[0])} receives by email and fills in.</p></div>${picker}</div>
-  <div class="ci-layout"><div class="ci-list">${list}</div>
-    <section class="card">
-      ${locked?`<div class="mail"><div class="meta">Question date: the ${c.day}</div><div class="subj">${c.title} is not open yet</div><p>This check-in opens on <b>${dmy(st.o.open)}</b>, ${OPEN_BEFORE} days before the ${c.day}. You can answer until <b>${dmy(st.o.close)}</b>, ${CLOSE_AFTER} days after.</p>${lastMissed?`<p style="color:var(--bad)">The last one (${dmy(st.last.date)}) closed on ${dmy(st.last.close)} without an answer.</p>`:''}</div>`
-      :`<div class="mail"><div class="meta">From TeamPulse · to ${esc(m.name)} · open ${dmy(st.o.open)} to ${dmy(st.o.close)}</div><div class="subj">${c.subject}</div><p>Hi ${esc(m.name.split(' ')[0])}, ${c.body}</p><p class="meta">It takes about two minutes. Your answer counts for the ${c.day}, even if you send it a few days late (until ${dmy(st.o.close)}).</p></div>
-      ${ciForm(S.ci,m)}`}
-    </section></div>`;
-}
-function ciForm(k,m){
-  if(k==='earn'){const none=m.earn==='none';return `<form data-form="earn" novalidate>
-    <div class="field"><label for="e-amt">Money made this month (USD)</label>
-      <div class="inline"><input id="e-amt" name="amt" type="number" min="0" step="1" value="${typeof m.earn==='number'?m.earn:''}" ${none?'disabled':''}>
-      <label class="inline" style="font-weight:400"><input id="e-none" name="none" type="checkbox" ${none?'checked':''}> Not yet</label></div></div>
-    <div class="field"><label for="e-ord">Active orders on your account right now</label><input id="e-ord" name="orders" type="number" min="0" value="${m.orders==null?'':m.orders}"></div>
-    <div class="field"><label for="e-del">Orders delivered and accepted this month</label><input id="e-del" name="delivered" type="number" min="0" value="${m.delivered==null?'':m.delivered}"></div>
-    <div class="field"><label for="e-drop">Amount that will drop into your account (USD)</label><input id="e-drop" name="drop" type="number" min="0" step="1" value="${m.drop==null?'':m.drop}"></div>
-    <div class="field"><label for="e-clr">Date the money drops and you can withdraw it</label><input id="e-clr" name="clears" type="date" value="${m.clears||''}"><span class="hint">Your leader uses this date to plan the days for your PPV order.</span></div>
-    <p class="hint" id="e-err" role="alert"></p>
-    <button class="btn primary" type="submit">Save my answers</button></form>`}
-  if(k==='ppv'){const none=m.qpv===0;return `<form data-form="ppv" novalidate>
-    <div class="field"><label for="p-ppv">Your PPV this month</label><input id="p-ppv" name="ppv" type="number" min="0" value="${m.ppv==null?'':m.ppv}"><span class="hint" id="p-ppvh">NeoLife asks for 100 PPV to stay active.</span></div>
-    <div class="field"><label for="p-qpv">Your team's QPV</label>
-      <div class="inline"><input id="p-qpv" name="qpv" type="number" min="0" value="${m.qpv==null?'':m.qpv}" ${none?'disabled':''}>
-      <label class="inline" style="font-weight:400"><input id="p-none" name="none" type="checkbox"> None yet, I have no downline</label></div>
-      <span class="hint" id="p-qpvh">If you have no downline, your QPV is just your PPV.</span></div>
-    <button class="btn primary" type="submit">Save my answers</button></form>`}
-  if(k==='plan'){const g=(m.plan&&m.plan.goals.length?m.plan.goals:[['I will','']]);return `<form data-form="plan" novalidate>
-    <div class="lbl" style="margin-bottom:6px">My goals for ${(()=>{const o=ciState('plan').o;return monthName(o.date.getFullYear(),o.date.getMonth()+1)})()}</div>
-    <div id="goals">${g.map(([p,t])=>goalRow(p,t)).join('')}</div>
-    <button class="btn sm" type="button" data-act="addgoal" style="margin-bottom:16px">Add another goal</button>
-    <div class="field"><label for="pl-s">How many people will you sign?</label><input id="pl-s" name="signups" type="number" min="0" value="${m.plan?m.plan.signups:''}"></div>
-    <div class="field"><label for="pl-t">How much do you want to make?</label><select id="pl-t" name="target">${['$0 to $300','$300 to $1,000','$1,000 and above'].map(o=>`<option ${m.plan&&m.plan.target===o?'selected':''}>${o}</option>`).join('')}</select></div>
-    <div class="field"><label for="pl-p">Your PPV for next month</label><input id="pl-p" name="pp" type="number" min="0"></div>
-    <div class="field"><label for="pl-q">Your QPV for next month</label><input id="pl-q" name="pq" type="number" min="0"></div>
-    <button class="btn primary" type="submit">Save my plan</button></form>`}
-  if(k==='paid'){return `<form data-form="paid" novalidate><div class="lbl" style="margin-bottom:8px">Have you paid your monthly responsibility?</div>
-    <div class="yn"><label><input type="radio" name="paid" value="yes" ${m.paid===true?'checked':''}> Yes, paid</label><label><input type="radio" name="paid" value="no" ${m.paid===false?'checked':''}> Not yet</label></div>
-    <p class="hint" id="paid-err" role="alert"></p><button class="btn primary" type="submit">Save my answer</button></form>`}
-  return `<form data-form="signup" novalidate><div class="lbl" style="margin-bottom:8px">Did you sign anyone this month?</div>
-    <div class="yn" style="margin-bottom:14px"><label><input type="radio" name="su" value="yes"> Yes</label><label><input type="radio" name="su" value="no"> No</label></div>
-    <div class="field"><label for="s-n">If yes, how many?</label><input id="s-n" name="count" type="number" min="1" value="1"><span class="hint">Your Admin confirms it, then you get a second email to enter their details.</span></div>
-    <div class="lbl" style="margin-bottom:6px">Step-ups in your team this month</div>
-    <div class="counters" style="margin-bottom:14px">${['Managers','Senior Managers','Executive Managers','Directors'].map((x,i)=>`<div><label for="st${i}" class="sub">${x}</label><input id="st${i}" name="st${i}" type="number" min="0" value="0"></div>`).join('')}</div>
-    <div class="lbl" style="margin-bottom:8px">Did you buy any tools this month?</div>
-    <div class="yn" style="margin-bottom:14px"><label><input type="radio" name="tools" value="yes"> Yes</label><label><input type="radio" name="tools" value="no" checked> No</label></div>
-    <p class="hint" id="su-err" role="alert"></p><button class="btn primary" type="submit">Save my answers</button></form>`;
-}
-function goalRow(p,t){return `<div class="goal"><select name="gp" aria-label="Goal starts with"><option ${p==='I will'?'selected':''}>I will</option><option ${p==='I must'?'selected':''}>I must</option></select><input name="gt" type="text" aria-label="Goal" value="${esc(t)}" placeholder="what you will do"></div>`}
-
-/* ---------- feed ---------- */
-function feed(){
-  const items=S.feed.map(f=>{
-    const w=byId(f.who);
-    if(f.kind==='join')return {id:f.id,rank:false,t:`<b>${esc(w.name)}</b> joined the team`,s:`Sponsored by ${esc(byId(f.by).name)}`,when:f.when};
-    return {id:f.id,rank:true,t:`<b>${esc(w.name)}</b> stepped up to ${esc(f.to)}`,s:'Congratulations on the new rank',when:f.when};
-  });
-  return `<section class="card feed"><div class="head"><h2>Team feed</h2><span class="sub">New members and step-ups, shown to the whole team</span></div>
-   <div style="margin-top:8px">${items.map(i=>`<div class="post"><div class="spark ${i.rank?'rank':''}" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${i.rank?'<path d="M12 19V5M5 12l7-7 7 7"/>':'<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/>'}</svg></div>
-     <div style="flex:1;min-width:0"><div>${i.t}</div><div class="sub">${i.s} · ${i.when}</div></div>
-     ${S.role==='admin'?`<button class="btn sm" type="button" data-act="hidepost" data-id="${i.id}">Hide</button>`:''}</div>`).join('')||'<div class="empty">Nothing yet.</div>'}</div></section>`;
-}
-
-/* ---------- profile ---------- */
-function profile(){
-  const m=byId(meId());
-  const editable=false;
-  const next=!m.leader&&m.rank<3?RANKS[m.rank+1]:null;
-  const pctN=next&&m.qpv!=null?Math.min(100,Math.round(m.qpv/next.q*100)):0;
-  const sim='';
-  return `<div class="grid g-two">
-    <section class="card"><h2>My profile</h2>
+    <section class="card"><h2>${u.role==='admin'?'Settings':'My profile'}</h2>
       <form data-form="profile" novalidate style="margin-top:14px">
-        <div class="inline" style="margin-bottom:14px">${av(m,'lg')}<div class="field" style="margin:0"><label for="pf-ph">Profile picture</label><input id="pf-ph" type="file" accept="image/*"></div></div>
-        <div class="field"><label for="pf-n">Display name</label><input id="pf-n" name="name" type="text" value="${esc(m.name)}"></div>
-        <div class="field"><label for="pf-p">Phone</label><input id="pf-p" name="phone" type="text" value="${esc(m.phone)}"></div>
-        <div class="field"><label for="pf-c">City</label><input id="pf-c" name="city" type="text" value="${esc(m.city)}"></div>
-        <div class="field"><label for="pf-b">About me</label><textarea id="pf-b" name="bio">${esc(m.bio)}</textarea></div>
-        <div class="field"><label for="pf-t">TeamPulse ID</label><div class="lock"><input id="pf-t" type="text" class="mono" value="${esc(m.teamId)}" readonly><span class="pill">Set by the system</span></div></div>
-        <div class="field"><label for="pf-ne">NeoLife ID</label>
-          <div class="lock"><input id="pf-ne" name="neo" type="text" class="mono" value="${esc(m.neoId)}" maxlength="11" ${editable?'':'readonly'}>${editable?pill('Editable for '+left+'h','warn'):pill('Locked','bad')}</div>
-          <span class="hint">This is your official NeoLife number. You cannot change it. If it is wrong, ask your Admin for a logged correction.</span>${sim}</div>
-        <p class="hint" id="pf-err" role="alert"></p>
-        <button class="btn primary" type="submit">Save profile</button>
-      </form></section>
+        <div class="inline" style="margin-bottom:14px">${av(u,'lg')}<div class="field" style="margin:0"><label for="pf-ph">Profile picture</label><input id="pf-ph" type="file" accept="image/*"></div></div>
+        <div class="field"><label for="pf-n">Display name</label><input id="pf-n" name="name" type="text" value="${esc(u.name)}"></div>
+        ${u.role==='admin'?`<div class="field"><label for="pf-tn">Team name</label><input id="pf-tn" name="team" type="text" value="${esc(team.name||'')}"></div>`:''}
+        <div class="f2"><div class="field"><label for="pf-p">Phone</label><input id="pf-p" name="phone" type="text" value="${esc(u.phone||'')}"></div><div class="field"><label for="pf-c">City</label><input id="pf-c" name="city" type="text" value="${esc(u.city||'')}"></div></div>
+        <div class="field"><label for="pf-b">About me</label><textarea id="pf-b" name="bio">${esc(u.bio||'')}</textarea></div>
+        <div class="f2"><div class="field"><label for="pf-t">TeamPulse ID</label><div class="lock"><input id="pf-t" type="text" class="mono" value="${esc(u.tp)}" readonly>${pill('Set by the system')}</div></div>
+        <div class="field"><label for="pf-ne">NeoLife ID</label><div class="lock"><input id="pf-ne" name="neo" type="text" class="mono" value="${esc(u.neoId)}" maxlength="11" ${u.role==='admin'?'':'readonly'}>${u.role==='admin'?'':pill('Locked','bad')}</div><span class="hint">${u.role==='admin'?'Your official NeoLife number.':'Your official number. If it is wrong, ask your team leader to correct it.'}</span></div></div>
+        ${errLine('pf-err','')}<button class="btn primary" type="submit">Save</button>
+      </form>
+      <h3 style="margin-top:26px">Change password</h3>
+      <form data-form="chgpw" novalidate style="margin-top:10px"><div class="field"><label for="cp0">Current password</label><input id="cp0" name="p0" type="password" autocomplete="current-password"></div>
+        <div class="f2"><div class="field"><label for="cp1">New password</label><input id="cp1" name="p1" type="password" autocomplete="new-password"></div><div class="field"><label for="cp2">Repeat new password</label><input id="cp2" name="p2" type="password" autocomplete="new-password"></div></div>
+        <p class="hint" style="margin-top:-6px">${PWRULE}</p>${errLine('cp-err','')}<button class="btn" type="submit">Change password</button></form>
+    </section>
     <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
-      <section class="card"><h3>${m.leader?'Your role':'My progress'}</h3>
-        ${m.leader?'<p class="sub" style="margin:0">You are the Admin. You are the only person who can add another Admin.</p>':`
-        <div class="kv"><div><div class="k">Rank</div><div class="v">${RANKS[m.rank].n}</div></div><div><div class="k">PPV</div><div class="v">${m.ppv==null?'—':num(m.ppv)}</div></div><div><div class="k">QPV</div><div class="v">${m.qpv==null?'—':num(m.qpv)}</div></div></div>
-        ${next?`<div class="sub">Next: ${next.n} at ${num(next.q)} QPV with 100 PPV</div><div class="meter"><i style="width:${pctN}%"></i></div><div class="sub">${pctN}% of the way</div>`:'<div class="sub">Next steps for Director use the Director rules.</div>'}`}
-      </section>
-      ${m.leader?'':`<section class="card"><h3>Rank history</h3>${m.history.length?`<div class="rows">${m.history.map(h=>`<div class="row"><div class="grow">${RANKS[h.from].n} to <b>${RANKS[h.to].n}</b></div><span class="sub">${h.cycle}</span></div>`).join('')}</div>`:'<div class="empty">No rank changes yet.</div>'}</section>`}
+      ${u.role==='member'?`<section class="card"><h3>My progress</h3><div class="kv"><div><div class="k">Rank</div><div class="v">${RANKS[u.rank].n}</div></div><div><div class="k">PPV</div><div class="v">${ppvNow(u)==null?'—':num(ppvNow(u))}</div></div><div><div class="k">QPV</div><div class="v">${q==null?'—':num(q)}</div></div></div>
+        ${next?`<div class="sub">Next: ${next.n} at ${num(next.q)} QPV with 100 PPV</div><div class="meter"><i style="width:${pctN}%"></i></div><div class="sub">${pctN}% of the way</div>`:'<div class="sub">Director follows its own rules.</div>'}</section>
+        <section class="card"><h3>Rank history</h3>${u.history.length?`<div class="rows">${u.history.map(h=>`<div class="row"><div class="grow">${RANKS[h.from].n} to <b>${RANKS[h.to].n}</b></div><span class="sub">${fmtISO(h.at)}</span></div>`).join('')}</div>`:'<div class="empty">No rank changes yet.</div>'}</section>`
+      :`<section class="card"><h3>Your team</h3><p class="sub" style="margin:0">Only team leaders register, and you are the only person who can add members or another Admin.</p></section>`}
     </div></div>`;
 }
 
-const views={dashboard,team,signups,checkins,feed,profile};
+/* ============================== member home and check-ins ============================== */
+function home(u){
+  const T=today(),{y,mo}=P(),p=ppvNow(u),q=qpvRep(u),next=u.rank<3?RANKS[u.rank+1]:null,pctN=next&&q!=null?Math.min(100,Math.round(q/next.q*100)):0;
+  const pg=prog(u),d=dropsOf([u])[0];
+  const rows=monthOccs().map(o=>{
+    const st=ciState(o.key),isOpen=st.state==='open'&&st.o.id===o.id||(st.state==='open'&&st.o.key===o.key);
+    const cur=st.state==='open'?st.o:o,answered=!!u.answers[cur.id];
+    let badge,action='';
+    if(st.state==='open'){badge=answered?pill('Answered','good'):pill('Open until '+dmy(st.o.close),'warn');action=`<button class="btn sm ${answered?'':'primary'}" type="button" data-act="go" data-r="checkins" data-key="${o.key}">${answered?'Review':'Answer now'}</button>`}
+    else if(o.close<T){badge=u.answers[o.id]?pill('Answered','good'):pill('Missed','bad')}
+    else badge=pill('Opens '+dmy(o.open));
+    return `<div class="todo"><div class="grow"><div class="name" style="font-weight:700">${CI[o.key].title}</div><div class="sub">The ${CI[o.key].day}</div></div>${badge}${action}</div>`}).join('');
+  const nextOpen=KEYS.map(k=>ciState(k)).filter(s=>s.state==='locked'&&s.o).sort((a,b)=>a.o.open-b.o.open)[0];
+  return `<div class="hello"><div><h1>Welcome, ${esc(first(u))}!</h1><p class="sub">${monthName(y,mo)} · ${RANKS[u.rank].n}${pg.due?` · ${pg.done} of ${pg.due} check-ins answered`:''}</p></div><button class="btn primary" type="button" data-act="go" data-r="checkins">Open my check-ins</button></div>
+  <div class="grid g-att">
+    <section class="card"><h3>My month</h3>
+      <div class="kv"><div><div class="k">PPV</div><div class="v">${p==null?'Not reported':num(p)}</div></div><div><div class="k">QPV</div><div class="v">${q==null?'Not reported':num(q)}</div></div></div>
+      ${p!=null&&p<100?`<p class="hint warn" style="margin:0 0 8px">${p} PPV is under the 100 minimum, so you are not active for bonuses this month.</p>`:p!=null?pill('Active, 100+ PPV','good'):''}
+      ${next?`<div class="sub" style="margin-top:12px">Next: ${next.n} at ${num(next.q)} QPV with 100 PPV</div><div class="meter"><i style="width:${pctN}%"></i></div><div class="sub">${pctN}% of the way</div>`:''}</section>
+    <section class="card"><h3>Check-ins this month</h3>${rows}${nextOpen?`<p class="sub" style="margin:12px 0 0">Next one opens on ${dmy(nextOpen.o.open)}.</p>`:''}</section>
+    <section class="card"><h3>Money dropping</h3>${d?`<div class="name" style="font-weight:700;font-size:1.4rem">${money(d.amount)}</div><div class="sub">on ${fmtISO(d.date)}. Your team leader plans your PPV order around it.</div>`:'<div class="empty">Report your payout in the 10th check-in and it shows here.</div>'}</section>
+    <section class="card feed"><div class="head"><h3 style="margin:0">Team feed</h3><button class="btn sm" type="button" data-act="go" data-r="feed">See all</button></div><div style="margin-top:8px">${feedList(feedFor(u),3)||'<div class="empty">New members and step-ups appear here.</div>'}</div></section>
+  </div>`;
+}
+function checkins(u){
+  const key=KEYS.includes(R.p.key)?R.p.key:(KEYS.map(k=>[k,ciState(k)]).find(([k,s])=>s.state==='open'&&!u.answers[s.o.id])||[KEYS[0]])[0];
+  const list=KEYS.map(k=>{
+    const st=ciState(k),o=st.o,isOpen=st.state==='open',ans=isOpen&&u.answers[o.id];
+    const badge=isOpen?(ans?pill('Answered','good'):pill('Open','warn')):pill('Locked');
+    const when=isOpen?'Open until '+dmy(o.close):'Opens '+dmy(o.open);
+    const missed=!isOpen&&st.last&&!u.answers[st.last.id]?`<span class="sub" style="color:var(--bad)">Missed on ${dmy(st.last.date)}</span>`:'';
+    return `<button class="ci-item" type="button" data-act="ckey" data-key="${k}" aria-pressed="${key===k}">${badge}<b>${CI[k].title}</b><span class="sub">The ${CI[k].day} · ${when}</span>${missed}</button>`}).join('');
+  const c=CI[key],st=ciState(key),locked=st.state==='locked',lastMissed=locked&&st.last&&!u.answers[st.last.id];
+  const panel=locked?`<div class="mail"><div class="meta">Question date: the ${c.day}</div><div class="subj">${c.title} is not open yet</div><p>This check-in opens on <b>${dmy(st.o.open)}</b>, ${OPEN_BEFORE} days before the ${c.day}. You can answer until <b>${dmy(st.o.close)}</b>, ${CLOSE_AFTER} days after.</p>${lastMissed?`<p style="color:var(--bad)">The last one (${dmy(st.last.date)}) closed on ${dmy(st.last.close)} without an answer.</p>`:''}</div>`
+   :`<div class="mail"><div class="meta">${c.title} · open ${dmy(st.o.open)} to ${dmy(st.o.close)}</div><div class="subj">${c.subject}</div><p>Hi ${esc(first(u))}, ${c.body}</p><p class="meta">It takes about two minutes. Your answer counts for the ${c.day}, even if you send it a few days late (until ${dmy(st.o.close)}).</p></div>${ciForm(key,u,st.o)}`;
+  return `<div class="head"><div><h2>Check-ins</h2><p class="sub" style="margin:2px 0 0">Each question opens 2 days before its date and closes 3 days after.</p></div></div>
+  <div class="ci-layout"><div class="ci-list">${list}</div><section class="card">${panel}</section></div>`;
+}
+function ciForm(k,u,o){
+  const a=u.answers[o.id]||{};
+  if(k==='earn'){const none=a.earn==='none';return `<form data-form="earn" novalidate>
+    <div class="field"><label for="e-amt">Money made this month (USD)</label><div class="inline"><input id="e-amt" name="amt" type="number" min="0" step="1" value="${typeof a.earn==='number'?a.earn:''}" ${none?'disabled':''}><label class="inline" style="font-weight:400"><input id="e-none" name="none" type="checkbox" ${none?'checked':''}> Not yet</label></div></div>
+    <div class="field"><label for="e-ord">Active orders on your account right now</label><input id="e-ord" name="orders" type="number" min="0" value="${a.orders!=null?a.orders:''}"></div>
+    <div class="field"><label for="e-del">Orders delivered and accepted this month</label><input id="e-del" name="delivered" type="number" min="0" value="${a.delivered!=null?a.delivered:''}"></div>
+    <div class="field"><label for="e-drop">Amount that will drop into your account (USD)</label><input id="e-drop" name="drop" type="number" min="0" step="1" value="${a.drop!=null?a.drop:''}"></div>
+    <div class="field"><label for="e-clr">Date the money drops and you can withdraw it</label><input id="e-clr" name="clears" type="date" value="${esc(a.clears||'')}"><span class="hint">Your leader uses this date to plan the days for your PPV order.</span></div>
+    ${errLine('e-err','')}<button class="btn primary" type="submit">Save my answers</button></form>`}
+  if(k==='ppv'){const none=a.ppv!=null&&a.qpv===a.ppv&&false;return `<form data-form="ppv" novalidate>
+    <div class="field"><label for="p-ppv">Your PPV this month</label><input id="p-ppv" name="ppv" type="number" min="0" value="${a.ppv!=null?a.ppv:''}"><span class="hint" id="p-ppvh">NeoLife asks for 100 PPV to stay active.</span></div>
+    <div class="field"><label for="p-qpv">Your team's QPV</label><div class="inline"><input id="p-qpv" name="qpv" type="number" min="0" value="${a.qpv!=null?a.qpv:''}"><label class="inline" style="font-weight:400"><input id="p-none" name="none" type="checkbox"> None yet, I have no downline</label></div><span class="hint" id="p-qpvh">If you have no downline, your QPV is just your PPV.</span></div>
+    ${errLine('p-err','')}<button class="btn primary" type="submit">Save my answers</button></form>`}
+  if(k==='plan'){const g=(a.goals&&a.goals.length?a.goals:[['I will','']]);const T=today(),nm=monthName(o.date.getFullYear(),o.date.getMonth()+1);return `<form data-form="plan" novalidate>
+    <div class="lbl" style="margin-bottom:6px">My goals for ${nm}</div><div id="goals">${g.map(([p,t])=>goalRow(p,t)).join('')}</div>
+    <button class="btn sm" type="button" data-act="addgoal" style="margin-bottom:16px">Add another goal</button>
+    <div class="field"><label for="pl-s">How many people will you sign?</label><input id="pl-s" name="signups" type="number" min="0" value="${a.signups!=null?a.signups:''}"></div>
+    <div class="field"><label for="pl-t">How much do you want to make?</label><select id="pl-t" name="target">${['$0 to $300','$300 to $1,000','$1,000 and above'].map(x=>`<option ${a.target===x?'selected':''}>${x}</option>`).join('')}</select></div>
+    <div class="f2"><div class="field"><label for="pl-p">Your PPV for ${nm}</label><input id="pl-p" name="pp" type="number" min="0" value="${a.pp!=null?a.pp:''}"></div><div class="field"><label for="pl-q">Your QPV for ${nm}</label><input id="pl-q" name="pq" type="number" min="0" value="${a.pq!=null?a.pq:''}"></div></div>
+    ${errLine('pl-err','')}<button class="btn primary" type="submit">Save my plan</button></form>`}
+  if(k==='paid'){return `<form data-form="paid" novalidate><div class="lbl" style="margin-bottom:8px">Have you paid your monthly responsibility?</div>
+    <div class="yn"><label><input type="radio" name="paid" value="yes" ${a.paid===true?'checked':''}> Yes, paid</label><label><input type="radio" name="paid" value="no" ${a.paid===false?'checked':''}> Not yet</label></div>
+    ${errLine('paid-err','')}<button class="btn primary" type="submit">Save my answer</button></form>`}
+  return `<form data-form="signup" novalidate><div class="lbl" style="margin-bottom:8px">Did you sign anyone this month?</div>
+    <div class="yn" style="margin-bottom:14px"><label><input type="radio" name="su" value="yes" ${a.su==='yes'?'checked':''}> Yes</label><label><input type="radio" name="su" value="no" ${a.su==='no'?'checked':''}> No</label></div>
+    <div class="field"><label for="s-n">If yes, how many?</label><input id="s-n" name="count" type="number" min="1" value="${a.count||1}"><span class="hint">Your team leader reviews it and may ask you for their details.</span></div>
+    <div class="lbl" style="margin-bottom:6px">Step-ups in your team this month</div>
+    <div class="counters" style="margin-bottom:14px">${['Managers','Senior Managers','Executive Managers','Directors'].map((x,i)=>`<div><label for="st${i}" class="sub">${x}</label><input id="st${i}" name="st${i}" type="number" min="0" value="${(a.steps||[])[i]||0}"></div>`).join('')}</div>
+    <div class="lbl" style="margin-bottom:8px">Did you buy any tools this month?</div>
+    <div class="yn" style="margin-bottom:14px"><label><input type="radio" name="tools" value="yes" ${a.tools==='yes'?'checked':''}> Yes</label><label><input type="radio" name="tools" value="no" ${a.tools!=='yes'?'checked':''}> No</label></div>
+    ${errLine('su-err','')}<button class="btn primary" type="submit">Save my answers</button></form>`;
+}
+const goalRow=(p,t)=>`<div class="goal"><select name="gp" aria-label="Goal starts with"><option ${p==='I will'?'selected':''}>I will</option><option ${p==='I must'?'selected':''}>I must</option></select><input name="gt" type="text" aria-label="Goal" value="${esc(t)}" placeholder="what you will do"></div>`;
 
-/* ---------- member modal and mails ---------- */
-function incomeHist(m){
-  const e=typeof m.earn==='number'?m.earn:0;
-  return e?[0.55,0.8,0.7,0.9,1].map(f=>Math.round(e*f)):[0,0,0,0,0];
-}
-function memberModal(m){
-  const calc=m.leader?0:calcQ(m),h=incomeHist(m),mx=Math.max(...h,1);
-  const sponsor=m.sponsor?byId(m.sponsor):null;
-  return `<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(m.name)}">
-    <button class="btn sm x" type="button" data-act="close">Close</button>
-    <div class="inline">${av(m,'lg')}<div><h2>${esc(m.name)}</h2><div class="sub">${esc(rankName(m))}${sponsor?' · sponsor '+esc(sponsor.name):''}</div><div class="mono sub">${esc(m.teamId)} · ${esc(m.neoId)}</div></div></div>
-    ${m.leader?'':`
-    <div class="kv"><div><div class="k">PPV</div><div class="v">${m.ppv==null?'No reply':num(m.ppv)}</div></div><div><div class="k">QPV reported</div><div class="v">${m.qpv==null?'No reply':num(m.qpv)}</div></div><div><div class="k">QPV system count</div><div class="v">${num(calc)}</div></div>
-    <div><div class="k">Income</div><div class="v">${m.earn==null?'No reply':m.earn==='none'?'Not yet':money(m.earn)}</div></div><div><div class="k">Active orders</div><div class="v">${m.orders==null?'—':m.orders}</div></div><div><div class="k">Delivered and accepted</div><div class="v">${m.delivered==null?'—':m.delivered}</div></div><div><div class="k">Money to drop</div><div class="v">${m.drop==null?'—':money(m.drop)}</div></div><div><div class="k">Drops on</div><div class="v">${fmtDate(m.clears)}</div></div></div>
-    <h3>Plan for next month</h3>
-    ${m.plan?`<div class="rows" style="margin-bottom:6px">${m.plan.goals.map(([p,t])=>`<div class="row"><b>${p}</b> ${esc(t)}</div>`).join('')}</div><div class="sub">Plans to sign ${m.plan.signups} · income target ${esc(m.plan.target)}</div>`:'<div class="empty">No plan sent yet.</div>'}
-    <h3 style="margin-top:16px">Income by month (example history, USD)</h3>
-    <div class="bars">${h.map(v=>`<div>${v?money(v):'0'}<i style="height:${Math.round(v/mx*80)}%"></i></div>`).join('')}</div>
-    <div class="axis">${['Jul','Aug','Sep','Oct','Nov'].map(x=>`<span>${x}</span>`).join('')}</div>
-    ${m.history.length?`<h3 style="margin-top:16px">Rank history</h3><div class="rows">${m.history.map(x=>`<div class="row"><div class="grow">${RANKS[x.from].n} to <b>${RANKS[x.to].n}</b></div><span class="sub">${x.cycle}</span></div>`).join('')}</div>`:''}`}
-    ${S.role==='admin'&&!m.leader?`<form data-form="fixneo" data-id="${m.id}" novalidate style="margin-top:18px"><h3>Admin only: correct NeoLife ID</h3><div class="inline"><input name="neo" type="text" class="mono" value="${esc(m.neoId)}" maxlength="11" aria-label="NeoLife ID"><button class="btn sm" type="submit">Save correction</button></div><p class="hint" id="fx-err" role="alert">Members cannot change this number. Every correction is logged.</p></form>`:''}
-    ${S.role==='admin'&&!m.leader?`<div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center"><button class="btn sm" type="button" data-act="resetpw" data-id="${m.id}">Reset password</button><span class="sub">${m.locked?'Locked after 5 wrong tries. ':''}${m.pw==null?'No password set yet.':'Sends '+esc(m.name.split(' ')[0])+' an email to choose a new one.'}</span></div>`:''}
-  </div></div>`;
-}
-function welcomeModal(m){
-  const sp=byId(m.sponsor),fn=esc(m.name.split(' ')[0]),sn=esc(sp.name);
-  return `<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="Welcome email">
-    <button class="btn sm x" type="button" data-act="close">Close</button>
-    <h2>${fn} is active</h2>
-    <p class="sub">${fn}'s first order of ${m.firstPv||0} PV now counts toward ${sn}'s QPV, the team feed shows the new member, and this email was sent:</p>
-    <div class="mail"><div class="meta">To ${esc(m.name)} · from TeamPulse</div><div class="subj">Welcome to the family, ${fn}!</div>
-      <p>Congratulations, ${fn}, and welcome to the family! ${sn} is proud of you for stepping up and joining the business. Your first order of ${m.firstPv||0} PV makes you a NeoLife Distributor today.</p>
-      <p>Now the real work starts. Here is what to do:</p>
-      <ol><li><b>Build your business actively.</b> Work it every week, not once in a while.</li>
-        <li><b>Start calling people.</b> Write a list of names today and reach out to them about your business.</li>
-        <li><b>Start recruiting.</b> Invite people to look at what you are doing.</li>
-        <li><b>Train your team.</b> Show them to do what you do, and how to earn with their own skills. Help them place their first order.</li>
-        <li><b>Grow through them.</b> When your team signs people, you sign more people too.</li>
-        <li><b>Stay close to ${sn}.</b> Book a call to plan your first 30 days.</li></ol>
-      <p><b>Set your password to get started.</b> Your TeamPulse ID is <span class="mono">${esc(m.teamId)}</span>. Use the button to choose your own password. The link works for 7 days. After that, sign in with your TeamPulse ID and your password.</p>
-      <p><button class="btn primary sm" type="button" data-act="openset" data-id="${m.id}">Set my password</button> <span class="sub">(prototype: this opens the link from the email)</span></p></div>
-    <button class="btn primary" type="button" data-act="close">Done</button></div></div>`;
-}
-function mailModal(c){
-  const m=byId(c.by);
-  return `<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="Details email">
-    <button class="btn sm x" type="button" data-act="close">Close</button>
-    <h2>Sign-up confirmed</h2><p class="sub">${esc(m.name)} received this email after you confirmed.</p>
-    <div class="mail"><div class="meta">To ${esc(m.name)} · from TeamPulse</div><div class="subj">Your sign-up is confirmed. Add their details</div>
-      <p>Hi ${esc(m.name.split(' ')[0])}, your Admin confirmed ${c.count} new sign-up${c.count>1?'s':''}. Please add the details so ${c.count>1?'they join':'they join'} your team.</p></div>
-    <button class="btn primary" type="button" data-act="detailsform" data-id="${c.id}">Open the details form (as ${esc(m.name.split(' ')[0])})</button></div></div>`;
-}
-function detailsModal(c){
-  const m=byId(c.by);
-  return `<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="Sign-up details">
-    <button class="btn sm x" type="button" data-act="close">Close</button>
-    <h2>New sign-up details</h2><p class="sub">${esc(m.name)} fills this in. ${c.count} left to add.</p>
-    <div id="dm" data-claim="${c.id}">${newMemberForm('dm-',m.id)}</div></div></div>`;
-}
-const maskEmail=e=>e.replace(/^(.).*(@.*)$/,'$1***$2');
-function signInAs(m){S.userId=m.id;S.role=m.leader?'admin':(m.rank===2?'qsm':'member');S.view=S.role==='member'?'checkins':'dashboard';S.modal=null;render();window.scrollTo(0,0);toast('Signed in as '+m.name)}
-function signinModal(md){
-  const step=md.step||'form',head='<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="Sign in"><button class="btn sm x" type="button" data-act="close">Close</button>',tail='</div></div>';
-  if(step==='setpw'){const m=byId(md.id);return head+`<h2>Set your password</h2><p class="sub">For ${esc(m.name)}, TeamPulse ID <span class="mono">${esc(m.teamId)}</span>. This link from your email works for 7 days.</p>
-    <form data-form="setpw" data-id="${m.id}" novalidate style="margin-top:14px"><div class="field"><label for="sp1">New password</label><input id="sp1" name="p1" type="password" autocomplete="new-password"><span class="hint">At least 8 characters, with a letter and a number.</span></div>
-    <div class="field"><label for="sp2">Repeat password</label><input id="sp2" name="p2" type="password" autocomplete="new-password"></div>
-    <p class="hint" id="sp-err" role="alert"></p><button class="btn primary" type="submit">Save password and sign in</button></form>`+tail}
-  if(step==='forgot'){return head+`<h2>Forgot your password?</h2><p class="sub">Enter your TeamPulse ID. We email a reset link to the address your team leader has on file.</p>
-    <form data-form="forgot" novalidate style="margin-top:14px"><div class="field"><label for="fp-id">TeamPulse ID</label><input id="fp-id" name="id" type="text" placeholder="06OW209" maxlength="7"></div><button class="btn primary" type="submit">Send reset link</button></form>`+tail}
-  if(step==='sent'){const m=md.found;return head+`<h2>Check your email</h2><p>If that TeamPulse ID exists, we sent a reset link to the email on file${m?' ('+esc(maskEmail(m.email))+')':''}. The link works for 7 days.</p>${m?`<p class="sub" style="margin:10px 0">Prototype: tap below as if you opened the link.</p><button class="btn primary" type="button" data-act="openset" data-id="${m.id}">Open the reset link</button>`:''}`+tail}
-  return head+`<h2>Sign in</h2><p class="sub">Use your TeamPulse ID and your password.</p>
-    <form data-form="signin" novalidate style="margin-top:14px"><div class="field"><label for="si-id">TeamPulse ID</label><input id="si-id" name="id" type="text" autocomplete="username" placeholder="06OW209" maxlength="7" value="${esc(md.prefill||'')}"></div>
-    <div class="field"><label for="si-pw">Password</label><input id="si-pw" name="pw" type="password" autocomplete="current-password"></div>
-    <p class="hint ${md.err?'bad':''}" id="si-err" role="alert">${esc(md.err||"Prototype: every example member's password is demo1234. Try 06OW209 (Blessing), 04OW558 (Tunde) or 04OW000 (the team leader). 06OW305 (Grace) is still pending.")}</p>
-    ${md.needsSet?`<p style="margin-bottom:10px"><button class="btn sm" type="button" data-act="openset" data-id="${md.needsSet}">Prototype: open the link from my welcome email</button></p>`:''}
-    <div class="inline"><button class="btn primary" type="submit">Sign in</button><button class="btn sm" type="button" data-act="forgot">Forgot your password?</button></div>
-    <p class="hint" style="margin-top:14px">New team leader? <button class="link" type="button" data-act="register">Register your team</button></p></form>`+tail;
-}
-function registerModal(md){
-  const head='<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="Register as a team leader"><button class="btn sm x" type="button" data-act="close">Close</button>',tail='</div></div>';
-  if(md.step==='verify'){return head+`<h2>Check your email</h2><p>We sent a confirmation link to <b>${esc(maskEmail(md.email))}</b>. Open it to finish creating your account.</p><p class="sub" style="margin:10px 0">Prototype: tap below as if you opened the link.</p><button class="btn primary" type="button" data-act="confirmreg">Open the confirmation link</button>`+tail}
-  if(md.step==='done'){const m=byId('leader');return head+`<h2>Your team is ready</h2><p>Welcome, ${esc(m.name.split(' ')[0])}. Your TeamPulse ID is <b class="mono" style="font-size:1.1rem">${esc(m.teamId)}</b>. You sign in with this ID and your password, so write it down.</p><p class="sub" style="margin:10px 0">Next, add your first member. They get their own TeamPulse ID and an email with a link to set their password.</p><button class="btn primary" type="button" data-act="goadd">Add my first member</button>`+tail}
-  return head+`<h2>Register as a team leader</h2><p class="sub">Only team leaders register. You add your own members afterwards, and they never register themselves.</p>
-    <form data-form="register" novalidate style="margin-top:14px">
-      <div class="field"><label for="rg-name">Full name</label><input id="rg-name" name="name" type="text" autocomplete="name"></div>
-      <div class="field"><label for="rg-team">Team name</label><input id="rg-team" name="team" type="text" placeholder="Team OW"></div>
-      <div class="field"><label for="rg-email">Email</label><input id="rg-email" name="email" type="email" autocomplete="email"><span class="hint">We send a confirmation link here, and password resets go here.</span></div>
-      <div class="field"><label for="rg-neo">Your NeoLife ID</label><input id="rg-neo" name="neo" type="text" inputmode="numeric" maxlength="11" placeholder="063-9262173"></div>
-      <div class="field"><label for="rg-p1">Password</label><input id="rg-p1" name="p1" type="password" autocomplete="new-password"><span class="hint">At least 8 characters, with a letter and a number.</span></div>
-      <div class="field"><label for="rg-p2">Repeat password</label><input id="rg-p2" name="p2" type="password" autocomplete="new-password"></div>
-      <p class="hint" id="rg-err" role="alert"></p>
-      <div class="inline"><button class="btn primary" type="submit">Create my account</button><button class="btn sm" type="button" data-act="signin">I already have an account</button></div>
-    </form>`+tail;
-}
-function renderModal(){
-  const md=S.modal,el=$('#modal');
-  if(!md){el.innerHTML='';return}
-  el.innerHTML=md.t==='register'?registerModal(md):md.t==='signin'?signinModal(md):md.t==='member'?memberModal(byId(md.id)):md.t==='welcome'?welcomeModal(byId(md.id)):md.t==='mail'?mailModal(S.claims.find(c=>c.id===md.id)):detailsModal(S.claims.find(c=>c.id===md.id));
-}
+const VIEWS={dashboard,team,addmember,memberadded,signups,claimdetails,feed,profile,home,checkins};
+const ADMIN_ONLY=['dashboard','addmember','memberadded'];
+const MEMBER_ONLY=['home','checkins','claimdetails'];
 
-/* ---------- render and events ---------- */
+/* ============================== rendering ============================== */
+function go(name,p){R={name,p:p||{}};render();window.scrollTo(0,0)}
 function render(){
-  renderChrome();
-  $('#main').innerHTML=views[S.view]();
-  bindView();
-  renderModal();
+  const u=me();
+  let name=R.name;
+  if(!AUTH_ROUTES.includes(name)){
+    if(!u){R={name:'signin',p:{next:{name:R.name,p:R.p}}};name='signin'}
+    else if((u.role!=='admin'&&ADMIN_ONLY.includes(name))||(u.role==='admin'&&MEMBER_ONLY.includes(name))||(name==='team'&&!canSeeTeam(u)))go(homeRoute(u));
+  }
+  if(R.name!==name||!AUTH_ROUTES.includes(R.name)||true){}
+  const cur=R.name;
+  $('#root').innerHTML=AUTH_ROUTES.includes(cur)?AUTH[cur]():shell(me());
+  afterRender();
+  renderModal();updateTT();
 }
-function bindView(){
-  const as=$('#asid');if(as)as.onchange=e=>{S.asId=e.target.value;render()};
-  const sim=$('#simid');if(sim)sim.onchange=e=>{byId(meId()).idHrs=Number(e.target.value);render()};
-  const ph=$('#pf-ph');if(ph)ph.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{byId(meId()).photo=r.result;render();toast('Picture updated')};r.readAsDataURL(f)};
+function afterRender(){
+  const q=$('#q');if(q)q.oninput=e=>{Q=e.target.value;const pos=e.target.selectionStart;render();const nq=$('#q');if(nq){nq.focus();nq.setSelectionRange(pos,pos)}};
   const en=$('#e-none');if(en)en.onchange=e=>{$('#e-amt').disabled=e.target.checked};
   const pp=$('#p-ppv'),pq=$('#p-qpv'),pn=$('#p-none');
   if(pp){
@@ -1280,175 +1425,263 @@ function bindView(){
       if(v==null){h.className='hint';h.textContent='NeoLife asks for 100 PPV to stay active.'}
       else if(v<100){h.className='hint bad';h.textContent=v+' PPV is under the 100 minimum. You will not be active for bonuses this month.'}
       else{h.className='hint good';h.textContent=v+' PPV. You meet the 100 minimum.'}
-      const q=pn.checked?(v||0):(pq.value===''?null:Number(pq.value)),qh=$('#p-qpvh');
-      if(q==null){qh.className='hint';qh.textContent='If you have no downline, your QPV is just your PPV.'}
-      else{let best=0;for(let i=1;i<=3;i++)if(q>=RANKS[i].q)best=i;
-        if(v!=null&&v>=100&&best>0){qh.className='hint good';qh.textContent=num(q)+' QPV reaches '+RANKS[best].n+' ('+num(RANKS[best].q)+'). Your Admin will review it.'}
-        else{const nx=RANKS[Math.max(1,best+1)];qh.className='hint';qh.textContent=num(q)+' QPV. Next threshold: '+nx.n+' at '+num(nx.q)+(v!=null&&v<100?', and it needs 100 PPV.':'.')}}
+      const qv=pn.checked?(v||0):(pq.value===''?null:Number(pq.value)),qh=$('#p-qpvh');
+      if(qv==null){qh.className='hint';qh.textContent='If you have no downline, your QPV is just your PPV.'}
+      else{let best=0;for(let i=1;i<=3;i++)if(qv>=RANKS[i].q)best=i;
+        if(v!=null&&v>=100&&best>0){qh.className='hint good';qh.textContent=num(qv)+' QPV reaches '+RANKS[best].n+' ('+num(RANKS[best].q)+'). Your team leader will review it.'}
+        else{const nx=RANKS[Math.max(1,best+1)];qh.className='hint';qh.textContent=num(qv)+' QPV. Next threshold: '+nx.n+' at '+num(nx.q)+(v!=null&&v<100?', and it needs 100 PPV.':'.')}}
     };
-    pp.oninput=upd;pq.oninput=upd;pn.onchange=()=>{pq.disabled=pn.checked;upd()};
-    if(pp.value)upd();
+    pp.oninput=upd;pq.oninput=upd;pn.onchange=()=>{pq.disabled=pn.checked;upd()};if(pp.value)upd();
+  }
+  const ph=$('#pf-ph');if(ph)ph.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const u=me();u.photo=r.result;save();render();toast('Picture updated')};r.readAsDataURL(f)};
+  const f=document.querySelector('[data-form=signin] #si-pw');if(f&&R.p.prefill)f.focus();
+}
+let toastTimer;
+function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{el.hidden=true},3600)}
+function renderModal(){
+  const el=$('#modal');
+  if(MAILVIEW){const m=DB.mail.find(x=>x.id===MAILVIEW);if(m){el.innerHTML=`<div class="overlay" data-act="closemail"><div class="modal" role="dialog" aria-modal="true" aria-label="Email"><button class="btn sm x" type="button" data-act="closemail">Close</button>
+    <h2>${esc(m.subject)}</h2><p class="sub">To ${esc(m.toName)} &lt;${esc(m.to)}&gt; · ${ago(m.at)}</p><div class="mailbody">${m.html}${m.cta?`<p style="margin-top:14px"><button class="btn primary" type="button" data-act="mailcta" data-id="${m.id}">${esc(m.cta.label)}</button></p>`:''}</div></div></div>`;return}}
+  if(R.p&&R.p.modalId){const u=me(),m=U(R.p.modalId);if(m&&u){el.innerHTML=memberModal(m,u);return}}
+  el.innerHTML='';
+}
+
+/* ============================== test tools (prototype only) ============================== */
+function updateTT(){
+  const n=DB.mail.filter(m=>!m.read).length,b=$('#ttbadge');
+  b.hidden=!n;b.textContent=n;
+  const box=$('#tt');
+  if(!box.hidden){
+    box.innerHTML=`<h3>Prototype test tools</h3><p class="sub" style="margin:0">Not part of TeamPulse. They stand in for what the real app does by itself.</p>
+      <h4>Mailbox (${DB.mail.length})</h4>
+      ${DB.mail.length?DB.mail.slice(0,12).map(m=>`<div class="mailrow ${m.read?'':'unread'}"><b>${esc(m.subject)}</b><small>To ${esc(m.toName)} · ${ago(m.at)}</small><div class="inline" style="margin-top:6px"><button class="btn sm" type="button" data-act="readmail" data-id="${m.id}">Read</button>${m.cta?`<button class="btn sm primary" type="button" data-act="mailcta" data-id="${m.id}">${esc(m.cta.label)}</button>`:''}</div></div>`).join(''):'<p class="sub">No emails yet. Emails the app sends appear here, with their links.</p>'}
+      <h4>Date</h4><p class="sub" style="margin:0 0 6px">Check-ins open on set days. Move the date to see windows open and close.</p>
+      <div class="inline"><input type="date" id="tt-date" value="${esc(DB.testDate||toISO(new Date()))}"><button class="btn sm" type="button" data-act="setdate">Use this date</button><button class="btn sm" type="button" data-act="realdate">Real date</button></div>
+      <p class="sub" style="margin:6px 0 0">Using ${DB.testDate?'test date '+DB.testDate:'the real date'}.</p>
+      <h4>Data</h4><p class="sub" style="margin:0 0 6px">Everything you enter is stored in this browser only.</p>
+      <button class="btn sm bad" type="button" data-act="wipe">Delete all data in this browser</button>`;
   }
 }
-document.addEventListener('click',e=>{
-  const a=e.target.closest('[data-act]');if(!a)return;
+
+/* ============================== actions ============================== */
+function signInUser(u){
+  setSession(u.id);scheduleMail();
+  const nx=R.p&&R.p.next;
+  if(nx&&nx.name&&!AUTH_ROUTES.includes(nx.name)){go(nx.name,nx.p)}else go(homeRoute(u));
+}
+async function completeRegistration(t){
+  const d=t.data;
+  if(DB.users.some(x=>x.email.toLowerCase()===d.email.toLowerCase())){t.used=true;save();setSession((DB.users.find(x=>x.email.toLowerCase()===d.email.toLowerCase())||{}).id||null);return go('signin',{err:'This email is already confirmed. Sign in below.'})}
+  const team={id:nid('tm'),name:d.team};DB.teams.push(team);
+  const u={id:nid('u'),teamId:team.id,role:'admin',name:d.name,email:d.email,neoId:d.neo,tp:newTP(),status:'active',salt:d.salt,pwHash:d.pwHash,tries:0,locked:false,sponsorId:null,rank:0,joinedAt:nowD().toISOString(),firstPv:null,phone:'',city:'',bio:'',photo:null,answers:{},history:[],sent:{}};
+  DB.users.push(u);t.used=true;save();setSession(u.id);
+  go('leaderwelcome');
+}
+function openToken(id){
+  const t=DB.tokens.find(x=>x.id===id);
+  if(!t)return go('linkbad',{why:'This link is not valid.'});
+  if(t.used)return go('linkbad',{why:'This link was already used.'});
+  if(!tokenOk(t))return go('linkbad',{why:'This link has expired.'});
+  if(t.type==='verify')return completeRegistration(t);
+  go('setpw',{token:id});
+}
+function openCta(mailId){
+  const m=DB.mail.find(x=>x.id===mailId);if(!m||!m.cta)return;
+  m.read=true;save();MAILVIEW=null;$('#tt').hidden=true;$('#ttbtn').setAttribute('aria-expanded','false');
+  if(m.cta.token)return openToken(m.cta.token);
+  go(m.cta.route,m.cta.p||{});
+}
+function createMember(u,d){
+  const m={id:nid('u'),teamId:u.teamId,role:'member',name:d.name,email:d.email,neoId:d.neo,tp:newTP(),status:'invited',salt:null,pwHash:null,tries:0,locked:false,sponsorId:d.sponsor,rank:0,joinedAt:nowD().toISOString(),firstPv:d.pv,phone:d.phone||'',city:'',bio:'',photo:null,answers:{},history:[],sent:{}};
+  DB.users.push(m);
+  DB.feed.unshift({id:nid('f'),teamId:u.teamId,kind:'join',who:m.id,by:d.sponsor,at:nowD().toISOString()});
+  const tk=makeToken('setpw',{userId:m.id});
+  inviteMail(m,tk,u);save();return m;
+}
+const fail=(id,msg)=>{const el=$('#'+id);if(el){el.className='hint bad';el.textContent=msg}};
+
+document.addEventListener('click',async e=>{
+  const a=e.target.closest('[data-act]');
+  if(!a){const l=e.target.closest('a[href="./"]');if(l&&window.parent!==window){e.preventDefault();parent.postMessage({tp:'home'},'*')}return}
   if(a.classList.contains('overlay')&&e.target!==a)return;
-  const id=a.dataset.id,act=a.dataset.act;
-  if(act==='nav'){S.view=a.dataset.v;render();window.scrollTo(0,0)}
-  else if(act==='filter'){S.filter=a.dataset.v;render()}
-  else if(act==='ci'){S.ci=a.dataset.v;render()}
-  else if(act==='member'){S.modal={t:'member',id};renderModal()}
-  else if(act==='signin'){S.modal={t:'signin'};renderModal();const i=$('#si-id');if(i)i.focus()}
-  else if(act==='register'){S.modal={t:'register'};renderModal();const el=$('#rg-name');if(el)el.focus()}
-  else if(act==='confirmreg'){
-    const d=S.regDraft;if(!d)return;
-    const leader={id:'leader',leader:true,name:d.name,rank:null,sponsor:null,teamId:teamId(),neoId:d.neo,email:d.email,pw:d.pw,status:'active',ppv:null,qpv:null,earn:null,orders:null,clears:null,paid:null,done:[],ans:[],plan:null,phone:'',city:'',bio:'',photo:null,idHrs:0,pendingHrs:0,history:[],tries:0,locked:false};
-    S.members=[leader];S.claims=[];S.feed=[];S.dismissed=[];S.n=10;S.role='admin';S.userId=null;S.asId=null;S.view='dashboard';S.custom=true;S.teamName=d.team;S.regDraft=null;
-    S.modal={t:'register',step:'done'};render();
-  }
-  else if(act==='goadd'){S.modal=null;S.view='signups';render();window.scrollTo(0,0)}
-  else if(act==='forgot'){S.modal={t:'signin',step:'forgot'};renderModal()}
-  else if(act==='openset'){S.modal={t:'signin',step:'setpw',id};renderModal()}
-  else if(act==='resetpw'){const m=byId(id);m.pw=null;m.locked=false;m.tries=0;render();S.modal={t:'member',id};renderModal();toast('Password reset. '+m.name.split(' ')[0]+' gets an email to choose a new one.')}
-  else if(act==='bell'){if(S.role==='admin'){S.view='dashboard';render();const el=$('#attn');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}else toast('You are all caught up.')}
-  else if(act==='report'){toast('Monthly report exported (prototype only).')}
-  else if(act==='close'){S.modal=null;renderModal()}
-  else if(act==='reset'){fresh({role:S.role,view:S.view,asId:S.asId,userId:S.userId});$('#q').value='';render();toast('Example data restored')}
-  else if(act==='remind'){toast('Reminder sent to '+byId(id).name+' by email')}
-  else if(act==='recok'){const m=byId(id),r=recommend(m);m.history.push({from:m.rank,to:r,cycle:'November'});S.feed.unshift({id:'f'+(S.n++),kind:'rank',who:m.id,to:RANKS[r].n,when:'just now'});m.rank=r;render();toast(m.name+' is now '+RANKS[r].n+'. The team feed shows it.')}
-  else if(act==='recno'){S.dismissed.push(id);render();toast('Recommendation dismissed and logged')}
-  else if(act==='activate'){const m=byId(id);m.status='active';m.pendingHrs=0;S.feed.unshift({id:'f'+(S.n++),kind:'join',who:m.id,by:m.sponsor,when:'just now'});render();S.modal={t:'welcome',id};renderModal()}
-  else if(act==='confirm'){const c=S.claims.find(x=>x.id===id);c.state='details';render();S.modal={t:'mail',id};renderModal()}
-  else if(act==='reject'){S.claims=S.claims.filter(x=>x.id!==id);render();toast('Claim rejected. The member is told why.')}
-  else if(act==='openmail'){S.modal={t:'mail',id};renderModal()}
-  else if(act==='detailsform'){S.modal={t:'details',id};renderModal()}
-  else if(act==='hidepost'){S.feed=S.feed.filter(f=>f.id!==id);render();toast('Post hidden from the team')}
+  const act=a.dataset.act,id=a.dataset.id,u=me();
+  if(act==='go'){go(a.dataset.r,a.dataset.key?{key:a.dataset.key}:a.dataset.id?{id:a.dataset.id}:{})}
+  else if(act==='ckey'){R.p.key=a.dataset.key;render()}
+  else if(act==='filter'){R.p.filter=a.dataset.v;render()}
+  else if(act==='mode'){R.p.mode=a.dataset.v;render()}
+  else if(act==='signout'){setSession(null);Q='';go('signin')}
+  else if(act==='member'){R.p.modalId=id;renderModal()}
+  else if(act==='close'){delete R.p.modalId;renderModal()}
+  else if(act==='bell'){go('dashboard');const el=$('#attn');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+  else if(act==='remind'){const m=U(id);sendMail(m,'A quick reminder about your check-ins',`<p>Hi ${esc(first(m))}, your team leader asked us to remind you about your check-ins this month.</p>`,{label:'Open my check-ins',route:'checkins',p:{}});toast('Reminder sent to '+m.name)}
+  else if(act==='resend'){const m=U(id),tk=makeToken('setpw',{userId:m.id});inviteMail(m,tk,u);toast('Invitation sent again to '+m.email)}
+  else if(act==='resetpw'){const m=U(id),tk=makeToken('reset',{userId:m.id});sendMail(m,'Choose a new password',mailFrame(m,`<p>Your team leader asked us to help you set a new password for TeamPulse ID <b class="mono">${esc(m.tp)}</b>. The link works for 7 days.</p>`),{label:'Choose a new password',token:tk.id});toast('Reset link sent to '+m.email)}
+  else if(act==='deactivate'){const m=U(id);m.status='inactive';save();render();toast(m.name+' is deactivated and cannot sign in')}
+  else if(act==='reactivate'){const m=U(id);m.status=m.pwHash?'active':'invited';save();render();toast(m.name+' is active again')}
+  else if(act==='recok'){const m=U(id),r=recommend(m);if(r==null)return;m.history.push({from:m.rank,to:r,at:nowD().toISOString()});DB.feed.unshift({id:nid('f'),teamId:m.teamId,kind:'rank',who:m.id,to:RANKS[r].n,at:nowD().toISOString()});m.rank=r;save();render();toast(m.name+' is now '+RANKS[r].n+'. The team feed shows it.')}
+  else if(act==='recno'){DB.dismissed.push(id);save();render();toast('Recommendation dismissed')}
+  else if(act==='claimadd'){const c=DB.claims.find(x=>x.id===id);go('addmember',{claim:id,sponsor:c.by,draft:c.details||{name:c.who||''}})}
+  else if(act==='claimask'){const c=DB.claims.find(x=>x.id===id),by=U(c.by);c.state='details_asked';const tk=makeToken('details',{claim:id});sendMail(by,'Your team leader needs your new sign-up\'s details',mailFrame(by,`<p>Your team leader would like to add ${c.count>1?'your new sign-ups':'your new sign-up'} to the team. Please send the details.</p>`),{label:'Send the details',route:'claimdetails',p:{id}});save();render();toast('Asked '+first(by)+' for the details')}
+  else if(act==='claimno'){const c=DB.claims.find(x=>x.id===id);c.state='dismissed';save();render();toast('Report dismissed')}
   else if(act==='addgoal'){$('#goals').insertAdjacentHTML('beforeend',goalRow('I will',''))}
+  else if(act==='resend-verify'){const t=DB.tokens.find(x=>x.id===id);if(t){const d=t.data;const nt=makeToken('verify',d);sendMail({name:d.name,email:d.email},'Confirm your email for TeamPulse',`<p>Hi ${esc(d.name.split(' ')[0])}, confirm your email to finish creating your team. The link works for 7 days.</p>`,{label:'Confirm my email',token:nt.id});R.p.token=nt.id;toast('We sent the link again')}}
+  /* test tools */
+  else if(act==='tt'){const box=$('#tt');box.hidden=!box.hidden;a.setAttribute('aria-expanded',String(!box.hidden));updateTT()}
+  else if(act==='readmail'){const m=DB.mail.find(x=>x.id===id);m.read=true;save();MAILVIEW=id;renderModal();updateTT()}
+  else if(act==='closemail'){MAILVIEW=null;renderModal()}
+  else if(act==='mailcta'){openCta(id)}
+  else if(act==='setdate'){const v=$('#tt-date').value;if(v){DB.testDate=v;save();scheduleMail();render();toast('Date set to '+v)}}
+  else if(act==='realdate'){DB.testDate=null;save();scheduleMail();render();toast('Using the real date')}
+  else if(act==='wipe'){if(a.dataset.sure==='1'){DB=blank();save();setSession(null);Q='';$('#tt').hidden=true;go('signin');toast('All data deleted')}else{a.dataset.sure='1';a.textContent='Click again to delete everything'}}
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.modal){S.modal=null;renderModal()}});
-$('#role').onchange=e=>{
-  S.role=e.target.value;S.userId=null;S.view=S.role==='member'?'checkins':'dashboard';S.filter='all';
-  if(S.role==='admin')S.asId='m_adaeze';
-  render();window.scrollTo(0,0);
-};
-document.addEventListener('submit',e=>{
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(MAILVIEW){MAILVIEW=null;renderModal()}else if(R.p&&R.p.modalId){delete R.p.modalId;renderModal()}}});
+
+document.addEventListener('submit',async e=>{
   const f=e.target.closest('form[data-form]');if(!f)return;e.preventDefault();
-  const k=f.dataset.form,d=new FormData(f);
-  const who=asMember();
-  const mark=key=>{const st=ciState(key);if(st.state==='open'&&!who.ans.includes(st.o.id))who.ans.push(st.o.id)};
-  if(k==='fixneo'){
-    const m=byId(f.dataset.id),v=String(d.get('neo')).trim(),err=$('#fx-err');
-    if(!validNeo(v)){err.className='hint bad';err.textContent='NeoLife ID must look like 063-9262173.';return}
-    if(S.members.some(x=>x.id!==m.id&&x.neoId===v)){err.className='hint bad';err.textContent='That NeoLife ID belongs to someone else.';return}
-    if(v===m.neoId){err.className='hint';err.textContent='No change to save.';return}
-    (m.neoLog=m.neoLog||[]).push({from:m.neoId,to:v});m.neoId=v;render();toast('NeoLife ID corrected and logged.');return;
-  }
+  const k=f.dataset.form,d=new FormData(f),g=n=>String(d.get(n)==null?'':d.get(n)).trim(),u=me();
   if(k==='signin'){
-    const raw=String(d.get('id')).trim(),pw=String(d.get('pw')),v=raw.toUpperCase().replace(/\s/g,'').replace(/0W/,'OW');
-    const fail=(msg,extra)=>{S.modal=Object.assign({t:'signin',err:msg},extra||{});renderModal()};
-    if(!v||!pw)return fail('Enter your TeamPulse ID and password.');
-    const m=S.members.find(x=>x.teamId===v);
-    if(!m)return fail('The TeamPulse ID or password is not right.');
-    if(m.status==='pending')return fail('Your account is waiting for activation by your team leader. You will get an email when it opens.');
-    if(m.locked)return fail('This account is locked after 5 wrong tries. Use "Forgot your password?" or ask your team leader to reset it.');
-    if(m.pw==null)return fail('You have not set a password yet. Open the "Set your password" link in your welcome email.',{needsSet:m.id});
-    if(pw!==m.pw){m.tries=(m.tries||0)+1;if(m.tries>=5){m.locked=true;return fail('Locked after 5 wrong tries. Use "Forgot your password?" or ask your team leader to reset it.')}return fail('The TeamPulse ID or password is not right. '+(5-m.tries)+' tries left.')}
-    m.tries=0;signInAs(m);return;
+    const id=normTP(g('id')),pw=String(d.get('pw')||''),nx=R.p.next;
+    const bail=msg=>{R={name:'signin',p:{err:msg,prefill:id,next:nx}};render()};
+    if(!id||!pw)return bail('Enter your TeamPulse ID and password.');
+    const m=DB.users.find(x=>x.tp===id);
+    if(!m)return bail('The TeamPulse ID or password is not right.');
+    if(m.status==='inactive')return bail('This account is not active. Ask your team leader.');
+    if(m.locked)return bail('This account is locked after 5 wrong tries. Use "Forgot your password?" or ask your team leader to reset it.');
+    if(!m.pwHash)return bail('You have not set a password yet. Open the "Set your password" link in your welcome email.');
+    if(await hashPw(m.salt,pw)!==m.pwHash){m.tries=(m.tries||0)+1;if(m.tries>=5)m.locked=true;save();return bail(m.locked?'Locked after 5 wrong tries. Use "Forgot your password?" or ask your team leader to reset it.':'The TeamPulse ID or password is not right. '+(5-m.tries)+' tries left.')}
+    m.tries=0;save();R={name:'signin',p:{next:nx}};signInUser(m);return;
   }
   if(k==='register'){
-    const g=n=>String(d.get(n)||'').trim(),name=g('name'),team=g('team'),email=g('email'),neo=g('neo'),p1=String(d.get('p1')||''),p2=String(d.get('p2')||''),err=$('#rg-err');
-    const bad=x=>{err.className='hint bad';err.textContent=x};
-    if(name.length<2)return bad('Enter your full name.');
-    if(team.length<2)return bad('Enter a name for your team.');
-    if(!/^\S+@\S+\.\S+$/.test(email))return bad('Enter a valid email address.');
-    if(!validNeo(neo))return bad('NeoLife ID must look like 063-9262173.');
-    if(p1.length<8||!/[A-Za-z]/.test(p1)||!/\d/.test(p1))return bad('Use at least 8 characters, with a letter and a number.');
-    if(p1!==p2)return bad('The two passwords do not match.');
-    S.regDraft={name,team,email,neo,pw:p1};S.modal={t:'register',step:'verify',email};renderModal();return;
+    const name=g('name'),team=g('team'),email=g('email'),neo=g('neo'),p1=String(d.get('p1')||''),p2=String(d.get('p2')||'');
+    const keep={name,team,email,neo};const bail=msg=>{R={name:'register',p:Object.assign({err:msg},keep)};render()};
+    if(name.length<2)return bail('Enter your full name.');
+    if(team.length<2)return bail('Enter a name for your team.');
+    if(!/^\S+@\S+\.\S+$/.test(email))return bail('Enter a valid email address.');
+    if(!validNeo(neo))return bail('NeoLife ID must look like 063-9262173.');
+    if(!strongPw(p1))return bail('Use at least 8 characters, with a letter and a number.');
+    if(p1!==p2)return bail('The two passwords do not match.');
+    if(DB.users.some(x=>x.email.toLowerCase()===email.toLowerCase()))return bail('An account with this email already exists. Sign in instead.');
+    if(DB.users.some(x=>x.neoId===neo))return bail('That NeoLife ID already has an account.');
+    const salt=newSalt(),pwHash=await hashPw(salt,p1),tk=makeToken('verify',{name,team,email,neo,salt,pwHash});
+    sendMail({name,email},'Confirm your email for TeamPulse',`<p>Hi ${esc(name.split(' ')[0])}, confirm your email to finish creating <b>${esc(team)}</b>. The link works for 7 days.</p>`,{label:'Confirm my email',token:tk.id});
+    go('verifysent',{email,token:tk.id});return;
   }
   if(k==='forgot'){
-    const v=String(d.get('id')).trim().toUpperCase().replace(/\s/g,'').replace(/0W/,'OW'),m=S.members.find(x=>x.teamId===v&&x.status==='active');
-    S.modal={t:'signin',step:'sent',found:m||null};renderModal();return;
+    const id=normTP(g('id')),m=DB.users.find(x=>x.tp===id&&x.status!=='inactive');
+    if(m){const tk=makeToken('reset',{userId:m.id});sendMail(m,'Reset your TeamPulse password',mailFrame(m,`<p>We got a request to reset the password for TeamPulse ID <b class="mono">${esc(m.tp)}</b>. If it was not you, ignore this email. The link works for 7 days.</p>`),{label:'Choose a new password',token:tk.id})}
+    go('forgotsent');return;
   }
   if(k==='setpw'){
-    const m=byId(f.dataset.id),p1=String(d.get('p1')),p2=String(d.get('p2')),err=$('#sp-err');
-    const bad=x=>{err.className='hint bad';err.textContent=x};
-    if(p1.length<8||!/[A-Za-z]/.test(p1)||!/\d/.test(p1))return bad('Use at least 8 characters, with a letter and a number.');
-    if(p1!==p2)return bad('The two passwords do not match.');
-    m.pw=p1;m.tries=0;m.locked=false;signInAs(m);return;
+    const t=DB.tokens.find(x=>x.id===f.dataset.token),p1=String(d.get('p1')||''),p2=String(d.get('p2')||'');
+    if(!tokenOk(t))return go('linkbad',{why:'This link expired.'});
+    if(!strongPw(p1))return fail('sp-err','Use at least 8 characters, with a letter and a number.');
+    if(p1!==p2)return fail('sp-err','The two passwords do not match.');
+    const m=U(t.data.userId);await setPassword(m,p1);m.status='active';t.used=true;save();
+    R={name:'signin',p:{}};signInUser(m);toast('Password saved. Welcome, '+first(m)+'!');return;
   }
+  if(!u)return;
+  if(k==='addmember'){
+    const name=g('name'),email=g('email'),neo=g('neo'),pv=g('pv'),sponsor=g('sponsor'),phone=g('phone');
+    const keep={name,email,neo,pv,phone,sponsor};
+    const bail=msg=>{R.p.draft=keep;R.p.sponsor=sponsor;render();fail('am-err',msg)};
+    if(name.length<2)return bail('Enter the new member\'s full name.');
+    if(!/^\S+@\S+\.\S+$/.test(email))return bail('Enter a valid email address.');
+    if(!validNeo(neo))return bail('NeoLife ID must look like 063-9262173.');
+    if(DB.users.some(x=>x.neoId===neo))return bail('That NeoLife ID is already in the system.');
+    if(DB.users.some(x=>x.email.toLowerCase()===email.toLowerCase()))return bail('That email already has an account.');
+    if(!(Number(pv)>0))return bail('Enter the PV of their first order, for example 100, 136, 250 or 272.');
+    const m=createMember(u,{name,email,neo,pv:Number(pv),sponsor,phone});
+    if(R.p.claim){const c=DB.claims.find(x=>x.id===R.p.claim);if(c){c.count-=1;if(c.count<=0)c.state='added';save()}}
+    go('memberadded',{id:m.id});return;
+  }
+  if(k==='fixneo'){
+    const m=U(f.dataset.id),v=g('neo');
+    if(!validNeo(v))return fail('fx-err','NeoLife ID must look like 063-9262173.');
+    if(DB.users.some(x=>x.id!==m.id&&x.neoId===v))return fail('fx-err','That NeoLife ID belongs to someone else.');
+    if(v===m.neoId)return fail('fx-err','No change to save.');
+    (m.neoLog=m.neoLog||[]).push({from:m.neoId,to:v,at:nowD().toISOString(),by:u.id});m.neoId=v;save();render();toast('NeoLife ID corrected and logged.');return;
+  }
+  if(k==='profile'){
+    const nm=g('name');if(nm.length<2)return fail('pf-err','Display name cannot be empty.');
+    if(u.role==='admin'){const neo=g('neo');if(neo!==u.neoId){if(!validNeo(neo))return fail('pf-err','NeoLife ID must look like 063-9262173.');if(DB.users.some(x=>x.id!==u.id&&x.neoId===neo))return fail('pf-err','That NeoLife ID belongs to someone else.');u.neoId=neo}
+      const tn=g('team');if(tn.length<2)return fail('pf-err','Enter a team name.');const t=DB.teams.find(x=>x.id===u.teamId);if(t)t.name=tn}
+    u.name=nm;u.phone=g('phone');u.city=g('city');u.bio=g('bio');save();render();toast('Saved');return;
+  }
+  if(k==='chgpw'){
+    const p0=String(d.get('p0')||''),p1=String(d.get('p1')||''),p2=String(d.get('p2')||'');
+    if(await hashPw(u.salt,p0)!==u.pwHash)return fail('cp-err','Your current password is not right.');
+    if(!strongPw(p1))return fail('cp-err','Use at least 8 characters, with a letter and a number.');
+    if(p1!==p2)return fail('cp-err','The two new passwords do not match.');
+    await setPassword(u,p1);save();render();toast('Password changed');return;
+  }
+  if(k==='report'){
+    const n=Math.max(1,Number(g('count')||1));DB.claims.unshift({id:nid('c'),teamId:u.teamId,by:u.id,count:n,who:g('who'),state:'review',at:nowD().toISOString()});save();f.reset();render();toast('Your team leader has been told.');return;
+  }
+  if(k==='claimdetails'){
+    const c=DB.claims.find(x=>x.id===f.dataset.id),name=g('name'),email=g('email'),neo=g('neo'),pv=g('pv');
+    if(name.length<2)return fail('cd-err','Enter their full name.');
+    if(!/^\S+@\S+\.\S+$/.test(email))return fail('cd-err','Enter a valid email address.');
+    if(!validNeo(neo))return fail('cd-err','NeoLife ID must look like 063-9262173.');
+    if(!(Number(pv)>0))return fail('cd-err','Enter the PV of their first order.');
+    c.details={name,email,neo,pv,phone:g('phone'),sponsor:c.by};c.state='ready';c.who=name;save();go('signups');toast('Sent to your team leader');return;
+  }
+  /* check-in answers */
+  const who=u,st=ciState(k==='earn'||k==='ppv'||k==='plan'||k==='paid'||k==='signup'?k:'earn');
+  if(!['earn','ppv','plan','paid','signup'].includes(k))return;
+  if(st.state!=='open')return toast('This check-in is not open.');
+  const put=obj=>{who.answers[st.o.id]=Object.assign({at:nowD().toISOString()},obj);save()};
   if(k==='earn'){
-    const none=d.get('none')==='on';
-    if(!none&&d.get('amt')===''){toast('Enter an amount, or tick "Not yet".');return}
-    const drop=d.get('drop')===''?0:Number(d.get('drop'));
-    if(drop>0&&!d.get('clears')){$('#e-err').className='hint bad';$('#e-err').textContent='Add the date the money drops, so your leader can plan your PPV order.';return}
-    who.earn=none?'none':Number(d.get('amt'));who.orders=d.get('orders')===''?0:Number(d.get('orders'));
-    who.delivered=d.get('delivered')===''?0:Number(d.get('delivered'));who.drop=drop;who.clears=d.get('clears')||null;
-    mark('earn');render();toast('Saved to '+who.name.split(' ')[0]+"'s profile");
-  }else if(k==='ppv'){
-    if(d.get('ppv')===''){toast('Enter your PPV.');return}
-    who.ppv=Number(d.get('ppv'));who.qpv=d.get('none')==='on'?who.ppv:(d.get('qpv')===''?who.ppv:Number(d.get('qpv')));
-    mark('ppv');render();toast('Saved. '+(who.ppv<100?'PPV is under 100, so your Admin will see a flag.':'You meet the 100 PPV minimum.'));
-  }else if(k==='plan'){
-    const p=d.getAll('gp'),t=d.getAll('gt');
-    const goals=p.map((x,i)=>[x,t[i].trim()]).filter(g=>g[1]);
-    if(!goals.length){toast('Write at least one goal after "I will" or "I must".');return}
-    who.plan={goals,signups:Number(d.get('signups')||0),target:d.get('target')};
-    mark('plan');render();toast('Plan saved. Every goal keeps its "I will" or "I must".');
-  }else if(k==='paid'){
-    const v=d.get('paid');if(!v){$('#paid-err').className='hint bad';$('#paid-err').textContent='Choose yes or not yet.';return}
-    who.paid=v==='yes';mark('paid');render();toast('Saved');
-  }else if(k==='signup'){
-    const v=d.get('su');if(!v){$('#su-err').className='hint bad';$('#su-err').textContent='Choose yes or no.';return}
-    mark('signup');
-    if(v==='yes'){const n=Math.max(1,Number(d.get('count')||1));S.claims.push({id:'c'+(S.n++),by:who.id,count:n,planned:who.plan?who.plan.signups:0,src:'25th check-in',state:'review'});render();toast('Saved. Your Admin will confirm your '+n+' sign-up'+(n>1?'s':'')+'.')}
-    else{render();toast('Saved')}
-  }else if(k==='report'){
-    const n=Math.max(1,Number(d.get('count')||1));
-    S.claims.push({id:'c'+(S.n++),by:meId(),count:n,planned:byId(meId()).plan?byId(meId()).plan.signups:0,src:'Reported to Admin today'+(d.get('who')?' ('+d.get('who')+')':''),state:'review'});
-    f.reset();toast('Your Admin has been told. They will add the new person.');
-  }else if(k==='profile'){
-    const m=byId(meId()),err=$('#pf-err'),nm=String(d.get('name')).trim();
-    if(!nm){err.className='hint bad';err.textContent='Display name cannot be empty.';return}
-    m.name=nm;m.phone=d.get('phone');m.city=d.get('city');m.bio=d.get('bio');
-    render();toast('Profile saved');
-  }else if(k==='newmember'){
-    const p=f.closest('#dm')?'dm-':'add-',err=$('#'+p+'err');
-    const name=String(d.get('name')).trim(),neo=String(d.get('neo')).trim(),email=String(d.get('email')).trim();
-    const bad=m=>{err.className='hint bad';err.textContent=m};
-    const pv=Number(d.get('pv'));
-    if(!name)return bad('Enter the new person\'s full name.');
-    if(!/^\S+@\S+\.\S+$/.test(email))return bad('Enter a valid email address.');
-    if(!validNeo(neo))return bad('NeoLife ID must look like 063-9262173 (3 digits, a hyphen, 7 digits).');
-    if(S.members.some(x=>x.neoId===neo))return bad('That NeoLife ID is already in the system.');
-    if(!(pv>0))return bad('Enter the PV of their first order, for example 100, 136, 250 or 272.');
-    const nm={id:'m_'+(S.n++),name,email,rank:0,sponsor:d.get('sponsor'),teamId:teamId(),neoId:neo,status:'pending',pw:null,tries:0,locked:false,ans:[],firstPv:pv,ppv:pv,qpv:pv,earn:null,orders:null,clears:null,paid:null,done:[],plan:null,phone:String(d.get('phone')||''),city:'',bio:'',photo:null,idHrs:0,pendingHrs:0,history:[]};
-    S.members.push(nm);
-    const dm=f.closest('#dm');
-    if(dm){const c=S.claims.find(x=>x.id===dm.dataset.claim);c.count-=1;if(c.count<=0)S.claims=S.claims.filter(x=>x!==c);S.modal=null}
-    render();
-    toast(name+' added with a '+pv+' PV first order and TeamPulse ID '+nm.teamId+'. Pending until you activate; it activates itself in 24 hours.');
+    const none=d.get('none')==='on',drop=g('drop')===''?0:Number(g('drop'));
+    if(!none&&g('amt')==='')return fail('e-err','Enter an amount, or tick "Not yet".');
+    if(drop>0&&!g('clears'))return fail('e-err','Add the date the money drops, so your leader can plan your PPV order.');
+    put({earn:none?'none':Number(g('amt')),orders:g('orders')===''?0:Number(g('orders')),delivered:g('delivered')===''?0:Number(g('delivered')),drop,clears:g('clears')||null});
+    render();toast('Saved');return;
+  }
+  if(k==='ppv'){
+    if(g('ppv')==='')return fail('p-err','Enter your PPV.');
+    const ppv=Number(g('ppv')),qpv=d.get('none')==='on'?ppv:(g('qpv')===''?ppv:Number(g('qpv')));
+    put({ppv,qpv});render();toast(ppv<100?'Saved. Under 100 PPV, so your leader will see a flag.':'Saved. You meet the 100 PPV minimum.');return;
+  }
+  if(k==='plan'){
+    const p=d.getAll('gp'),t=d.getAll('gt'),goals=p.map((x,i)=>[x,String(t[i]).trim()]).filter(x=>x[1]);
+    if(!goals.length)return fail('pl-err','Write at least one goal after "I will" or "I must".');
+    put({goals,signups:Number(g('signups')||0),target:g('target'),pp:g('pp'),pq:g('pq')});render();toast('Plan saved');return;
+  }
+  if(k==='paid'){
+    const v=g('paid');if(!v)return fail('paid-err','Choose yes or not yet.');
+    put({paid:v==='yes'});render();toast('Saved');return;
+  }
+  if(k==='signup'){
+    const v=g('su');if(!v)return fail('su-err','Choose yes or no.');
+    const n=Math.max(1,Number(g('count')||1));
+    put({su:v,count:n,steps:[0,1,2,3].map(i=>Number(g('st'+i)||0)),tools:g('tools')});
+    if(v==='yes'&&!DB.claims.some(c=>c.by===u.id&&c.occ===st.o.id)){DB.claims.unshift({id:nid('c'),teamId:u.teamId,by:u.id,count:n,who:'',state:'review',at:nowD().toISOString(),occ:st.o.id});save()}
+    render();toast(v==='yes'?'Saved. Your team leader will review your '+n+' sign-up'+(n>1?'s':'')+'.':'Saved');return;
   }
 });
-$('#today').onchange=e=>{if(e.target.value){S.today=e.target.value;render()}};
-$('#q').oninput=e=>{S.q=e.target.value;if(S.view!=='dashboard')S.view='dashboard';render()};
-fresh();render();
-/* Opens the sign-in screen with the TeamPulse ID typed on the landing page. */
+
+/* ============================== start ============================== */
 function openSigninFromLanding(){
   let id='';try{id=sessionStorage.getItem('tp_id')||'';sessionStorage.removeItem('tp_id')}catch(_){}
-  S.modal={t:'signin',prefill:id};renderModal();
+  if(me()){go(homeRoute(me()));return}
+  go('signin',{prefill:id});
   const el=$(id?'#si-pw':'#si-id');if(el)el.focus();
 }
+function openRegisterFromLanding(){if(me())setSession(null);go('register');const el=$('#rg-name');if(el)el.focus()}
+function openAppFromLanding(){const u=me();if(u)go(homeRoute(u));else go('signin')}
 const embedded=window.parent!==window;
-function openRegisterFromLanding(){S.modal={t:'register'};renderModal();const el=$('#rg-name');if(el)el.focus()}
 const embeddedHash=()=>{try{return embedded?parent.location.hash:''}catch(_){return ''}};
-if(location.hash==='#signin'||embeddedHash()==='#app-signin')openSigninFromLanding();
-else if(location.hash==='#register'||embeddedHash()==='#app-register')openRegisterFromLanding();
-/* Inside the landing page, "back to the landing page" asks the page around it to switch views. */
-document.addEventListener('click',e=>{
-  const a=e.target.closest('a[href="./"]');
-  if(a&&embedded){e.preventDefault();parent.postMessage({tp:'home'},'*')}
-});
+
+DB=load();SESSION=loadSession();
+if(SESSION&&!U(SESSION))setSession(null);
+scheduleMail();
+(function start(){
+  const h=embedded?embeddedHash():location.hash;
+  if(h==='#signin'||h==='#app-signin')openSigninFromLanding();
+  else if(h==='#register'||h==='#app-register')openRegisterFromLanding();
+  else openAppFromLanding();
+})();
+window.TP={db:()=>DB,route:()=>R,go,me,mail:()=>DB.mail,openCta,openToken};
 </script>
 </template>
 <script>

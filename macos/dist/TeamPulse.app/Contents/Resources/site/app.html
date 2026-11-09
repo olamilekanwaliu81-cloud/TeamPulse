@@ -1,0 +1,1136 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{-webkit-text-size-adjust:100%}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>TeamPulse App</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='8' fill='%236A5AE0'/%3E%3Cpath d='M3 15h5l3-8 5 14 3-7h6' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: left rail with a pill-shaped active item, soft white cards on a lavender page.
+   Leader flow: welcome, team cards, needs-attention, summary table + gauge, then rank, income and feed. */
+:root{
+  --bg:#EEF0F8; --surface:#FFFFFF; --surface2:#F4F5FB; --ink:#171C3F; --muted:#686E8E; --line:#E3E6F2;
+  --accent:#6A5AE0; --accent-ink:#FFFFFF; --accent-soft:#E9E6FB;
+  --orange:#E8801A; --orange-soft:#FDEBD6; --teal:#1FA58E; --teal-soft:#D6F2EA; --blue:#3F82F0; --blue-soft:#DEEAFE;
+  --gold:#A8600A; --gold-soft:#FDEBD6;
+  --good:#1B8550; --good-soft:#DAF2E4; --warn:#9A5A08; --warn-soft:#FDEBD0; --bad:#C0352D; --bad-soft:#FBE0DD;
+  --navy:#171C3F; --navy-ink:#FFFFFF;
+  --av0:#D6D1F7; --av1:#FAD9B5; --av2:#CFE2FB; --av3:#F8D2DC; --av4:#CDEFE4;
+  --shadow:0 1px 2px rgba(23,28,63,.05),0 10px 30px rgba(23,28,63,.06);
+  --display:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+  --body:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D0F21; --surface:#171A34; --surface2:#1F2342; --ink:#ECEEFB; --muted:#9BA1C7; --line:#2B3058;
+    --accent:#8F83FF; --accent-ink:#10112A; --accent-soft:#2B2862;
+    --orange:#FFAA52; --orange-soft:#3C2B15; --teal:#4FD6BE; --teal-soft:#143A30; --blue:#7DB0FF; --blue-soft:#1C2E54;
+    --gold:#FFB86B; --gold-soft:#3C2B15;
+    --good:#5CC680; --good-soft:#163824; --warn:#F0B64F; --warn-soft:#3A2B0D; --bad:#F2887F; --bad-soft:#43201D;
+    --navy:#ECEEFB; --navy-ink:#10112A;
+    --av0:#332F6E; --av1:#4A3A18; --av2:#223A66; --av3:#52272F; --av4:#1C4A3E;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 30px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D0F21; --surface:#171A34; --surface2:#1F2342; --ink:#ECEEFB; --muted:#9BA1C7; --line:#2B3058;
+  --accent:#8F83FF; --accent-ink:#10112A; --accent-soft:#2B2862;
+  --orange:#FFAA52; --orange-soft:#3C2B15; --teal:#4FD6BE; --teal-soft:#143A30; --blue:#7DB0FF; --blue-soft:#1C2E54;
+  --gold:#FFB86B; --gold-soft:#3C2B15;
+  --good:#5CC680; --good-soft:#163824; --warn:#F0B64F; --warn-soft:#3A2B0D; --bad:#F2887F; --bad-soft:#43201D;
+  --navy:#ECEEFB; --navy-ink:#10112A;
+  --av0:#332F6E; --av1:#4A3A18; --av2:#223A66; --av3:#52272F; --av4:#1C4A3E;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 30px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.2;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:1.7rem;font-weight:800} h2{font-size:1.3rem;font-weight:700} h3{font-size:1.05rem;font-weight:700}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ic{width:20px;height:20px;flex:none}
+.shell{display:grid;grid-template-columns:232px minmax(0,1fr);gap:20px;max-width:1480px;margin:0 auto;padding-top:16px}
+.side{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));align-self:start;height:calc(100vh - 32px - env(safe-area-inset-top,0px));
+  background:var(--surface);border-radius:24px;padding:22px 14px 16px;display:flex;flex-direction:column;gap:22px;box-shadow:var(--shadow)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.3rem;padding:0 8px;letter-spacing:-.02em}
+.brand svg{color:var(--accent)}
+.brand{text-decoration:none;color:inherit}
+.link{background:none;border:0;color:var(--accent);font-weight:600;cursor:pointer;padding:0;text-decoration:underline;font-size:inherit}
+.side nav{display:flex;flex-direction:column;gap:6px}
+.nav-item{display:flex;align-items:center;gap:12px;border:0;background:none;padding:12px 14px;border-radius:16px;cursor:pointer;color:var(--muted);font-weight:600;text-align:left;white-space:nowrap}
+.nav-item:hover{background:var(--surface2);color:var(--ink)}
+.nav-item[aria-current=page]{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 18px rgba(106,90,224,.28)}
+.nav-item .pill{margin-left:auto}
+.cyclecard{margin-top:auto;background:var(--accent-soft);border-radius:18px;padding:14px;font-size:.8rem;color:var(--muted)}
+.cyclecard b{display:block;color:var(--ink);font-size:.9rem;margin:2px 0}
+.content{min-width:0;display:flex;flex-direction:column;gap:18px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding-block:0 4px;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.search{flex:1 1 260px;display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:999px;padding:0 18px;box-shadow:var(--shadow);color:var(--muted)}
+.search input{flex:1;min-width:0;border:0;background:none;padding:13px 0;outline:none}
+.search:focus-within{outline:2px solid var(--accent)}
+.top-right{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.iconbtn{position:relative;width:46px;height:46px;border-radius:50%;border:0;background:var(--surface);box-shadow:var(--shadow);display:grid;place-items:center;cursor:pointer;color:var(--ink)}
+.iconbtn i{position:absolute;top:11px;right:12px;width:9px;height:9px;border-radius:50%;background:var(--orange);border:2px solid var(--surface)}
+.me{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:999px;padding:5px 16px 5px 6px;box-shadow:var(--shadow)}
+.me .me-n{font-weight:700;font-size:.9rem;line-height:1.2}
+.as{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted)}
+.proto{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;background:var(--accent-soft);border-radius:14px;padding:8px 14px;font-size:.82rem;color:var(--muted)}
+.proto .grow{flex:1 1 260px}
+.as input[type=date]{min-height:34px;padding:3px 8px}
+select,input[type=text],input[type=number],input[type=email],input[type=date],input[type=password],input[type=search],textarea{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:8px 12px;min-height:42px;max-width:100%}
+textarea{width:100%;min-height:80px;resize:vertical}
+input:disabled,select:disabled{opacity:.55}
+input[readonly]{background:var(--surface2);color:var(--muted)}
+main{display:flex;flex-direction:column;gap:20px}
+.card{background:var(--surface);border-radius:22px;padding:22px;box-shadow:var(--shadow);min-width:0}
+.card h3{margin-bottom:12px}
+.head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
+.sub{color:var(--muted);font-size:.88rem}
+.grid{display:grid;gap:20px}
+.g-att{grid-template-columns:repeat(auto-fit,minmax(245px,1fr))}
+.g-two{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.hello{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between}
+.hello p{margin:4px 0 0}
+.crews{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(196px,1fr))}
+.crew{background:var(--surface);border-radius:22px;padding:16px 18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;min-width:0}
+.crew-top{display:flex;align-items:center;gap:12px}
+.crew-top b{display:block;line-height:1.2}
+.sq{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:.8rem;flex:none}
+.c-accent.sq{background:var(--accent-soft);color:var(--accent)} .c-orange.sq{background:var(--orange-soft);color:var(--orange)}
+.c-teal.sq{background:var(--teal-soft);color:var(--teal)} .c-blue.sq{background:var(--blue-soft);color:var(--blue)}
+.stack{display:flex}
+.stack .av{border:2px solid var(--surface);margin-left:-9px;width:32px;height:32px;font-size:.7rem}
+.stack .av:first-child{margin-left:0}
+.av.more{background:var(--surface2);color:var(--muted)}
+.prog{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.prog b{color:var(--ink)}
+.meter{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.meter.c-orange i{background:var(--orange)} .meter.c-teal i{background:var(--teal)} .meter.c-blue i{background:var(--blue)}
+.minis{display:flex;flex-wrap:wrap;gap:6px}
+.mini{font-size:.74rem;font-weight:600;background:var(--surface2);border-radius:99px;padding:3px 10px;color:var(--muted);white-space:nowrap}
+.mini.warn{background:var(--warn-soft);color:var(--warn)}
+.crew.add{border:2px dashed var(--accent);background:var(--surface);box-shadow:none;align-items:center;justify-content:center;cursor:pointer;color:var(--accent);font-weight:700;min-height:150px;font-family:inherit;font-size:1rem}
+.crew.add .plus{width:42px;height:42px;border-radius:12px;background:var(--accent-soft);display:grid;place-items:center;font-size:1.6rem;line-height:1}
+.split{display:grid;gap:20px;grid-template-columns:minmax(0,2.3fr) minmax(250px,1fr)}
+.trio{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+@media (max-width:1100px){.split{grid-template-columns:1fr}}
+.gauge{width:100%;max-width:310px;display:block;margin:4px auto 0}
+.g-num{font:800 30px var(--display);fill:var(--ink)}
+.g-sub{font:500 12px var(--body);fill:var(--muted)}
+.g-end{font:500 11px var(--body);fill:var(--muted)}
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;margin-top:10px}
+.stats4 b{display:block;font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.2}
+.stats4 span{font-size:.72rem;color:var(--muted);line-height:1.2;display:block}
+.stats4 .n1{color:var(--ink)} .stats4 .n2{color:var(--teal)} .stats4 .n3{color:var(--orange)} .stats4 .n4{color:var(--accent)}
+.btn{border:0;background:var(--surface2);color:var(--ink);border-radius:12px;padding:8px 16px;min-height:42px;cursor:pointer;font-weight:600}
+.btn:hover{background:var(--accent-soft)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.dark{background:var(--navy);color:var(--navy-ink);border-radius:999px;padding:10px 20px}
+.btn.sm{min-height:32px;padding:4px 12px;font-size:.84rem;border-radius:10px}
+.btn.good{background:var(--good-soft);color:var(--good)}
+.btn.bad{background:var(--bad-soft);color:var(--bad)}
+.pill{display:inline-block;font-size:.73rem;font-weight:700;padding:2px 10px;border-radius:99px;background:var(--surface2);color:var(--muted);white-space:nowrap}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.acc{background:var(--accent-soft);color:var(--accent)}
+.pill.gold{background:var(--gold-soft);color:var(--gold)}
+.av{width:38px;height:38px;border-radius:50%;display:inline-grid;place-items:center;font-weight:700;font-size:.8rem;flex:none;object-fit:cover}
+.av.lg{width:68px;height:68px;font-size:1.25rem}
+.a0{background:var(--av0)} .a1{background:var(--av1)} .a2{background:var(--av2)} .a3{background:var(--av3)} .a4{background:var(--av4)}
+.rows{display:flex;flex-direction:column}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:11px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0;padding-top:0}
+.row .grow{flex:1 1 180px;min-width:0}
+.row .name{font-weight:700}
+.mono{font-family:var(--mono);font-size:.82rem}
+.empty{color:var(--muted);font-size:.9rem;padding:6px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:0;background:var(--surface2);border-radius:99px;padding:6px 14px;cursor:pointer;font-size:.84rem;font-weight:600;color:var(--muted)}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:600px}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle;font-variant-numeric:tabular-nums}
+tr.click{cursor:pointer} tr.click:hover td{background:var(--surface2)}
+td.num,th.num{text-align:right}
+.who{display:flex;align-items:center;gap:10px}
+.dots{display:inline-flex;gap:3px}
+.dots i{width:9px;height:9px;border-radius:3px;background:var(--line)}
+.dots i.on{background:var(--accent)}
+.diff{display:block;font-size:.7rem;color:var(--warn);white-space:nowrap}
+.tree .node{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:8px 0;cursor:pointer}
+.tree .lvl{border-left:2px solid var(--line);margin-left:19px;padding-left:16px}
+.tree .dim{opacity:.6}
+.ci-layout{display:grid;gap:20px;grid-template-columns:minmax(210px,270px) minmax(0,1fr)}
+@media (max-width:760px){.ci-layout{grid-template-columns:1fr}}
+.ci-list{display:flex;flex-direction:column;gap:10px}
+.ci-item{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;border:2px solid transparent;background:var(--surface);border-radius:18px;padding:12px 14px;cursor:pointer;box-shadow:var(--shadow)}
+.ci-item[aria-pressed=true]{border-color:var(--accent)}
+.mail{border-radius:16px;background:var(--surface2);padding:16px 18px;margin-bottom:18px}
+.mail .meta{font-size:.78rem;color:var(--muted)}
+.mail .subj{font-weight:700;margin:2px 0 6px}
+.mail p{margin:6px 0}
+form .field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+form label,.lbl{font-size:.85rem;font-weight:600}
+.inline{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.hint{font-size:.82rem;color:var(--muted)}
+.hint.good{color:var(--good)} .hint.warn{color:var(--warn)} .hint.bad{color:var(--bad)}
+.goal{display:flex;gap:8px;margin-bottom:8px}
+.goal select{flex:none;font-weight:700;background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.goal input{flex:1;min-width:0}
+.yn{display:flex;gap:12px;flex-wrap:wrap}
+.yn label{flex:1 1 140px;border:2px solid transparent;border-radius:16px;padding:14px;text-align:center;cursor:pointer;font-weight:700;background:var(--surface2)}
+.yn input{position:absolute;opacity:0;pointer-events:none}
+.yn label:has(input:checked){background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.yn label:has(input:focus-visible){outline:2px solid var(--accent)}
+.counters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.counters input{width:100%}
+.feed .post{display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.feed .post:first-child{border-top:0;padding-top:4px}
+.spark{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--orange-soft);color:var(--orange)}
+.spark.rank{background:var(--accent-soft);color:var(--accent)}
+.bars{display:flex;align-items:flex-end;gap:12px;height:150px;border-bottom:1px solid var(--line);padding-top:18px}
+.bars div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:.74rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.bars i{display:block;width:100%;max-width:46px;background:var(--accent-soft);border-radius:12px 12px 6px 6px;min-height:4px}
+.bars div.now i{background:var(--orange)}
+.bars div.now{color:var(--ink);font-weight:700}
+.axis{display:flex;gap:12px;font-size:.75rem;color:var(--muted);padding-top:6px}
+.axis span{flex:1;text-align:center}
+.legend{display:flex;gap:14px;font-size:.78rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.lock{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+input[type=file]{max-width:100%;min-width:0;font-size:.85rem}
+.inline .field{min-width:0;flex:1 1 160px}
+.lock input{flex:1 1 150px;min-width:0}
+.overlay{position:fixed;inset:0;z-index:40;background:rgba(13,15,40,.55);display:grid;place-items:start center;padding:24px 16px;overflow-y:auto}
+.modal{background:var(--surface);border-radius:24px;padding:24px;width:min(680px,100%);margin-block:auto;box-shadow:var(--shadow)}
+.modal .x{float:right}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:14px 0}
+.kv div{background:var(--surface2);border-radius:14px;padding:10px 14px}
+.kv .k{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.kv .v{font-weight:700;font-variant-numeric:tabular-nums}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;background:var(--navy);color:var(--navy-ink);padding:11px 20px;border-radius:14px;max-width:min(520px,calc(100% - 32px));box-shadow:var(--shadow)}
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:row;align-items:center;padding:10px 12px;border-radius:20px;overflow-x:auto;gap:10px}
+  .side nav{flex-direction:row}
+  .brand{padding:0 6px}
+  .cyclecard{display:none}
+}
+@media (prefers-reduced-motion:no-preference){.meter i{transition:width .3s}}
+
+/* ---------- sign-in, registration and other pages that stand on their own ---------- */
+.auth{min-height:100vh;display:grid;place-content:center;justify-items:center;gap:18px;padding:32px 0}
+.auth-card{width:min(480px,100%);background:var(--surface);border-radius:28px;padding:34px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.auth-card .brand{margin-bottom:12px;padding:0}
+.auth-card h1{font-size:1.65rem;line-height:1.15}
+.auth-card .sub{margin-bottom:10px}
+.auth-card form{margin-top:10px}
+.auth-card .big{font-family:var(--mono);font-size:1.6rem;font-weight:500;letter-spacing:.04em;background:var(--accent-soft);color:var(--accent);border-radius:16px;padding:14px 18px;text-align:center;margin:12px 0}
+.auth-foot{font-size:.88rem;color:var(--muted)}
+.auth-foot a{color:var(--accent);font-weight:600}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media (max-width:560px){.f2{grid-template-columns:1fr}.auth-card{padding:26px 22px}}
+
+/* ---------- getting started ---------- */
+.start{display:grid;gap:14px}
+.start li{list-style:none;display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.start li:first-child{border-top:0}
+.start .n{width:36px;height:36px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:800}
+.start .done .n{background:var(--good-soft);color:var(--good)}
+.start ul{margin:0;padding:0}
+.start p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+
+/* ---------- check-in list on the member home ---------- */
+.todo{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 0;border-top:1px solid var(--line)}
+.todo:first-child{border-top:0;padding-top:0}
+.todo .grow{flex:1 1 170px;min-width:0}
+
+/* ---------- prototype test tools (not part of the product) ---------- */
+.tt-btn{position:fixed;right:14px;bottom:14px;z-index:60;border:2px dashed var(--orange);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font-weight:700;font-size:.82rem;cursor:pointer;box-shadow:var(--shadow);display:inline-flex;gap:8px;align-items:center}
+.tt-badge{background:var(--orange);color:#fff;border-radius:99px;font-size:.7rem;padding:1px 7px}
+.tt{position:fixed;right:14px;bottom:62px;z-index:60;width:min(430px,calc(100vw - 28px));max-height:72vh;overflow:auto;background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:18px;border:2px dashed var(--orange)}
+.tt h3{margin:0 0 4px}
+.tt h4{margin:16px 0 6px;font-size:.85rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.tt .mailrow{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-top:1px solid var(--line)}
+.tt .mailrow:first-of-type{border-top:0}
+.tt .mailrow b{font-size:.9rem}
+.tt .mailrow small{color:var(--muted)}
+.tt .mailrow.unread b::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--orange);margin-right:7px}
+.tt-only{display:inline}
+.mailbody{border-radius:16px;background:var(--surface2);padding:16px 18px}
+.mailbody p{margin:6px 0}
+.mailbody ol{margin:6px 0 6px 18px;padding:0}
+</style>
+
+<div id="root"></div>
+<div id="modal"></div>
+<div id="toast" role="status" hidden></div>
+<button class="tt-btn" id="ttbtn" type="button" data-act="tt" aria-expanded="false">Test tools<span class="tt-badge" id="ttbadge" hidden>0</span></button>
+<aside class="tt" id="tt" hidden aria-label="Prototype test tools"></aside>
+
+<script>
+'use strict';
+/* TeamPulse app prototype. Everything is stored in this browser only (localStorage).
+   The "Test tools" button stands in for things the real app does by itself (sending email, passing time). */
+
+/* ============================== data and storage ============================== */
+const RANKS=[{n:'Distributor',q:0},{n:'Manager',q:500},{n:'Senior Manager',q:1000},{n:'Executive Manager',q:2000},{n:'Director',q:4000}];
+const KEYS=['earn','ppv','plan','signup','paid'];
+const CI={
+  earn:{d:10,day:'10th',title:'Earnings and orders',subject:'How much have you made this month?',body:'Tell us your earnings, your active orders, the orders delivered and accepted, and when your money drops.'},
+  ppv:{d:14,day:'14th',title:'PPV and QPV',subject:'Your affirmation plan: PPV and QPV',body:'How many PPV will you finish this month? How much QPV is your team building?'},
+  plan:{d:15,day:'15th',title:'New-month plan',subject:'Your new-month plan starts today',body:'Write what you will do next month. Every goal starts with "I will" or "I must".'},
+  signup:{d:25,day:'25th',title:'Sign-ups and step-ups',subject:'Did you sign anyone this month?',body:'Tell us about new sign-ups, step-ups in your team and any tools you bought.'},
+  paid:{d:28,day:'28th',title:'Monthly responsibility',subject:'Have you paid your monthly responsibility?',body:'One tap: yes or no.'}
+};
+const OPEN_BEFORE=2,CLOSE_AFTER=3;
+const KEY='teampulse.v2',SKEY='teampulse.session.v2';
+let DB,SESSION=null,R={name:'signin',p:{}},Q='',MAILVIEW=null;
+
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>'$'+Number(n).toLocaleString('en-US');
+const num=n=>Number(n).toLocaleString('en-US');
+const initials=n=>n.split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const hashCode=s=>[...s].reduce((a,c)=>a+c.charCodeAt(0),0)%5;
+const first=u=>u.name.split(' ')[0];
+
+function blank(){return {seq:1,teams:[],users:[],tokens:[],mail:[],feed:[],claims:[],dismissed:[],testDate:null}}
+function load(){try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);if(d&&Array.isArray(d.users))return Object.assign(blank(),d)}}catch(_){}return blank()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(_){}}
+function setSession(id){SESSION=id;try{if(id)localStorage.setItem(SKEY,id);else localStorage.removeItem(SKEY)}catch(_){}}
+function loadSession(){try{return localStorage.getItem(SKEY)}catch(_){return null}}
+const nid=p=>p+(DB.seq++)+Math.random().toString(36).slice(2,6);
+
+/* ============================== time ============================== */
+const pad2=n=>String(n).padStart(2,'0');
+const toISO=dt=>dt.getFullYear()+'-'+pad2(dt.getMonth()+1)+'-'+pad2(dt.getDate());
+const fromISO=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const addDays=(dt,n)=>new Date(dt.getFullYear(),dt.getMonth(),dt.getDate()+n);
+const dmy=dt=>dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+const fmtISO=iso=>iso?dmy(fromISO(String(iso).slice(0,10))):'—';
+const monthName=(y,m)=>new Date(y,m,1).toLocaleDateString('en-GB',{month:'long'});
+const monthShort=(y,m)=>new Date(y,m,1).toLocaleDateString('en-GB',{month:'short'});
+const nowD=()=>DB.testDate?new Date(DB.testDate+'T12:00:00'):new Date();
+const today=()=>{const n=nowD();return new Date(n.getFullYear(),n.getMonth(),n.getDate())};
+const P=()=>{const t=today();return {y:t.getFullYear(),mo:t.getMonth()}};
+function ago(iso){const d=Math.round((today()-new Date(new Date(iso).getFullYear(),new Date(iso).getMonth(),new Date(iso).getDate()))/864e5);return d<=0?'today':d===1?'yesterday':d<8?d+' days ago':dmy(new Date(iso))}
+function teamLine(T){
+  const y=T.getFullYear(),m=T.getMonth(),d=T.getDate();
+  if(d<15){const left=15-d;return `Your team's ${monthName(y,m)} ends in ${left} day${left>1?'s':''}. Team ${monthName(y,m+1)} starts on 15 ${monthShort(y,m)}.`}
+  return `Team ${monthName(y,m+1)}, day ${d-14}. Team ${monthName(y,m+2)} starts on 15 ${monthShort(y,m+1)}.`;
+}
+
+/* ---------- answer windows: open 2 days before a question's date, close 3 days after ---------- */
+function occ(key,y,m){const q=new Date(y,m,CI[key].d);return {key,date:q,id:key+'@'+toISO(q),open:addDays(q,-OPEN_BEFORE),close:addDays(q,CLOSE_AFTER)}}
+const occId=(key,y,m)=>occ(key,y,m).id;
+function ciState(key){
+  const T=today(),list=[-1,0,1].map(o=>occ(key,T.getFullYear(),T.getMonth()+o));
+  const open=list.find(o=>o.open<=T&&T<=o.close);
+  if(open)return {state:'open',o:open};
+  return {state:'locked',o:list.find(o=>o.open>T),last:[...list].reverse().find(o=>o.close<T)};
+}
+const monthOccs=()=>{const {y,mo}=P();return KEYS.map(k=>occ(k,y,mo))};
+function prog(u){const T=today(),due=monthOccs().filter(o=>o.open<=T);return {due:due.length,done:due.filter(o=>u.answers[o.id]).length,missed:due.filter(o=>o.close<T&&!u.answers[o.id]).length}}
+
+/* ============================== people ============================== */
+const U=id=>DB.users.find(u=>u.id===id);
+const me=()=>SESSION?U(SESSION):null;
+const kids=id=>DB.users.filter(x=>x.sponsorId===id&&x.status!=='inactive');
+function downline(id){const out=[];const walk=i=>kids(i).forEach(k=>{out.push(k);walk(k.id)});walk(id);return out}
+const teamMembers=u=>DB.users.filter(x=>x.teamId===u.teamId&&x.role==='member');
+const liveMembers=u=>teamMembers(u).filter(x=>x.status!=='inactive');
+const canSeeTeam=u=>u.role==='admin'||u.rank>=2;
+const scopeOf=u=>u.role==='admin'?liveMembers(u):downline(u.id);
+const rankName=u=>u.role==='admin'?'Team leader':RANKS[u.rank].n;
+function newTP(){let t;do{t='0'+String(nowD().getFullYear()).slice(-1)+'OW'+String(Math.floor(Math.random()*1000)).padStart(3,'0')}while(DB.users.some(u=>u.tp===t));return t}
+const validNeo=v=>/^\d{3}-\d{7}$/.test(v);
+const normTP=s=>String(s||'').trim().toUpperCase().replace(/\s/g,'').replace(/0W/,'OW');
+const strongPw=p=>p.length>=8&&/[A-Za-z]/.test(p)&&/\d/.test(p);
+const PWRULE='At least 8 characters, with a letter and a number.';
+
+/* month figures, read from what each person answered */
+const ansM=(u,key)=>{const {y,mo}=P();return u.answers[occId(key,y,mo)]||null};
+const ppvNow=u=>{const a=ansM(u,'ppv');if(a&&a.ppv!=null)return a.ppv;const j=new Date(u.joinedAt),{y,mo}=P();return(j.getFullYear()===y&&j.getMonth()===mo&&u.firstPv!=null)?u.firstPv:null};
+const qpvRep=u=>{const a=ansM(u,'ppv');return a?a.qpv:null};
+const earnNow=u=>{const a=ansM(u,'earn');return a?a.earn:null};
+const paidNow=u=>{const a=ansM(u,'paid');return a?a.paid:null};
+function calcQ(u){return (ppvNow(u)||0)+kids(u.id).filter(k=>k.rank!==4).reduce((s,k)=>s+calcQ(k),0)}
+function recommend(u){
+  const p=ppvNow(u),q=qpvRep(u);
+  if(u.role!=='member'||u.status!=='active'||p==null||p<100||q==null)return null;
+  let best=0;for(let i=1;i<=3;i++)if(q>=RANKS[i].q)best=i;
+  return best>u.rank?best:null;
+}
+const qualified=u=>{const p=ppvNow(u),q=qpvRep(u);return u.rank>=1&&p!=null&&p>=100&&q!=null&&q>=RANKS[u.rank].q};
+function series(users,n){
+  const t=today(),out=[];
+  for(let i=n-1;i>=0;i--){const d=new Date(t.getFullYear(),t.getMonth()-i,1),y=d.getFullYear(),mo=d.getMonth();
+    out.push({label:monthShort(y,mo),v:users.reduce((s,u)=>{const a=u.answers[occId('earn',y,mo)];return s+(a&&typeof a.earn==='number'?a.earn:0)},0)})}
+  return out;
+}
+function dropsOf(users){
+  const T=today(),out=[];
+  users.forEach(u=>Object.entries(u.answers).forEach(([id,a])=>{if(id.startsWith('earn@')&&a.drop>0&&a.clears&&fromISO(a.clears)>=T)out.push({u,amount:a.drop,date:a.clears})}));
+  return out.sort((a,b)=>a.date<b.date?-1:1);
+}
+
+/* ============================== passwords, email and links ============================== */
+async function hashPw(salt,pw){
+  const s=salt+':'+pw;
+  try{if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}}catch(_){}
+  let h1=0xdeadbeef,h2=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}
+  h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+  return (h2>>>0).toString(16)+(h1>>>0).toString(16);
+}
+const newSalt=()=>Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2);
+async function setPassword(u,pw){u.salt=newSalt();u.pwHash=await hashPw(u.salt,pw);u.tries=0;u.locked=false}
+function sendMail(to,subject,html,cta){DB.mail.unshift({id:nid('m'),to:to.email,toName:to.name,subject,html,cta:cta||null,at:nowD().toISOString(),read:false});save();updateTT()}
+function makeToken(type,data){const t={id:nid('t'),type,data:data||{},exp:addDays(today(),7).toISOString(),used:false};DB.tokens.push(t);save();return t}
+const tokenOk=t=>t&&!t.used&&new Date(t.exp)>=today();
+
+function mailFrame(u,inner){return `<p>Hi ${esc(first(u))},</p>${inner}<p class="sub">TeamPulse · monthly check-ins for your team</p>`}
+function inviteMail(m,token,leader){
+  const sp=U(m.sponsorId)||leader;
+  sendMail(m,`Welcome to the family, ${first(m)}!`,
+   `<p>Congratulations, ${esc(first(m))}, and welcome to the family! ${esc(sp.name)} is proud of you for stepping up and joining the business. Your first order of ${m.firstPv||0} PV makes you a NeoLife Distributor today.</p>
+    <p><b>Set your password to get started.</b> Your TeamPulse ID is <b class="mono">${esc(m.tp)}</b>. Use the button below to choose your own password. The link works for 7 days. After that, you sign in with your TeamPulse ID and your password.</p>
+    <p>Now the real work starts:</p>
+    <ol><li><b>Build your business actively.</b> Work it every week, not once in a while.</li><li><b>Start calling people.</b> Write a list of names today and reach out about your business.</li><li><b>Start recruiting.</b> Invite people to look at what you are doing.</li><li><b>Train your team.</b> Show them to do what you do, and how to earn with their own skills. Help them place their first order.</li><li><b>Grow through them.</b> When your team signs people, you sign more people too.</li><li><b>Stay close to ${esc(sp.name)}.</b> Book a call to plan your first 30 days.</li></ol>`,
+   {label:'Set my password',token:token.id});
+}
+
+/* check-in emails go out by themselves when a window opens */
+function scheduleMail(){
+  let changed=false;
+  DB.users.filter(u=>u.role==='member'&&u.status==='active').forEach(u=>{
+    u.sent=u.sent||{};
+    KEYS.forEach(k=>{
+      const st=ciState(k);
+      if(st.state==='open'&&!u.answers[st.o.id]&&!u.sent[st.o.id]){
+        u.sent[st.o.id]=1;changed=true;
+        sendMail(u,`${CI[k].title}: your check-in is open`,`<p>Hi ${esc(first(u))}, ${esc(CI[k].body)}</p><p>It takes about two minutes. You can answer until ${dmy(st.o.close)}.</p>`,{label:'Answer now',route:'checkins',p:{key:k}});
+      }
+    });
+  });
+  if(changed)save();
+}
+
+/* ============================== screens that stand on their own ============================== */
+const IC=p=>`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const ICON={
+  dashboard:IC('<rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/>'),
+  team:IC('<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M17 14c2.5 0 4.5 2 4.5 4.5"/>'),
+  signups:IC('<circle cx="10" cy="8" r="3.4"/><path d="M3.5 20c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5"/><path d="M19 8v6M16 11h6"/>'),
+  checkins:IC('<rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8.5 12l2.5 2.5 4.5-5"/>'),
+  feed:IC('<path d="M12 3l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6L12 15.4 7 18.2l1.2-5.6L4 8.8l5.6-.6z"/>'),
+  profile:IC('<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4 3.4-7 7.5-7s7.5 3 7.5 7"/>')
+};
+const BRAND='<a class="brand" href="./" title="Back to the landing page"><svg width="30" height="30" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M2 15h6l3-9 5 17 3-8h7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>TeamPulse</a>';
+const authShell=inner=>`<div class="auth"><div class="auth-card">${BRAND}${inner}</div><p class="auth-foot"><a href="./">Back to the landing page</a></p></div>`;
+const errLine=(id,msg)=>`<p class="hint ${msg?'bad':''}" id="${id}" role="alert">${esc(msg||'')}</p>`;
+const maskEmail=e=>e.replace(/^(.).*(@.*)$/,'$1***$2');
+const testHint=t=>`<p class="hint tt-only" style="margin-top:12px;padding:8px 12px;background:var(--orange-soft);border-radius:10px;color:var(--warn)">Prototype: ${t}</p>`;
+
+const AUTH={
+  signin(){const p=R.p;return authShell(`<h1>Sign in</h1><p class="sub">Use your TeamPulse ID and your password.</p>
+    <form data-form="signin" novalidate>
+      <div class="field"><label for="si-id">TeamPulse ID</label><input id="si-id" name="id" type="text" autocomplete="username" placeholder="06OW674" maxlength="7" value="${esc(p.prefill||'')}"></div>
+      <div class="field"><label for="si-pw">Password</label><input id="si-pw" name="pw" type="password" autocomplete="current-password"></div>
+      ${errLine('si-err',p.err)}
+      <button class="btn primary" type="submit" style="width:100%;justify-content:center">Sign in</button>
+    </form>
+    <p class="hint" style="margin-top:16px"><button class="link" type="button" data-act="go" data-r="forgot">Forgot your password?</button></p>
+    <p class="hint" style="margin-top:8px">New team leader? <button class="link" type="button" data-act="go" data-r="register">Register your team</button></p>
+    <p class="hint" style="margin-top:8px">First time as a member? Open the "Set your password" link in your welcome email.</p>`)},
+  register(){const p=R.p;return authShell(`<h1>Register as a team leader</h1><p class="sub">Only team leaders register. You add your own members afterwards, and they never register themselves.</p>
+    <form data-form="register" novalidate>
+      <div class="f2"><div class="field"><label for="rg-name">Full name</label><input id="rg-name" name="name" type="text" autocomplete="name" value="${esc(p.name||'')}"></div>
+      <div class="field"><label for="rg-team">Team name</label><input id="rg-team" name="team" type="text" placeholder="Team OW" value="${esc(p.team||'')}"></div></div>
+      <div class="field"><label for="rg-email">Email</label><input id="rg-email" name="email" type="email" autocomplete="email" value="${esc(p.email||'')}"><span class="hint">We send a confirmation link here, and password resets go here.</span></div>
+      <div class="field"><label for="rg-neo">Your NeoLife ID</label><input id="rg-neo" name="neo" type="text" inputmode="numeric" maxlength="11" placeholder="063-9262173" value="${esc(p.neo||'')}"></div>
+      <div class="f2"><div class="field"><label for="rg-p1">Password</label><input id="rg-p1" name="p1" type="password" autocomplete="new-password"></div>
+      <div class="field"><label for="rg-p2">Repeat password</label><input id="rg-p2" name="p2" type="password" autocomplete="new-password"></div></div>
+      <p class="hint" style="margin-top:-6px">${PWRULE}</p>
+      ${errLine('rg-err',p.err)}
+      <button class="btn primary" type="submit" style="width:100%;justify-content:center">Create my account</button>
+    </form>
+    <p class="hint" style="margin-top:16px">Already have an account? <button class="link" type="button" data-act="go" data-r="signin">Sign in</button></p>`)},
+  verifysent(){const p=R.p;return authShell(`<h1>Check your email</h1><p class="sub">We sent a confirmation link to <b>${esc(maskEmail(p.email))}</b>. Open it to finish creating your account. The link works for 7 days.</p>
+    <p class="hint">Nothing in your inbox? Check your spam folder, or <button class="link" type="button" data-act="resend-verify" data-id="${esc(p.token)}">send the link again</button>.</p>
+    ${testHint('open Test tools at the bottom right to read this email and click its link.')}`)},
+  leaderwelcome(){const u=me();return authShell(`<h1>Your team is ready</h1><p class="sub">Welcome, ${esc(first(u))}. This is your TeamPulse ID. You sign in with it and your password, so write it down.</p>
+    <div class="big">${esc(u.tp)}</div>
+    <p class="sub">Next, add your first member. They get their own TeamPulse ID and an email with a link to set their password.</p>
+    <button class="btn primary" type="button" data-act="go" data-r="dashboard" style="width:100%;justify-content:center;margin-top:6px">Go to my dashboard</button>`)},
+  setpw(){
+    const t=DB.tokens.find(x=>x.id===R.p.token);
+    if(!tokenOk(t))return AUTH.linkbad();
+    const u=U(t.data.userId),reset=t.type==='reset';
+    return authShell(`<h1>${reset?'Choose a new password':'Set your password'}</h1><p class="sub">For ${esc(u.name)}, TeamPulse ID <b class="mono">${esc(u.tp)}</b>.</p>
+    <form data-form="setpw" data-token="${esc(t.id)}" novalidate>
+      <div class="field"><label for="sp1">New password</label><input id="sp1" name="p1" type="password" autocomplete="new-password"><span class="hint">${PWRULE}</span></div>
+      <div class="field"><label for="sp2">Repeat password</label><input id="sp2" name="p2" type="password" autocomplete="new-password"></div>
+      ${errLine('sp-err','')}
+      <button class="btn primary" type="submit" style="width:100%;justify-content:center">Save password and sign in</button>
+    </form>`)},
+  forgot(){return authShell(`<h1>Forgot your password?</h1><p class="sub">Enter your TeamPulse ID. We email a reset link to the address on your account.</p>
+    <form data-form="forgot" novalidate><div class="field"><label for="fp-id">TeamPulse ID</label><input id="fp-id" name="id" type="text" placeholder="06OW674" maxlength="7" value="${esc(R.p.prefill||'')}"></div>
+    ${errLine('fp-err','')}<button class="btn primary" type="submit" style="width:100%;justify-content:center">Send reset link</button></form>
+    <p class="hint" style="margin-top:16px"><button class="link" type="button" data-act="go" data-r="signin">Back to sign in</button></p>`)},
+  forgotsent(){return authShell(`<h1>Check your email</h1><p class="sub">If that TeamPulse ID exists, we sent a reset link to the email on the account. The link works for 7 days.</p>
+    <button class="btn" type="button" data-act="go" data-r="signin" style="margin-top:10px">Back to sign in</button>
+    ${testHint('open Test tools to read the email.')}`)},
+  linkbad(){const p=R.p;return authShell(`<h1>This link does not work</h1><p class="sub">${esc(p.why||'This link is not valid or has expired.')} Links last 7 days and work once.</p>
+    <p class="sub">You can ask for a new one with "Forgot your password?".</p>
+    <div class="inline" style="margin-top:12px"><button class="btn primary" type="button" data-act="go" data-r="forgot">Get a new link</button><button class="btn" type="button" data-act="go" data-r="signin">Back to sign in</button></div>`)}
+};
+const AUTH_ROUTES=Object.keys(AUTH);
+
+/* ============================== signed-in shell ============================== */
+const NAVL={dashboard:'Dashboard',team:'Team',signups:'Sign-ups',feed:'Team feed',profile:'Settings',home:'Home',checkins:'Check-ins'};
+function navFor(u){
+  if(u.role==='admin')return [['dashboard','Dashboard','dashboard'],['team','Team','team'],['signups','Sign-ups','signups'],['feed','Team feed','feed'],['profile','Settings','profile']];
+  const n=[['home','Home','dashboard'],['checkins','Check-ins','checkins']];
+  if(u.rank>=2)n.push(['team','My team','team']);
+  n.push(['signups','Report a sign-up','signups'],['feed','Team feed','feed'],['profile','My profile','profile']);
+  return n;
+}
+const homeRoute=u=>u.role==='admin'?'dashboard':'home';
+function bellCount(u){
+  if(u.role!=='admin')return 0;
+  const mem=liveMembers(u);
+  return mem.filter(m=>m.status==='invited').length+mem.map(recommend).filter((r,i)=>r!=null&&!DB.dismissed.includes(mem[i].id)).length+DB.claims.filter(c=>c.teamId===u.teamId&&['review','ready'].includes(c.state)).length;
+}
+const av=(u,c='')=>u.photo?`<img class="av ${c}" src="${u.photo}" alt="">`:`<span class="av a${hashCode(u.id)} ${c}" aria-hidden="true">${esc(initials(u.name))}</span>`;
+const pill=(t,k='')=>`<span class="pill ${k}">${esc(t)}</span>`;
+function shell(u){
+  const nav=navFor(u).map(([r,l,ic])=>{
+    const badge=r==='signups'&&u.role==='admin'?(()=>{const n=DB.claims.filter(c=>c.teamId===u.teamId&&['review','ready'].includes(c.state)).length;return n?`<span class="pill warn">${n}</span>`:''})():'';
+    return `<button class="nav-item" type="button" data-act="go" data-r="${r}" ${R.name===r||(R.name==='addmember'&&r==='team')||(R.name==='memberadded'&&r==='team')?'aria-current="page"':''}>${ICON[ic]}<span>${l}</span>${badge}</button>`}).join('');
+  const T=today(),ms=new Date(T.getFullYear(),T.getMonth(),1),mEnd=new Date(T.getFullYear(),T.getMonth()+1,0);
+  const showSearch=(u.role==='admin'&&['dashboard','team'].includes(R.name))||(u.role==='member'&&R.name==='team');
+  const bc=bellCount(u);
+  const view=(VIEWS[R.name]||VIEWS[homeRoute(u)])(u);
+  return `<div class="shell">
+    <aside class="side"><a class="brand" href="./" title="Back to the landing page"><svg width="30" height="30" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M2 15h6l3-9 5 17 3-8h7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>TeamPulse</a>
+      <nav aria-label="Sections">${nav}</nav>
+      <div class="cyclecard">This month<b>${dmy(ms)} – ${dmy(mEnd)} ${mEnd.getFullYear()}</b>NeoLife counts PV by the normal calendar month.<br><br>${teamLine(T)}</div></aside>
+    <div class="content">
+      <header class="top">
+        <label class="search" ${showSearch?'':'style="visibility:hidden"'}><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input id="q" type="search" placeholder="Search members, TeamPulse ID or NeoLife ID" aria-label="Search members" value="${esc(Q)}"></label>
+        <div class="top-right">
+          ${u.role==='admin'?`<button class="iconbtn" type="button" data-act="bell" aria-label="Notifications"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 17h12l-1.5-2V10.5a4.5 4.5 0 10-9 0V15z"/><path d="M10 20a2 2 0 004 0"/></svg>${bc?'<i></i>':''}</button>`:''}
+          <div class="me">${av(u)}<div><div class="me-n">${esc(u.name)}</div><div class="sub">${u.role==='admin'?'Team leader · '+esc((DB.teams.find(t=>t.id===u.teamId)||{}).name||''):esc(rankName(u))}</div></div></div>
+          <button class="btn sm" type="button" data-act="signout">Sign out</button>
+        </div>
+      </header>
+      <main id="main">${view}</main>
+    </div></div>`;
+}
+
+/* ============================== shared pieces ============================== */
+function gauge(pct){
+  return `<svg class="gauge" viewBox="0 0 200 120" role="img" aria-label="${pct} percent of check-ins answered">
+    <defs><linearGradient id="gg" x1="0" x2="1" y1="0" y2="0"><stop offset="0" style="stop-color:var(--teal)"/><stop offset="1" style="stop-color:var(--orange)"/></linearGradient></defs>
+    <path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="var(--surface2)" stroke-width="16" stroke-linecap="round" pathLength="100"/>
+    <path d="M20 100A80 80 0 0 1 180 100" fill="none" stroke="url(#gg)" stroke-width="16" stroke-linecap="round" pathLength="100" stroke-dasharray="${pct} 100"/>
+    <text x="100" y="82" text-anchor="middle" class="g-num">${pct}%</text><text x="100" y="100" text-anchor="middle" class="g-sub">Check-ins answered</text>
+    <text x="20" y="118" text-anchor="middle" class="g-end">0</text><text x="180" y="118" text-anchor="middle" class="g-end">100</text></svg>`;
+}
+const incomeTxt=v=>v==null?'<span class="sub">No reply</span>':v==='none'?'<span class="sub">Not yet</span>':money(v);
+const statusPill=u=>u.status==='invited'?pill('Invited','warn'):u.status==='inactive'?pill('Inactive','bad'):'';
+function feedItem(f){
+  const w=U(f.who);if(!w)return null;
+  return f.kind==='join'?{who:w,t:`<b>${esc(w.name)}</b> joined the team`,s:`Sponsored by ${esc((U(f.by)||{name:'the team leader'}).name)}`,rank:false,at:f.at}
+    :{who:w,t:`<b>${esc(w.name)}</b> stepped up to ${esc(f.to)}`,s:'Congratulations on the new rank',rank:true,at:f.at};
+}
+const feedFor=u=>DB.feed.filter(f=>f.teamId===u.teamId).map(feedItem).filter(Boolean);
+function feedList(items,limit){
+  return items.slice(0,limit||99).map(p=>`<div class="post"><div class="spark ${p.rank?'rank':''}" aria-hidden="true">${p.rank?IC('<path d="M12 19V5M5 12l7-7 7 7"/>'):IC('<path d="M12 3l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6L12 15.4 7 18.2l1.2-5.6L4 8.8l5.6-.6z"/>')}</div><div style="flex:1;min-width:0"><div>${p.t}</div><div class="sub">${p.s} · ${ago(p.at)}</div></div></div>`).join('');
+}
+
+/* ============================== team leader: dashboard ============================== */
+function dashboard(u){
+  const mem=liveMembers(u),act=mem.filter(x=>x.status==='active');
+  const P_=Object.fromEntries(mem.map(m=>[m.id,prog(m)]));
+  const slots=mem.reduce((s,m)=>s+P_[m.id].due,0),done=mem.reduce((s,m)=>s+P_[m.id].done,0),pct=slots?Math.round(done/slots*100):0;
+  const activeP=act.filter(m=>(ppvNow(m)||0)>=100).length;
+  const unpaid=act.filter(m=>paidNow(m)===false).length;
+  const invited=mem.filter(m=>m.status==='invited');
+  const recs=act.map(m=>[m,recommend(m)]).filter(([m,r])=>r!=null&&!DB.dismissed.includes(m.id));
+  const late=act.filter(m=>P_[m.id].done<P_[m.id].due);
+  const claims=DB.claims.filter(c=>c.teamId===u.teamId&&['review','ready'].includes(c.state));
+  const f=R.p.filter||'all',q=Q.trim().toLowerCase();
+  const filt={all:()=>true,late:m=>P_[m.id].done<P_[m.id].due,unpaid:m=>paidNow(m)!==true,noinc:m=>earnNow(m)==='none',low:m=>ppvNow(m)==null||ppvNow(m)<100}[f];
+  const chip=(k,t)=>`<button class="chip" type="button" data-act="filter" data-v="${k}" aria-pressed="${f===k}">${t}</button>`;
+  const groups=[[3,'Executive Managers','EM','accent'],[2,'Senior Managers','SM','orange'],[1,'Managers','M','teal'],[0,'Distributors','D','blue'],[4,'Directors','DIR','accent']];
+  const crews=groups.map(([r,name,ab,c])=>{
+    const g=mem.filter(m=>m.rank===r);if(!g.length)return '';
+    const d=g.reduce((s,m)=>s+P_[m.id].done,0),sl=g.reduce((s,m)=>s+P_[m.id].due,0),p=sl?Math.round(d/sl*100):0,fu=g.filter(m=>P_[m.id].done<P_[m.id].due).length;
+    return `<div class="crew"><div class="crew-top"><span class="sq c-${c}">${ab}</span><div><b>${name}</b><span class="sub">${g.length} member${g.length>1?'s':''}</span></div></div>
+      <div class="stack">${g.slice(0,4).map(m=>av(m)).join('')}${g.length>4?`<span class="av more">+${g.length-4}</span>`:''}</div>
+      <div class="prog"><span>Check-ins answered</span><b>${p}%</b></div><div class="meter c-${c}"><i style="width:${p}%"></i></div>
+      <div class="minis"><span class="mini ${fu?'warn':''}">${fu} to follow up</span><span class="mini">${g.filter(m=>(ppvNow(m)||0)>=100).length} active</span></div></div>`;
+  }).join('');
+  const rows=mem.filter(filt).filter(m=>!q||(m.name+' '+m.tp+' '+m.neoId).toLowerCase().includes(q)).map(m=>{
+    const p=ppvNow(m),qr=qpvRep(m),calc=calcQ(m),diff=qr!=null&&qr!==calc;
+    return `<tr class="click" data-act="member" data-id="${m.id}">
+      <td><div class="who">${av(m)}<div><div style="font-weight:700">${esc(m.name)} ${statusPill(m)}</div><div class="mono sub">${esc(m.tp)}</div></div></div></td>
+      <td>${pill(RANKS[m.rank].n,m.rank>=1?'acc':'')} ${m.rank>=1&&m.status==='active'?(qualified(m)?pill('Qualified','good'):pill('Not qualified','warn')):''}</td>
+      <td class="num">${p==null?'<span class="sub">No reply</span>':num(p)+(p<100?' '+pill('Under 100','bad'):'')}</td>
+      <td class="num">${qr==null?'<span class="sub">No reply</span>':num(qr)}${diff?`<span class="diff">System ${num(calc)}</span>`:''}</td>
+      <td class="num">${incomeTxt(earnNow(m))}</td>
+      <td>${paidNow(m)===true?pill('Paid','good'):paidNow(m)===false?pill('Not paid','bad'):pill('No answer','warn')}</td>
+      <td><span class="dots" title="${P_[m.id].done} of ${P_[m.id].due} check-ins answered">${P_[m.id].due?Array.from({length:P_[m.id].due},(_,i)=>`<i class="${i<P_[m.id].done?'on':''}"></i>`).join(''):'<span class="sub">None due</span>'}</span></td></tr>`}).join('');
+  const top=[...act].filter(m=>qpvRep(m)!=null).sort((a,b)=>qpvRep(b)-qpvRep(a)).slice(0,3);
+  const hist=series(mem,5),mx=Math.max(...hist.map(h=>h.v),1);
+  const drops=dropsOf(mem),dropTotal=drops.reduce((s,d)=>s+d.amount,0);
+  const posts=feedFor(u).slice(0,3);
+  const header=`<div class="hello"><div><h1>Welcome, ${esc(first(u))}!</h1><p class="sub">${esc((DB.teams.find(t=>t.id===u.teamId)||{}).name||'')}${mem.length?` · Check-in completion this month: <b>${pct}%</b>. Target 75 to 80%.`:''}</p></div>
+    <button class="btn primary" type="button" data-act="go" data-r="addmember">Add a member</button></div>`;
+  if(!mem.length){
+    return header+`<section class="card start"><h2>Get started</h2><p class="sub" style="margin:-6px 0 6px">Three steps and your team is live.</p>
+      <ul>
+        <li class="done"><span class="n">${IC('<path d="M5 12.5l4.5 4.5L19 7.5"/>')}</span><div><b>Create your team</b><p>${esc((DB.teams.find(t=>t.id===u.teamId)||{}).name||'')} is ready, and your TeamPulse ID is <span class="mono">${esc(u.tp)}</span>.</p></div><span></span></li>
+        <li><span class="n">2</span><div><b>Add your first member</b><p>Enter their name, NeoLife ID, sponsor and first order. They get a TeamPulse ID and an email to set their password.</p></div><button class="btn primary sm" type="button" data-act="go" data-r="addmember">Add a member</button></li>
+        <li><span class="n">3</span><div><b>See the check-in calendar</b><p>Five questions a month, each open 2 days before its date and 3 days after. Your members get an email when one opens.</p></div><span></span></li>
+      </ul></section>`;
+  }
+  return header+`
+  <div class="crews">${crews}<button class="crew add" type="button" data-act="go" data-r="addmember"><span class="plus">+</span>Add a member</button></div>
+  <div class="grid g-att" id="attn">
+    <section class="card"><h3>Invited, no password yet</h3>
+      ${invited.length?`<div class="rows">${invited.map(m=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">Added ${ago(m.joinedAt)} · ${esc(m.tp)} · first order ${m.firstPv||0} PV</div></div><button class="btn sm" type="button" data-act="resend" data-id="${m.id}">Resend</button></div>`).join('')}</div>`:'<div class="empty">Everyone you added has set a password.</div>'}</section>
+    <section class="card"><h3>Reported sign-ups</h3>
+      ${claims.length?`<div class="rows">${claims.slice(0,4).map(c=>`<div class="row"><div class="grow"><div class="name">${esc((U(c.by)||{name:'Someone'}).name)} reports ${c.count}</div><div class="sub">${c.state==='ready'?'Details received':'Waiting for your review'}</div></div></div>`).join('')}</div><button class="btn sm" type="button" data-act="go" data-r="signups" style="margin-top:10px">Review</button>`:'<div class="empty">No reports waiting.</div>'}</section>
+    <section class="card"><h3>Rank-up recommendations</h3>
+      ${recs.length?`<div class="rows">${recs.map(([m,r])=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">PPV ${ppvNow(m)} · QPV ${num(qpvRep(m))} reaches ${RANKS[r].n} (${num(RANKS[r].q)})</div></div><button class="btn sm good" type="button" data-act="recok" data-id="${m.id}">Confirm</button><button class="btn sm" type="button" data-act="recno" data-id="${m.id}">Dismiss</button></div>`).join('')}</div>`:'<div class="empty">No one has reached a new threshold.</div>'}</section>
+    <section class="card"><h3>Not fully replied</h3>
+      ${late.length?`<div class="rows">${late.map(m=>`<div class="row"><div class="grow"><div class="name">${esc(m.name)}</div><div class="sub">${P_[m.id].done===0?'No answers yet':P_[m.id].done+' of '+P_[m.id].due+' answered'}${P_[m.id].missed?' · '+P_[m.id].missed+' missed':''}</div></div><button class="btn sm" type="button" data-act="remind" data-id="${m.id}">Remind</button></div>`).join('')}</div>`:'<div class="empty">Everyone has replied.</div>'}</section>
+    <section class="card"><h3>Money dropping soon</h3>
+      ${drops.length?`<div class="rows">${drops.slice(0,6).map(d=>`<div class="row"><div class="grow"><div class="name">${esc(d.u.name)}</div><div class="sub">${money(d.amount)} on ${fmtISO(d.date)}</div></div></div>`).join('')}</div><p class="sub" style="margin:10px 0 0">Total ${money(dropTotal)}. Plan PPV orders around these dates.</p>`:'<div class="empty">No payouts reported yet.</div>'}</section>
+  </div>
+  <div class="split">
+    <section class="card">
+      <div class="head"><h2>Team this month</h2><div class="chips">${chip('all','All')}${chip('late','Not replied')}${chip('unpaid','Not paid')}${chip('noinc','No income yet')}${chip('low','Under 100 PPV')}</div></div>
+      <p class="sub">Select a row for a member's plan, history and income. "System" is the QPV worked out from the members added here. Customers outside the system explain most gaps.</p>
+      <div class="scroll"><table><thead><tr><th>Member</th><th>Rank</th><th class="num">PPV</th><th class="num">QPV</th><th class="num">Income</th><th>Monthly</th><th>Replies</th></tr></thead>
+      <tbody>${rows||'<tr><td colspan="7" class="empty">No members match.</td></tr>'}</tbody></table></div>
+    </section>
+    <section class="card"><div class="head"><h3 style="margin:0">Overall progress</h3><span class="pill acc">Whole team</span></div>
+      ${gauge(pct)}
+      <div class="stats4"><div><b class="n1">${mem.length}</b><span>Members</span></div><div><b class="n2">${activeP}</b><span>Active, 100+ PPV</span></div><div><b class="n3">${unpaid}</b><span>Not paid</span></div><div><b class="n4">${recs.length}</b><span>Rank-up checks</span></div></div>
+      <p class="sub" style="text-align:center;margin:14px 0 0">${done} of ${slots} check-in answers received</p></section>
+  </div>
+  <div class="trio">
+    <section class="card"><div class="head"><h3 style="margin:0">Rank performance</h3><button class="btn sm" type="button" data-act="go" data-r="team">See all</button></div>
+      <div class="rows" style="margin-top:12px">${top.map(m=>`<div class="row"><span>${av(m)}</span><div class="grow" style="flex:1 1 90px"><div class="name">${esc(m.name)}</div><div class="sub">${RANKS[m.rank].n}</div></div><b>${num(qpvRep(m))} <span class="sub" style="font-weight:500">QPV</span></b></div>`).join('')||'<div class="empty">QPV appears after members answer the 14th check-in.</div>'}</div></section>
+    <section class="card"><div class="head"><h3 style="margin:0">Income by month</h3><span class="legend"><span><i style="background:var(--accent-soft)"></i>Earlier</span><span><i style="background:var(--orange)"></i>This month</span></span></div>
+      <p class="sub" style="margin:4px 0 0">Team total in USD, from the 10th check-ins.</p>
+      <div class="bars" style="margin-top:8px">${hist.map((h,i)=>`<div class="${i===4?'now':''}">${h.v?money(h.v):'0'}<i style="height:${Math.round(h.v/mx*78)}%"></i></div>`).join('')}</div>
+      <div class="axis">${hist.map(h=>`<span>${h.label}</span>`).join('')}</div></section>
+    <section class="card feed"><div class="head"><h3 style="margin:0">Team feed</h3><button class="btn sm" type="button" data-act="go" data-r="feed">See all</button></div>
+      <div style="margin-top:8px">${feedList(posts)||'<div class="empty">New members and step-ups appear here.</div>'}</div></section>
+  </div>`;
+}
+
+/* ============================== team and members ============================== */
+function team(u){
+  const list=scopeOf(u),q=Q.trim().toLowerCase(),mode=R.p.mode||'list';
+  const admin=u.role==='admin';
+  const shown=list.filter(m=>!q||(m.name+' '+m.tp+' '+m.neoId).toLowerCase().includes(q));
+  const node=(m)=>{const c=kids(m.id).filter(k=>list.some(x=>x.id===k.id));
+    return `<div class="node ${m.status==='inactive'?'dim':''}" data-act="member" data-id="${m.id}">${av(m)}<div style="flex:1 1 180px"><div style="font-weight:600">${esc(m.name)} ${statusPill(m)}</div><div class="mono sub">${esc(m.tp)} · ${esc(m.neoId)}</div></div>${pill(rankName(m),m.rank>=1?'acc':'')}</div>${c.length?`<div class="lvl">${c.map(node).join('')}</div>`:''}`};
+  const roots=list.filter(m=>!list.some(x=>x.id===m.sponsorId));
+  const body=!list.length?`<div class="empty" style="padding:26px 0">${admin?'No members yet. Add your first member to start the team.':'Nobody is in your downline yet.'}</div>`
+   :mode==='tree'?`<div class="tree" style="margin-top:12px">${roots.map(node).join('')}</div>`
+   :`<div class="scroll" style="margin-top:12px"><table><thead><tr><th>Member</th><th>Rank</th><th>NeoLife ID</th><th>Sponsor</th><th>Joined</th></tr></thead><tbody>${shown.map(m=>`<tr class="click" data-act="member" data-id="${m.id}"><td><div class="who">${av(m)}<div><div style="font-weight:700">${esc(m.name)} ${statusPill(m)}</div><div class="mono sub">${esc(m.tp)}</div></div></div></td><td>${pill(RANKS[m.rank].n,m.rank>=1?'acc':'')}</td><td class="mono">${esc(m.neoId)}</td><td>${esc((U(m.sponsorId)||{name:'—'}).name)}</td><td>${fmtISO(m.joinedAt)}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">No members match.</td></tr>'}</tbody></table></div>`;
+  return `<div class="head"><div><h2>${admin?'Team':'My team'}</h2><p class="sub" style="margin:2px 0 0">${list.length} member${list.length===1?'':'s'}${admin?'':' in your downline. You see their results, and nobody outside it.'}</p></div>
+    <div class="inline"><div class="chips"><button class="chip" type="button" data-act="mode" data-v="list" aria-pressed="${mode==='list'}">List</button><button class="chip" type="button" data-act="mode" data-v="tree" aria-pressed="${mode==='tree'}">Tree</button></div>${admin?`<button class="btn primary" type="button" data-act="go" data-r="addmember">Add a member</button>`:''}</div></div>
+    <section class="card">${body}</section>`;
+}
+function sponsorOptions(u,sel){return [u,...liveMembers(u)].map(x=>`<option value="${x.id}" ${x.id===sel?'selected':''}>${esc(x.name)}${x.role==='admin'?' (you)':''}</option>`).join('')}
+function addmember(u){
+  const p=R.p,d=p.draft||{};
+  return `<div class="head"><div><h2>Add a member</h2><p class="sub" style="margin:2px 0 0">They never register themselves. They get a TeamPulse ID and an email to set their password.</p></div></div>
+  <section class="card" style="max-width:640px"><form data-form="addmember" novalidate>
+    <div class="f2"><div class="field"><label for="am-name">Full name</label><input id="am-name" name="name" type="text" value="${esc(d.name||'')}"></div>
+    <div class="field"><label for="am-email">Email</label><input id="am-email" name="email" type="email" value="${esc(d.email||'')}"></div></div>
+    <div class="f2"><div class="field"><label for="am-phone">Phone (optional)</label><input id="am-phone" name="phone" type="text" value="${esc(d.phone||'')}"></div>
+    <div class="field"><label for="am-neo">NeoLife ID</label><input id="am-neo" name="neo" type="text" inputmode="numeric" maxlength="11" placeholder="063-9262173" value="${esc(d.neo||'')}"><span class="hint">Check it carefully. Members cannot change it later. Only you can correct it.</span></div></div>
+    <div class="f2"><div class="field"><label for="am-sp">Sponsor</label><select id="am-sp" name="sponsor">${sponsorOptions(u,p.sponsor||d.sponsor||u.id)}</select></div>
+    <div class="field"><label for="am-pv">First-order PV</label><input id="am-pv" name="pv" type="number" min="0" list="pvl" placeholder="136" value="${esc(d.pv||'')}"><datalist id="pvl"><option value="100"><option value="136"><option value="250"><option value="272"></datalist><span class="hint">They already ordered. This counts as their PPV this month and adds to their sponsor's QPV.</span></div></div>
+    ${errLine('am-err','')}
+    <div class="inline"><button class="btn primary" type="submit">Add member and send invitation</button><button class="btn" type="button" data-act="go" data-r="team">Cancel</button></div>
+  </form></section>`;
+}
+function memberadded(u){
+  const m=U(R.p.id);if(!m)return team(u);
+  return `<section class="card" style="max-width:560px"><h2>${esc(first(m))} is added</h2>
+    <p class="sub" style="margin:6px 0 12px">We emailed ${esc(m.email)} a welcome message with a link to set their password. The link works for 7 days.</p>
+    <p class="sub" style="margin:0">Their TeamPulse ID</p><div class="auth-card big" style="padding:12px 18px;margin:6px 0 14px">${esc(m.tp)}</div>
+    <p class="sub">Their first order of ${m.firstPv||0} PV counts as their PPV this month, and the team feed now shows them with ${esc((U(m.sponsorId)||u).name)} as sponsor.</p>
+    <div class="inline" style="margin-top:14px"><button class="btn primary" type="button" data-act="go" data-r="addmember">Add another member</button><button class="btn" type="button" data-act="go" data-r="team">Back to team</button></div></section>`;
+}
+
+/* member detail */
+function memberModal(m,viewer){
+  const admin=viewer.role==='admin',calc=calcQ(m),{y,mo}=P();
+  const a=k=>ansM(m,k),e=a('earn'),pl=a('plan');
+  const h=series([m],5),mx=Math.max(...h.map(x=>x.v),1);
+  const r=recommend(m);
+  return `<div class="overlay" data-act="close"><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(m.name)}">
+    <button class="btn sm x" type="button" data-act="close">Close</button>
+    <div class="inline">${av(m,'lg')}<div><h2>${esc(m.name)} ${statusPill(m)}</h2><div class="sub">${esc(rankName(m))}${m.sponsorId?' · sponsor '+esc((U(m.sponsorId)||{name:'—'}).name):''}</div><div class="mono sub">${esc(m.tp)} · ${esc(m.neoId)}</div></div></div>
+    <div class="kv"><div><div class="k">PPV</div><div class="v">${ppvNow(m)==null?'No reply':num(ppvNow(m))}</div></div><div><div class="k">QPV reported</div><div class="v">${qpvRep(m)==null?'No reply':num(qpvRep(m))}</div></div><div><div class="k">QPV system</div><div class="v">${num(calc)}</div></div>
+    <div><div class="k">Income</div><div class="v">${e?(e.earn==='none'?'Not yet':money(e.earn)):'No reply'}</div></div><div><div class="k">Active orders</div><div class="v">${e?e.orders:'—'}</div></div><div><div class="k">Delivered and accepted</div><div class="v">${e?e.delivered:'—'}</div></div>
+    <div><div class="k">Money to drop</div><div class="v">${e&&e.drop?money(e.drop):'—'}</div></div><div><div class="k">Drops on</div><div class="v">${e?fmtISO(e.clears):'—'}</div></div><div><div class="k">Joined</div><div class="v">${fmtISO(m.joinedAt)}</div></div></div>
+    <h3>Plan for next month</h3>
+    ${pl?`<div class="rows" style="margin-bottom:6px">${pl.goals.map(([p,t])=>`<div class="row"><b>${esc(p)}</b> ${esc(t)}</div>`).join('')}</div><div class="sub">Plans to sign ${pl.signups} · income target ${esc(pl.target)}</div>`:'<div class="empty">No plan sent yet.</div>'}
+    <h3 style="margin-top:16px">Income by month (USD)</h3>
+    <div class="bars">${h.map(x=>`<div>${x.v?money(x.v):'0'}<i style="height:${Math.round(x.v/mx*80)}%"></i></div>`).join('')}</div>
+    <div class="axis">${h.map(x=>`<span>${x.label}</span>`).join('')}</div>
+    ${m.history.length?`<h3 style="margin-top:16px">Rank history</h3><div class="rows">${m.history.map(x=>`<div class="row"><div class="grow">${RANKS[x.from].n} to <b>${RANKS[x.to].n}</b></div><span class="sub">${fmtISO(x.at)}</span></div>`).join('')}</div>`:''}
+    ${admin?`<h3 style="margin-top:18px">Manage</h3>
+      <div class="inline" style="margin-bottom:12px">
+        ${r!=null?`<button class="btn sm good" type="button" data-act="recok" data-id="${m.id}">Confirm rank-up to ${RANKS[r].n}</button>`:''}
+        ${m.status==='invited'?`<button class="btn sm" type="button" data-act="resend" data-id="${m.id}">Resend invitation</button>`:`<button class="btn sm" type="button" data-act="resetpw" data-id="${m.id}">Send password reset</button>`}
+        ${m.status==='inactive'?`<button class="btn sm" type="button" data-act="reactivate" data-id="${m.id}">Reactivate</button>`:`<button class="btn sm bad" type="button" data-act="deactivate" data-id="${m.id}">Deactivate</button>`}
+      </div>
+      <form data-form="fixneo" data-id="${m.id}" novalidate><label class="lbl" for="fx-neo">Correct NeoLife ID</label><div class="inline"><input id="fx-neo" name="neo" type="text" class="mono" value="${esc(m.neoId)}" maxlength="11"><button class="btn sm" type="submit">Save correction</button></div><p class="hint" id="fx-err" role="alert">Members cannot change this number. Every correction is logged.</p></form>`:''}
+  </div></div>`;
+}
+
+/* ============================== sign-ups ============================== */
+function signups(u){
+  if(u.role!=='admin'){
+    const mine=DB.claims.filter(c=>c.by===u.id);
+    return `<section class="card" style="max-width:560px"><h2>Report a sign-up</h2><p class="sub">Got a new sign-up? Tell your team leader now. You do not need to wait for the 25th. Your leader adds them, and they get their own TeamPulse ID.</p>
+      <form data-form="report" novalidate style="margin-top:12px"><div class="field"><label for="rp-n">Name of the new person (if you know it)</label><input id="rp-n" name="who" type="text"></div>
+      <div class="field"><label for="rp-c">How many people?</label><input id="rp-c" name="count" type="number" min="1" value="1"></div><button class="btn primary" type="submit">Tell my team leader</button></form></section>
+      ${mine.length?`<section class="card" style="margin-top:16px;max-width:560px"><h3>Your reports</h3><div class="rows">${mine.map(c=>`<div class="row"><div class="grow"><div class="name">${c.count} sign-up${c.count>1?'s':''}${c.who?' · '+esc(c.who):''}</div><div class="sub">${ago(c.at)}</div></div>${c.state==='details_asked'?`<button class="btn sm primary" type="button" data-act="go" data-r="claimdetails" data-id="${c.id}">Send details</button>`:pill({review:'With your leader',ready:'With your leader',added:'Added',dismissed:'Not added'}[c.state]||c.state,c.state==='added'?'good':'')}</div>`).join('')}</div></section>`:''}`;
+  }
+  const open=DB.claims.filter(c=>c.teamId===u.teamId&&c.state!=='added'&&c.state!=='dismissed');
+  const done=DB.claims.filter(c=>c.teamId===u.teamId&&(c.state==='added'||c.state==='dismissed'));
+  const card=c=>{const by=U(c.by)||{name:'Someone'};
+    return `<div class="row"><div class="grow"><div class="name">${esc(by.name)} reports ${c.count} sign-up${c.count>1?'s':''}${c.who?' · '+esc(c.who):''}</div><div class="sub">${ago(c.at)} · ${c.state==='ready'?'Details received, ready to add':c.state==='details_asked'?'Waiting for '+esc(first(by))+'\'s details':'Waiting for your review'}</div></div>
+      ${c.state==='ready'?`<button class="btn sm primary" type="button" data-act="claimadd" data-id="${c.id}">Add this person</button>`:`<button class="btn sm primary" type="button" data-act="claimadd" data-id="${c.id}">Add this person</button><button class="btn sm" type="button" data-act="claimask" data-id="${c.id}" ${c.state==='details_asked'?'disabled':''}>Ask for details</button>`}<button class="btn sm bad" type="button" data-act="claimno" data-id="${c.id}">Dismiss</button></div>`};
+  return `<div class="head"><div><h2>Sign-ups</h2><p class="sub" style="margin:2px 0 0">Your members report their sign-ups here. You decide who joins the team.</p></div><button class="btn primary" type="button" data-act="go" data-r="addmember">Add a member</button></div>
+  <section class="card"><h3>Waiting for you</h3>${open.length?`<div class="rows">${open.map(card).join('')}</div>`:'<div class="empty">No reports waiting.</div>'}</section>
+  ${done.length?`<section class="card"><h3>Done</h3><div class="rows">${done.slice(0,8).map(c=>`<div class="row"><div class="grow"><div class="name">${esc((U(c.by)||{name:'Someone'}).name)} · ${c.count}</div><div class="sub">${ago(c.at)}</div></div>${pill(c.state==='added'?'Added':'Dismissed',c.state==='added'?'good':'')}</div>`).join('')}</div></section>`:''}`;
+}
+function claimdetails(u){
+  const c=DB.claims.find(x=>x.id===R.p.id);
+  if(!c||c.by!==u.id)return signups(u);
+  return `<div class="head"><div><h2>Details of your new sign-up</h2><p class="sub" style="margin:2px 0 0">Your team leader asked for these so they can add the person.</p></div></div>
+  <section class="card" style="max-width:640px"><form data-form="claimdetails" data-id="${c.id}" novalidate>
+    <div class="f2"><div class="field"><label for="cd-name">Full name</label><input id="cd-name" name="name" type="text"></div><div class="field"><label for="cd-email">Email</label><input id="cd-email" name="email" type="email"></div></div>
+    <div class="f2"><div class="field"><label for="cd-phone">Phone (optional)</label><input id="cd-phone" name="phone" type="text"></div><div class="field"><label for="cd-neo">NeoLife ID</label><input id="cd-neo" name="neo" type="text" inputmode="numeric" maxlength="11" placeholder="063-9262173"></div></div>
+    <div class="field" style="max-width:280px"><label for="cd-pv">First-order PV</label><input id="cd-pv" name="pv" type="number" min="0" placeholder="136"></div>
+    ${errLine('cd-err','')}<button class="btn primary" type="submit">Send to my team leader</button></form></section>`;
+}
+
+/* ============================== feed and profile ============================== */
+function feed(u){
+  const items=feedFor(u);
+  return `<section class="card feed"><div class="head"><h2>Team feed</h2><span class="sub">New members and step-ups, shown to the whole team</span></div><div style="margin-top:8px">${feedList(items)||'<div class="empty" style="padding:16px 0">Nothing yet. When a member joins or steps up to a new rank, it appears here.</div>'}</div></section>`;
+}
+function profile(u){
+  const next=u.role==='member'&&u.rank<3?RANKS[u.rank+1]:null,q=qpvRep(u),pctN=next&&q!=null?Math.min(100,Math.round(q/next.q*100)):0;
+  const team=DB.teams.find(t=>t.id===u.teamId)||{};
+  return `<div class="grid g-two">
+    <section class="card"><h2>${u.role==='admin'?'Settings':'My profile'}</h2>
+      <form data-form="profile" novalidate style="margin-top:14px">
+        <div class="inline" style="margin-bottom:14px">${av(u,'lg')}<div class="field" style="margin:0"><label for="pf-ph">Profile picture</label><input id="pf-ph" type="file" accept="image/*"></div></div>
+        <div class="field"><label for="pf-n">Display name</label><input id="pf-n" name="name" type="text" value="${esc(u.name)}"></div>
+        ${u.role==='admin'?`<div class="field"><label for="pf-tn">Team name</label><input id="pf-tn" name="team" type="text" value="${esc(team.name||'')}"></div>`:''}
+        <div class="f2"><div class="field"><label for="pf-p">Phone</label><input id="pf-p" name="phone" type="text" value="${esc(u.phone||'')}"></div><div class="field"><label for="pf-c">City</label><input id="pf-c" name="city" type="text" value="${esc(u.city||'')}"></div></div>
+        <div class="field"><label for="pf-b">About me</label><textarea id="pf-b" name="bio">${esc(u.bio||'')}</textarea></div>
+        <div class="f2"><div class="field"><label for="pf-t">TeamPulse ID</label><div class="lock"><input id="pf-t" type="text" class="mono" value="${esc(u.tp)}" readonly>${pill('Set by the system')}</div></div>
+        <div class="field"><label for="pf-ne">NeoLife ID</label><div class="lock"><input id="pf-ne" name="neo" type="text" class="mono" value="${esc(u.neoId)}" maxlength="11" ${u.role==='admin'?'':'readonly'}>${u.role==='admin'?'':pill('Locked','bad')}</div><span class="hint">${u.role==='admin'?'Your official NeoLife number.':'Your official number. If it is wrong, ask your team leader to correct it.'}</span></div></div>
+        ${errLine('pf-err','')}<button class="btn primary" type="submit">Save</button>
+      </form>
+      <h3 style="margin-top:26px">Change password</h3>
+      <form data-form="chgpw" novalidate style="margin-top:10px"><div class="field"><label for="cp0">Current password</label><input id="cp0" name="p0" type="password" autocomplete="current-password"></div>
+        <div class="f2"><div class="field"><label for="cp1">New password</label><input id="cp1" name="p1" type="password" autocomplete="new-password"></div><div class="field"><label for="cp2">Repeat new password</label><input id="cp2" name="p2" type="password" autocomplete="new-password"></div></div>
+        <p class="hint" style="margin-top:-6px">${PWRULE}</p>${errLine('cp-err','')}<button class="btn" type="submit">Change password</button></form>
+    </section>
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      ${u.role==='member'?`<section class="card"><h3>My progress</h3><div class="kv"><div><div class="k">Rank</div><div class="v">${RANKS[u.rank].n}</div></div><div><div class="k">PPV</div><div class="v">${ppvNow(u)==null?'—':num(ppvNow(u))}</div></div><div><div class="k">QPV</div><div class="v">${q==null?'—':num(q)}</div></div></div>
+        ${next?`<div class="sub">Next: ${next.n} at ${num(next.q)} QPV with 100 PPV</div><div class="meter"><i style="width:${pctN}%"></i></div><div class="sub">${pctN}% of the way</div>`:'<div class="sub">Director follows its own rules.</div>'}</section>
+        <section class="card"><h3>Rank history</h3>${u.history.length?`<div class="rows">${u.history.map(h=>`<div class="row"><div class="grow">${RANKS[h.from].n} to <b>${RANKS[h.to].n}</b></div><span class="sub">${fmtISO(h.at)}</span></div>`).join('')}</div>`:'<div class="empty">No rank changes yet.</div>'}</section>`
+      :`<section class="card"><h3>Your team</h3><p class="sub" style="margin:0">Only team leaders register, and you are the only person who can add members or another Admin.</p></section>`}
+    </div></div>`;
+}
+
+/* ============================== member home and check-ins ============================== */
+function home(u){
+  const T=today(),{y,mo}=P(),p=ppvNow(u),q=qpvRep(u),next=u.rank<3?RANKS[u.rank+1]:null,pctN=next&&q!=null?Math.min(100,Math.round(q/next.q*100)):0;
+  const pg=prog(u),d=dropsOf([u])[0];
+  const rows=monthOccs().map(o=>{
+    const st=ciState(o.key),isOpen=st.state==='open'&&st.o.id===o.id||(st.state==='open'&&st.o.key===o.key);
+    const cur=st.state==='open'?st.o:o,answered=!!u.answers[cur.id];
+    let badge,action='';
+    if(st.state==='open'){badge=answered?pill('Answered','good'):pill('Open until '+dmy(st.o.close),'warn');action=`<button class="btn sm ${answered?'':'primary'}" type="button" data-act="go" data-r="checkins" data-key="${o.key}">${answered?'Review':'Answer now'}</button>`}
+    else if(o.close<T){badge=u.answers[o.id]?pill('Answered','good'):pill('Missed','bad')}
+    else badge=pill('Opens '+dmy(o.open));
+    return `<div class="todo"><div class="grow"><div class="name" style="font-weight:700">${CI[o.key].title}</div><div class="sub">The ${CI[o.key].day}</div></div>${badge}${action}</div>`}).join('');
+  const nextOpen=KEYS.map(k=>ciState(k)).filter(s=>s.state==='locked'&&s.o).sort((a,b)=>a.o.open-b.o.open)[0];
+  return `<div class="hello"><div><h1>Welcome, ${esc(first(u))}!</h1><p class="sub">${monthName(y,mo)} · ${RANKS[u.rank].n}${pg.due?` · ${pg.done} of ${pg.due} check-ins answered`:''}</p></div><button class="btn primary" type="button" data-act="go" data-r="checkins">Open my check-ins</button></div>
+  <div class="grid g-att">
+    <section class="card"><h3>My month</h3>
+      <div class="kv"><div><div class="k">PPV</div><div class="v">${p==null?'Not reported':num(p)}</div></div><div><div class="k">QPV</div><div class="v">${q==null?'Not reported':num(q)}</div></div></div>
+      ${p!=null&&p<100?`<p class="hint warn" style="margin:0 0 8px">${p} PPV is under the 100 minimum, so you are not active for bonuses this month.</p>`:p!=null?pill('Active, 100+ PPV','good'):''}
+      ${next?`<div class="sub" style="margin-top:12px">Next: ${next.n} at ${num(next.q)} QPV with 100 PPV</div><div class="meter"><i style="width:${pctN}%"></i></div><div class="sub">${pctN}% of the way</div>`:''}</section>
+    <section class="card"><h3>Check-ins this month</h3>${rows}${nextOpen?`<p class="sub" style="margin:12px 0 0">Next one opens on ${dmy(nextOpen.o.open)}.</p>`:''}</section>
+    <section class="card"><h3>Money dropping</h3>${d?`<div class="name" style="font-weight:700;font-size:1.4rem">${money(d.amount)}</div><div class="sub">on ${fmtISO(d.date)}. Your team leader plans your PPV order around it.</div>`:'<div class="empty">Report your payout in the 10th check-in and it shows here.</div>'}</section>
+    <section class="card feed"><div class="head"><h3 style="margin:0">Team feed</h3><button class="btn sm" type="button" data-act="go" data-r="feed">See all</button></div><div style="margin-top:8px">${feedList(feedFor(u),3)||'<div class="empty">New members and step-ups appear here.</div>'}</div></section>
+  </div>`;
+}
+function checkins(u){
+  const key=KEYS.includes(R.p.key)?R.p.key:(KEYS.map(k=>[k,ciState(k)]).find(([k,s])=>s.state==='open'&&!u.answers[s.o.id])||[KEYS[0]])[0];
+  const list=KEYS.map(k=>{
+    const st=ciState(k),o=st.o,isOpen=st.state==='open',ans=isOpen&&u.answers[o.id];
+    const badge=isOpen?(ans?pill('Answered','good'):pill('Open','warn')):pill('Locked');
+    const when=isOpen?'Open until '+dmy(o.close):'Opens '+dmy(o.open);
+    const missed=!isOpen&&st.last&&!u.answers[st.last.id]?`<span class="sub" style="color:var(--bad)">Missed on ${dmy(st.last.date)}</span>`:'';
+    return `<button class="ci-item" type="button" data-act="ckey" data-key="${k}" aria-pressed="${key===k}">${badge}<b>${CI[k].title}</b><span class="sub">The ${CI[k].day} · ${when}</span>${missed}</button>`}).join('');
+  const c=CI[key],st=ciState(key),locked=st.state==='locked',lastMissed=locked&&st.last&&!u.answers[st.last.id];
+  const panel=locked?`<div class="mail"><div class="meta">Question date: the ${c.day}</div><div class="subj">${c.title} is not open yet</div><p>This check-in opens on <b>${dmy(st.o.open)}</b>, ${OPEN_BEFORE} days before the ${c.day}. You can answer until <b>${dmy(st.o.close)}</b>, ${CLOSE_AFTER} days after.</p>${lastMissed?`<p style="color:var(--bad)">The last one (${dmy(st.last.date)}) closed on ${dmy(st.last.close)} without an answer.</p>`:''}</div>`
+   :`<div class="mail"><div class="meta">${c.title} · open ${dmy(st.o.open)} to ${dmy(st.o.close)}</div><div class="subj">${c.subject}</div><p>Hi ${esc(first(u))}, ${c.body}</p><p class="meta">It takes about two minutes. Your answer counts for the ${c.day}, even if you send it a few days late (until ${dmy(st.o.close)}).</p></div>${ciForm(key,u,st.o)}`;
+  return `<div class="head"><div><h2>Check-ins</h2><p class="sub" style="margin:2px 0 0">Each question opens 2 days before its date and closes 3 days after.</p></div></div>
+  <div class="ci-layout"><div class="ci-list">${list}</div><section class="card">${panel}</section></div>`;
+}
+function ciForm(k,u,o){
+  const a=u.answers[o.id]||{};
+  if(k==='earn'){const none=a.earn==='none';return `<form data-form="earn" novalidate>
+    <div class="field"><label for="e-amt">Money made this month (USD)</label><div class="inline"><input id="e-amt" name="amt" type="number" min="0" step="1" value="${typeof a.earn==='number'?a.earn:''}" ${none?'disabled':''}><label class="inline" style="font-weight:400"><input id="e-none" name="none" type="checkbox" ${none?'checked':''}> Not yet</label></div></div>
+    <div class="field"><label for="e-ord">Active orders on your account right now</label><input id="e-ord" name="orders" type="number" min="0" value="${a.orders!=null?a.orders:''}"></div>
+    <div class="field"><label for="e-del">Orders delivered and accepted this month</label><input id="e-del" name="delivered" type="number" min="0" value="${a.delivered!=null?a.delivered:''}"></div>
+    <div class="field"><label for="e-drop">Amount that will drop into your account (USD)</label><input id="e-drop" name="drop" type="number" min="0" step="1" value="${a.drop!=null?a.drop:''}"></div>
+    <div class="field"><label for="e-clr">Date the money drops and you can withdraw it</label><input id="e-clr" name="clears" type="date" value="${esc(a.clears||'')}"><span class="hint">Your leader uses this date to plan the days for your PPV order.</span></div>
+    ${errLine('e-err','')}<button class="btn primary" type="submit">Save my answers</button></form>`}
+  if(k==='ppv'){const none=a.ppv!=null&&a.qpv===a.ppv&&false;return `<form data-form="ppv" novalidate>
+    <div class="field"><label for="p-ppv">Your PPV this month</label><input id="p-ppv" name="ppv" type="number" min="0" value="${a.ppv!=null?a.ppv:''}"><span class="hint" id="p-ppvh">NeoLife asks for 100 PPV to stay active.</span></div>
+    <div class="field"><label for="p-qpv">Your team's QPV</label><div class="inline"><input id="p-qpv" name="qpv" type="number" min="0" value="${a.qpv!=null?a.qpv:''}"><label class="inline" style="font-weight:400"><input id="p-none" name="none" type="checkbox"> None yet, I have no downline</label></div><span class="hint" id="p-qpvh">If you have no downline, your QPV is just your PPV.</span></div>
+    ${errLine('p-err','')}<button class="btn primary" type="submit">Save my answers</button></form>`}
+  if(k==='plan'){const g=(a.goals&&a.goals.length?a.goals:[['I will','']]);const T=today(),nm=monthName(o.date.getFullYear(),o.date.getMonth()+1);return `<form data-form="plan" novalidate>
+    <div class="lbl" style="margin-bottom:6px">My goals for ${nm}</div><div id="goals">${g.map(([p,t])=>goalRow(p,t)).join('')}</div>
+    <button class="btn sm" type="button" data-act="addgoal" style="margin-bottom:16px">Add another goal</button>
+    <div class="field"><label for="pl-s">How many people will you sign?</label><input id="pl-s" name="signups" type="number" min="0" value="${a.signups!=null?a.signups:''}"></div>
+    <div class="field"><label for="pl-t">How much do you want to make?</label><select id="pl-t" name="target">${['$0 to $300','$300 to $1,000','$1,000 and above'].map(x=>`<option ${a.target===x?'selected':''}>${x}</option>`).join('')}</select></div>
+    <div class="f2"><div class="field"><label for="pl-p">Your PPV for ${nm}</label><input id="pl-p" name="pp" type="number" min="0" value="${a.pp!=null?a.pp:''}"></div><div class="field"><label for="pl-q">Your QPV for ${nm}</label><input id="pl-q" name="pq" type="number" min="0" value="${a.pq!=null?a.pq:''}"></div></div>
+    ${errLine('pl-err','')}<button class="btn primary" type="submit">Save my plan</button></form>`}
+  if(k==='paid'){return `<form data-form="paid" novalidate><div class="lbl" style="margin-bottom:8px">Have you paid your monthly responsibility?</div>
+    <div class="yn"><label><input type="radio" name="paid" value="yes" ${a.paid===true?'checked':''}> Yes, paid</label><label><input type="radio" name="paid" value="no" ${a.paid===false?'checked':''}> Not yet</label></div>
+    ${errLine('paid-err','')}<button class="btn primary" type="submit">Save my answer</button></form>`}
+  return `<form data-form="signup" novalidate><div class="lbl" style="margin-bottom:8px">Did you sign anyone this month?</div>
+    <div class="yn" style="margin-bottom:14px"><label><input type="radio" name="su" value="yes" ${a.su==='yes'?'checked':''}> Yes</label><label><input type="radio" name="su" value="no" ${a.su==='no'?'checked':''}> No</label></div>
+    <div class="field"><label for="s-n">If yes, how many?</label><input id="s-n" name="count" type="number" min="1" value="${a.count||1}"><span class="hint">Your team leader reviews it and may ask you for their details.</span></div>
+    <div class="lbl" style="margin-bottom:6px">Step-ups in your team this month</div>
+    <div class="counters" style="margin-bottom:14px">${['Managers','Senior Managers','Executive Managers','Directors'].map((x,i)=>`<div><label for="st${i}" class="sub">${x}</label><input id="st${i}" name="st${i}" type="number" min="0" value="${(a.steps||[])[i]||0}"></div>`).join('')}</div>
+    <div class="lbl" style="margin-bottom:8px">Did you buy any tools this month?</div>
+    <div class="yn" style="margin-bottom:14px"><label><input type="radio" name="tools" value="yes" ${a.tools==='yes'?'checked':''}> Yes</label><label><input type="radio" name="tools" value="no" ${a.tools!=='yes'?'checked':''}> No</label></div>
+    ${errLine('su-err','')}<button class="btn primary" type="submit">Save my answers</button></form>`;
+}
+const goalRow=(p,t)=>`<div class="goal"><select name="gp" aria-label="Goal starts with"><option ${p==='I will'?'selected':''}>I will</option><option ${p==='I must'?'selected':''}>I must</option></select><input name="gt" type="text" aria-label="Goal" value="${esc(t)}" placeholder="what you will do"></div>`;
+
+const VIEWS={dashboard,team,addmember,memberadded,signups,claimdetails,feed,profile,home,checkins};
+const ADMIN_ONLY=['dashboard','addmember','memberadded'];
+const MEMBER_ONLY=['home','checkins','claimdetails'];
+
+/* ============================== rendering ============================== */
+function go(name,p){R={name,p:p||{}};render();window.scrollTo(0,0)}
+function render(){
+  const u=me();
+  let name=R.name;
+  if(!AUTH_ROUTES.includes(name)){
+    if(!u){R={name:'signin',p:{next:{name:R.name,p:R.p}}};name='signin'}
+    else if((u.role!=='admin'&&ADMIN_ONLY.includes(name))||(u.role==='admin'&&MEMBER_ONLY.includes(name))||(name==='team'&&!canSeeTeam(u)))go(homeRoute(u));
+  }
+  if(R.name!==name||!AUTH_ROUTES.includes(R.name)||true){}
+  const cur=R.name;
+  $('#root').innerHTML=AUTH_ROUTES.includes(cur)?AUTH[cur]():shell(me());
+  afterRender();
+  renderModal();updateTT();
+}
+function afterRender(){
+  const q=$('#q');if(q)q.oninput=e=>{Q=e.target.value;const pos=e.target.selectionStart;render();const nq=$('#q');if(nq){nq.focus();nq.setSelectionRange(pos,pos)}};
+  const en=$('#e-none');if(en)en.onchange=e=>{$('#e-amt').disabled=e.target.checked};
+  const pp=$('#p-ppv'),pq=$('#p-qpv'),pn=$('#p-none');
+  if(pp){
+    const upd=()=>{
+      const v=pp.value===''?null:Number(pp.value),h=$('#p-ppvh');
+      if(v==null){h.className='hint';h.textContent='NeoLife asks for 100 PPV to stay active.'}
+      else if(v<100){h.className='hint bad';h.textContent=v+' PPV is under the 100 minimum. You will not be active for bonuses this month.'}
+      else{h.className='hint good';h.textContent=v+' PPV. You meet the 100 minimum.'}
+      const qv=pn.checked?(v||0):(pq.value===''?null:Number(pq.value)),qh=$('#p-qpvh');
+      if(qv==null){qh.className='hint';qh.textContent='If you have no downline, your QPV is just your PPV.'}
+      else{let best=0;for(let i=1;i<=3;i++)if(qv>=RANKS[i].q)best=i;
+        if(v!=null&&v>=100&&best>0){qh.className='hint good';qh.textContent=num(qv)+' QPV reaches '+RANKS[best].n+' ('+num(RANKS[best].q)+'). Your team leader will review it.'}
+        else{const nx=RANKS[Math.max(1,best+1)];qh.className='hint';qh.textContent=num(qv)+' QPV. Next threshold: '+nx.n+' at '+num(nx.q)+(v!=null&&v<100?', and it needs 100 PPV.':'.')}}
+    };
+    pp.oninput=upd;pq.oninput=upd;pn.onchange=()=>{pq.disabled=pn.checked;upd()};if(pp.value)upd();
+  }
+  const ph=$('#pf-ph');if(ph)ph.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const u=me();u.photo=r.result;save();render();toast('Picture updated')};r.readAsDataURL(f)};
+  const f=document.querySelector('[data-form=signin] #si-pw');if(f&&R.p.prefill)f.focus();
+}
+let toastTimer;
+function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{el.hidden=true},3600)}
+function renderModal(){
+  const el=$('#modal');
+  if(MAILVIEW){const m=DB.mail.find(x=>x.id===MAILVIEW);if(m){el.innerHTML=`<div class="overlay" data-act="closemail"><div class="modal" role="dialog" aria-modal="true" aria-label="Email"><button class="btn sm x" type="button" data-act="closemail">Close</button>
+    <h2>${esc(m.subject)}</h2><p class="sub">To ${esc(m.toName)} &lt;${esc(m.to)}&gt; · ${ago(m.at)}</p><div class="mailbody">${m.html}${m.cta?`<p style="margin-top:14px"><button class="btn primary" type="button" data-act="mailcta" data-id="${m.id}">${esc(m.cta.label)}</button></p>`:''}</div></div></div>`;return}}
+  if(R.p&&R.p.modalId){const u=me(),m=U(R.p.modalId);if(m&&u){el.innerHTML=memberModal(m,u);return}}
+  el.innerHTML='';
+}
+
+/* ============================== test tools (prototype only) ============================== */
+function updateTT(){
+  const n=DB.mail.filter(m=>!m.read).length,b=$('#ttbadge');
+  b.hidden=!n;b.textContent=n;
+  const box=$('#tt');
+  if(!box.hidden){
+    box.innerHTML=`<h3>Prototype test tools</h3><p class="sub" style="margin:0">Not part of TeamPulse. They stand in for what the real app does by itself.</p>
+      <h4>Mailbox (${DB.mail.length})</h4>
+      ${DB.mail.length?DB.mail.slice(0,12).map(m=>`<div class="mailrow ${m.read?'':'unread'}"><b>${esc(m.subject)}</b><small>To ${esc(m.toName)} · ${ago(m.at)}</small><div class="inline" style="margin-top:6px"><button class="btn sm" type="button" data-act="readmail" data-id="${m.id}">Read</button>${m.cta?`<button class="btn sm primary" type="button" data-act="mailcta" data-id="${m.id}">${esc(m.cta.label)}</button>`:''}</div></div>`).join(''):'<p class="sub">No emails yet. Emails the app sends appear here, with their links.</p>'}
+      <h4>Date</h4><p class="sub" style="margin:0 0 6px">Check-ins open on set days. Move the date to see windows open and close.</p>
+      <div class="inline"><input type="date" id="tt-date" value="${esc(DB.testDate||toISO(new Date()))}"><button class="btn sm" type="button" data-act="setdate">Use this date</button><button class="btn sm" type="button" data-act="realdate">Real date</button></div>
+      <p class="sub" style="margin:6px 0 0">Using ${DB.testDate?'test date '+DB.testDate:'the real date'}.</p>
+      <h4>Data</h4><p class="sub" style="margin:0 0 6px">Everything you enter is stored in this browser only.</p>
+      <button class="btn sm bad" type="button" data-act="wipe">Delete all data in this browser</button>`;
+  }
+}
+
+/* ============================== actions ============================== */
+function signInUser(u){
+  setSession(u.id);scheduleMail();
+  const nx=R.p&&R.p.next;
+  if(nx&&nx.name&&!AUTH_ROUTES.includes(nx.name)){go(nx.name,nx.p)}else go(homeRoute(u));
+}
+async function completeRegistration(t){
+  const d=t.data;
+  if(DB.users.some(x=>x.email.toLowerCase()===d.email.toLowerCase())){t.used=true;save();setSession((DB.users.find(x=>x.email.toLowerCase()===d.email.toLowerCase())||{}).id||null);return go('signin',{err:'This email is already confirmed. Sign in below.'})}
+  const team={id:nid('tm'),name:d.team};DB.teams.push(team);
+  const u={id:nid('u'),teamId:team.id,role:'admin',name:d.name,email:d.email,neoId:d.neo,tp:newTP(),status:'active',salt:d.salt,pwHash:d.pwHash,tries:0,locked:false,sponsorId:null,rank:0,joinedAt:nowD().toISOString(),firstPv:null,phone:'',city:'',bio:'',photo:null,answers:{},history:[],sent:{}};
+  DB.users.push(u);t.used=true;save();setSession(u.id);
+  go('leaderwelcome');
+}
+function openToken(id){
+  const t=DB.tokens.find(x=>x.id===id);
+  if(!t)return go('linkbad',{why:'This link is not valid.'});
+  if(t.used)return go('linkbad',{why:'This link was already used.'});
+  if(!tokenOk(t))return go('linkbad',{why:'This link has expired.'});
+  if(t.type==='verify')return completeRegistration(t);
+  go('setpw',{token:id});
+}
+function openCta(mailId){
+  const m=DB.mail.find(x=>x.id===mailId);if(!m||!m.cta)return;
+  m.read=true;save();MAILVIEW=null;$('#tt').hidden=true;$('#ttbtn').setAttribute('aria-expanded','false');
+  if(m.cta.token)return openToken(m.cta.token);
+  go(m.cta.route,m.cta.p||{});
+}
+function createMember(u,d){
+  const m={id:nid('u'),teamId:u.teamId,role:'member',name:d.name,email:d.email,neoId:d.neo,tp:newTP(),status:'invited',salt:null,pwHash:null,tries:0,locked:false,sponsorId:d.sponsor,rank:0,joinedAt:nowD().toISOString(),firstPv:d.pv,phone:d.phone||'',city:'',bio:'',photo:null,answers:{},history:[],sent:{}};
+  DB.users.push(m);
+  DB.feed.unshift({id:nid('f'),teamId:u.teamId,kind:'join',who:m.id,by:d.sponsor,at:nowD().toISOString()});
+  const tk=makeToken('setpw',{userId:m.id});
+  inviteMail(m,tk,u);save();return m;
+}
+const fail=(id,msg)=>{const el=$('#'+id);if(el){el.className='hint bad';el.textContent=msg}};
+
+document.addEventListener('click',async e=>{
+  const a=e.target.closest('[data-act]');
+  if(!a){const l=e.target.closest('a[href="./"]');if(l&&window.parent!==window){e.preventDefault();parent.postMessage({tp:'home'},'*')}return}
+  if(a.classList.contains('overlay')&&e.target!==a)return;
+  const act=a.dataset.act,id=a.dataset.id,u=me();
+  if(act==='go'){go(a.dataset.r,a.dataset.key?{key:a.dataset.key}:a.dataset.id?{id:a.dataset.id}:{})}
+  else if(act==='ckey'){R.p.key=a.dataset.key;render()}
+  else if(act==='filter'){R.p.filter=a.dataset.v;render()}
+  else if(act==='mode'){R.p.mode=a.dataset.v;render()}
+  else if(act==='signout'){setSession(null);Q='';go('signin')}
+  else if(act==='member'){R.p.modalId=id;renderModal()}
+  else if(act==='close'){delete R.p.modalId;renderModal()}
+  else if(act==='bell'){go('dashboard');const el=$('#attn');if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+  else if(act==='remind'){const m=U(id);sendMail(m,'A quick reminder about your check-ins',`<p>Hi ${esc(first(m))}, your team leader asked us to remind you about your check-ins this month.</p>`,{label:'Open my check-ins',route:'checkins',p:{}});toast('Reminder sent to '+m.name)}
+  else if(act==='resend'){const m=U(id),tk=makeToken('setpw',{userId:m.id});inviteMail(m,tk,u);toast('Invitation sent again to '+m.email)}
+  else if(act==='resetpw'){const m=U(id),tk=makeToken('reset',{userId:m.id});sendMail(m,'Choose a new password',mailFrame(m,`<p>Your team leader asked us to help you set a new password for TeamPulse ID <b class="mono">${esc(m.tp)}</b>. The link works for 7 days.</p>`),{label:'Choose a new password',token:tk.id});toast('Reset link sent to '+m.email)}
+  else if(act==='deactivate'){const m=U(id);m.status='inactive';save();render();toast(m.name+' is deactivated and cannot sign in')}
+  else if(act==='reactivate'){const m=U(id);m.status=m.pwHash?'active':'invited';save();render();toast(m.name+' is active again')}
+  else if(act==='recok'){const m=U(id),r=recommend(m);if(r==null)return;m.history.push({from:m.rank,to:r,at:nowD().toISOString()});DB.feed.unshift({id:nid('f'),teamId:m.teamId,kind:'rank',who:m.id,to:RANKS[r].n,at:nowD().toISOString()});m.rank=r;save();render();toast(m.name+' is now '+RANKS[r].n+'. The team feed shows it.')}
+  else if(act==='recno'){DB.dismissed.push(id);save();render();toast('Recommendation dismissed')}
+  else if(act==='claimadd'){const c=DB.claims.find(x=>x.id===id);go('addmember',{claim:id,sponsor:c.by,draft:c.details||{name:c.who||''}})}
+  else if(act==='claimask'){const c=DB.claims.find(x=>x.id===id),by=U(c.by);c.state='details_asked';const tk=makeToken('details',{claim:id});sendMail(by,'Your team leader needs your new sign-up\'s details',mailFrame(by,`<p>Your team leader would like to add ${c.count>1?'your new sign-ups':'your new sign-up'} to the team. Please send the details.</p>`),{label:'Send the details',route:'claimdetails',p:{id}});save();render();toast('Asked '+first(by)+' for the details')}
+  else if(act==='claimno'){const c=DB.claims.find(x=>x.id===id);c.state='dismissed';save();render();toast('Report dismissed')}
+  else if(act==='addgoal'){$('#goals').insertAdjacentHTML('beforeend',goalRow('I will',''))}
+  else if(act==='resend-verify'){const t=DB.tokens.find(x=>x.id===id);if(t){const d=t.data;const nt=makeToken('verify',d);sendMail({name:d.name,email:d.email},'Confirm your email for TeamPulse',`<p>Hi ${esc(d.name.split(' ')[0])}, confirm your email to finish creating your team. The link works for 7 days.</p>`,{label:'Confirm my email',token:nt.id});R.p.token=nt.id;toast('We sent the link again')}}
+  /* test tools */
+  else if(act==='tt'){const box=$('#tt');box.hidden=!box.hidden;a.setAttribute('aria-expanded',String(!box.hidden));updateTT()}
+  else if(act==='readmail'){const m=DB.mail.find(x=>x.id===id);m.read=true;save();MAILVIEW=id;renderModal();updateTT()}
+  else if(act==='closemail'){MAILVIEW=null;renderModal()}
+  else if(act==='mailcta'){openCta(id)}
+  else if(act==='setdate'){const v=$('#tt-date').value;if(v){DB.testDate=v;save();scheduleMail();render();toast('Date set to '+v)}}
+  else if(act==='realdate'){DB.testDate=null;save();scheduleMail();render();toast('Using the real date')}
+  else if(act==='wipe'){if(a.dataset.sure==='1'){DB=blank();save();setSession(null);Q='';$('#tt').hidden=true;go('signin');toast('All data deleted')}else{a.dataset.sure='1';a.textContent='Click again to delete everything'}}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(MAILVIEW){MAILVIEW=null;renderModal()}else if(R.p&&R.p.modalId){delete R.p.modalId;renderModal()}}});
+
+document.addEventListener('submit',async e=>{
+  const f=e.target.closest('form[data-form]');if(!f)return;e.preventDefault();
+  const k=f.dataset.form,d=new FormData(f),g=n=>String(d.get(n)==null?'':d.get(n)).trim(),u=me();
+  if(k==='signin'){
+    const id=normTP(g('id')),pw=String(d.get('pw')||''),nx=R.p.next;
+    const bail=msg=>{R={name:'signin',p:{err:msg,prefill:id,next:nx}};render()};
+    if(!id||!pw)return bail('Enter your TeamPulse ID and password.');
+    const m=DB.users.find(x=>x.tp===id);
+    if(!m)return bail('The TeamPulse ID or password is not right.');
+    if(m.status==='inactive')return bail('This account is not active. Ask your team leader.');
+    if(m.locked)return bail('This account is locked after 5 wrong tries. Use "Forgot your password?" or ask your team leader to reset it.');
+    if(!m.pwHash)return bail('You have not set a password yet. Open the "Set your password" link in your welcome email.');
+    if(await hashPw(m.salt,pw)!==m.pwHash){m.tries=(m.tries||0)+1;if(m.tries>=5)m.locked=true;save();return bail(m.locked?'Locked after 5 wrong tries. Use "Forgot your password?" or ask your team leader to reset it.':'The TeamPulse ID or password is not right. '+(5-m.tries)+' tries left.')}
+    m.tries=0;save();R={name:'signin',p:{next:nx}};signInUser(m);return;
+  }
+  if(k==='register'){
+    const name=g('name'),team=g('team'),email=g('email'),neo=g('neo'),p1=String(d.get('p1')||''),p2=String(d.get('p2')||'');
+    const keep={name,team,email,neo};const bail=msg=>{R={name:'register',p:Object.assign({err:msg},keep)};render()};
+    if(name.length<2)return bail('Enter your full name.');
+    if(team.length<2)return bail('Enter a name for your team.');
+    if(!/^\S+@\S+\.\S+$/.test(email))return bail('Enter a valid email address.');
+    if(!validNeo(neo))return bail('NeoLife ID must look like 063-9262173.');
+    if(!strongPw(p1))return bail('Use at least 8 characters, with a letter and a number.');
+    if(p1!==p2)return bail('The two passwords do not match.');
+    if(DB.users.some(x=>x.email.toLowerCase()===email.toLowerCase()))return bail('An account with this email already exists. Sign in instead.');
+    if(DB.users.some(x=>x.neoId===neo))return bail('That NeoLife ID already has an account.');
+    const salt=newSalt(),pwHash=await hashPw(salt,p1),tk=makeToken('verify',{name,team,email,neo,salt,pwHash});
+    sendMail({name,email},'Confirm your email for TeamPulse',`<p>Hi ${esc(name.split(' ')[0])}, confirm your email to finish creating <b>${esc(team)}</b>. The link works for 7 days.</p>`,{label:'Confirm my email',token:tk.id});
+    go('verifysent',{email,token:tk.id});return;
+  }
+  if(k==='forgot'){
+    const id=normTP(g('id')),m=DB.users.find(x=>x.tp===id&&x.status!=='inactive');
+    if(m){const tk=makeToken('reset',{userId:m.id});sendMail(m,'Reset your TeamPulse password',mailFrame(m,`<p>We got a request to reset the password for TeamPulse ID <b class="mono">${esc(m.tp)}</b>. If it was not you, ignore this email. The link works for 7 days.</p>`),{label:'Choose a new password',token:tk.id})}
+    go('forgotsent');return;
+  }
+  if(k==='setpw'){
+    const t=DB.tokens.find(x=>x.id===f.dataset.token),p1=String(d.get('p1')||''),p2=String(d.get('p2')||'');
+    if(!tokenOk(t))return go('linkbad',{why:'This link expired.'});
+    if(!strongPw(p1))return fail('sp-err','Use at least 8 characters, with a letter and a number.');
+    if(p1!==p2)return fail('sp-err','The two passwords do not match.');
+    const m=U(t.data.userId);await setPassword(m,p1);m.status='active';t.used=true;save();
+    R={name:'signin',p:{}};signInUser(m);toast('Password saved. Welcome, '+first(m)+'!');return;
+  }
+  if(!u)return;
+  if(k==='addmember'){
+    const name=g('name'),email=g('email'),neo=g('neo'),pv=g('pv'),sponsor=g('sponsor'),phone=g('phone');
+    const keep={name,email,neo,pv,phone,sponsor};
+    const bail=msg=>{R.p.draft=keep;R.p.sponsor=sponsor;render();fail('am-err',msg)};
+    if(name.length<2)return bail('Enter the new member\'s full name.');
+    if(!/^\S+@\S+\.\S+$/.test(email))return bail('Enter a valid email address.');
+    if(!validNeo(neo))return bail('NeoLife ID must look like 063-9262173.');
+    if(DB.users.some(x=>x.neoId===neo))return bail('That NeoLife ID is already in the system.');
+    if(DB.users.some(x=>x.email.toLowerCase()===email.toLowerCase()))return bail('That email already has an account.');
+    if(!(Number(pv)>0))return bail('Enter the PV of their first order, for example 100, 136, 250 or 272.');
+    const m=createMember(u,{name,email,neo,pv:Number(pv),sponsor,phone});
+    if(R.p.claim){const c=DB.claims.find(x=>x.id===R.p.claim);if(c){c.count-=1;if(c.count<=0)c.state='added';save()}}
+    go('memberadded',{id:m.id});return;
+  }
+  if(k==='fixneo'){
+    const m=U(f.dataset.id),v=g('neo');
+    if(!validNeo(v))return fail('fx-err','NeoLife ID must look like 063-9262173.');
+    if(DB.users.some(x=>x.id!==m.id&&x.neoId===v))return fail('fx-err','That NeoLife ID belongs to someone else.');
+    if(v===m.neoId)return fail('fx-err','No change to save.');
+    (m.neoLog=m.neoLog||[]).push({from:m.neoId,to:v,at:nowD().toISOString(),by:u.id});m.neoId=v;save();render();toast('NeoLife ID corrected and logged.');return;
+  }
+  if(k==='profile'){
+    const nm=g('name');if(nm.length<2)return fail('pf-err','Display name cannot be empty.');
+    if(u.role==='admin'){const neo=g('neo');if(neo!==u.neoId){if(!validNeo(neo))return fail('pf-err','NeoLife ID must look like 063-9262173.');if(DB.users.some(x=>x.id!==u.id&&x.neoId===neo))return fail('pf-err','That NeoLife ID belongs to someone else.');u.neoId=neo}
+      const tn=g('team');if(tn.length<2)return fail('pf-err','Enter a team name.');const t=DB.teams.find(x=>x.id===u.teamId);if(t)t.name=tn}
+    u.name=nm;u.phone=g('phone');u.city=g('city');u.bio=g('bio');save();render();toast('Saved');return;
+  }
+  if(k==='chgpw'){
+    const p0=String(d.get('p0')||''),p1=String(d.get('p1')||''),p2=String(d.get('p2')||'');
+    if(await hashPw(u.salt,p0)!==u.pwHash)return fail('cp-err','Your current password is not right.');
+    if(!strongPw(p1))return fail('cp-err','Use at least 8 characters, with a letter and a number.');
+    if(p1!==p2)return fail('cp-err','The two new passwords do not match.');
+    await setPassword(u,p1);save();render();toast('Password changed');return;
+  }
+  if(k==='report'){
+    const n=Math.max(1,Number(g('count')||1));DB.claims.unshift({id:nid('c'),teamId:u.teamId,by:u.id,count:n,who:g('who'),state:'review',at:nowD().toISOString()});save();f.reset();render();toast('Your team leader has been told.');return;
+  }
+  if(k==='claimdetails'){
+    const c=DB.claims.find(x=>x.id===f.dataset.id),name=g('name'),email=g('email'),neo=g('neo'),pv=g('pv');
+    if(name.length<2)return fail('cd-err','Enter their full name.');
+    if(!/^\S+@\S+\.\S+$/.test(email))return fail('cd-err','Enter a valid email address.');
+    if(!validNeo(neo))return fail('cd-err','NeoLife ID must look like 063-9262173.');
+    if(!(Number(pv)>0))return fail('cd-err','Enter the PV of their first order.');
+    c.details={name,email,neo,pv,phone:g('phone'),sponsor:c.by};c.state='ready';c.who=name;save();go('signups');toast('Sent to your team leader');return;
+  }
+  /* check-in answers */
+  const who=u,st=ciState(k==='earn'||k==='ppv'||k==='plan'||k==='paid'||k==='signup'?k:'earn');
+  if(!['earn','ppv','plan','paid','signup'].includes(k))return;
+  if(st.state!=='open')return toast('This check-in is not open.');
+  const put=obj=>{who.answers[st.o.id]=Object.assign({at:nowD().toISOString()},obj);save()};
+  if(k==='earn'){
+    const none=d.get('none')==='on',drop=g('drop')===''?0:Number(g('drop'));
+    if(!none&&g('amt')==='')return fail('e-err','Enter an amount, or tick "Not yet".');
+    if(drop>0&&!g('clears'))return fail('e-err','Add the date the money drops, so your leader can plan your PPV order.');
+    put({earn:none?'none':Number(g('amt')),orders:g('orders')===''?0:Number(g('orders')),delivered:g('delivered')===''?0:Number(g('delivered')),drop,clears:g('clears')||null});
+    render();toast('Saved');return;
+  }
+  if(k==='ppv'){
+    if(g('ppv')==='')return fail('p-err','Enter your PPV.');
+    const ppv=Number(g('ppv')),qpv=d.get('none')==='on'?ppv:(g('qpv')===''?ppv:Number(g('qpv')));
+    put({ppv,qpv});render();toast(ppv<100?'Saved. Under 100 PPV, so your leader will see a flag.':'Saved. You meet the 100 PPV minimum.');return;
+  }
+  if(k==='plan'){
+    const p=d.getAll('gp'),t=d.getAll('gt'),goals=p.map((x,i)=>[x,String(t[i]).trim()]).filter(x=>x[1]);
+    if(!goals.length)return fail('pl-err','Write at least one goal after "I will" or "I must".');
+    put({goals,signups:Number(g('signups')||0),target:g('target'),pp:g('pp'),pq:g('pq')});render();toast('Plan saved');return;
+  }
+  if(k==='paid'){
+    const v=g('paid');if(!v)return fail('paid-err','Choose yes or not yet.');
+    put({paid:v==='yes'});render();toast('Saved');return;
+  }
+  if(k==='signup'){
+    const v=g('su');if(!v)return fail('su-err','Choose yes or no.');
+    const n=Math.max(1,Number(g('count')||1));
+    put({su:v,count:n,steps:[0,1,2,3].map(i=>Number(g('st'+i)||0)),tools:g('tools')});
+    if(v==='yes'&&!DB.claims.some(c=>c.by===u.id&&c.occ===st.o.id)){DB.claims.unshift({id:nid('c'),teamId:u.teamId,by:u.id,count:n,who:'',state:'review',at:nowD().toISOString(),occ:st.o.id});save()}
+    render();toast(v==='yes'?'Saved. Your team leader will review your '+n+' sign-up'+(n>1?'s':'')+'.':'Saved');return;
+  }
+});
+
+/* ============================== start ============================== */
+function openSigninFromLanding(){
+  let id='';try{id=sessionStorage.getItem('tp_id')||'';sessionStorage.removeItem('tp_id')}catch(_){}
+  if(me()){go(homeRoute(me()));return}
+  go('signin',{prefill:id});
+  const el=$(id?'#si-pw':'#si-id');if(el)el.focus();
+}
+function openRegisterFromLanding(){if(me())setSession(null);go('register');const el=$('#rg-name');if(el)el.focus()}
+function openAppFromLanding(){const u=me();if(u)go(homeRoute(u));else go('signin')}
+const embedded=window.parent!==window;
+const embeddedHash=()=>{try{return embedded?parent.location.hash:''}catch(_){return ''}};
+
+DB=load();SESSION=loadSession();
+if(SESSION&&!U(SESSION))setSession(null);
+scheduleMail();
+(function start(){
+  const h=embedded?embeddedHash():location.hash;
+  if(h==='#signin'||h==='#app-signin')openSigninFromLanding();
+  else if(h==='#register'||h==='#app-register')openRegisterFromLanding();
+  else openAppFromLanding();
+})();
+window.TP={db:()=>DB,route:()=>R,go,me,mail:()=>DB.mail,openCta,openToken};
+</script>
+</body></html>
