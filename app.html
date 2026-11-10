@@ -187,7 +187,10 @@ td.num,th.num{text-align:right}
 .diff{display:block;font-size:.7rem;color:var(--warn);white-space:nowrap}
 .otree-wrap{margin-top:6px}
 .otree{overflow:auto;padding:18px 8px 24px;border-radius:18px;background:var(--surface);-webkit-overflow-scrolling:touch}
-.otree ul{display:flex;justify-content:center;padding:22px 0 0;margin:0;position:relative;list-style:none;width:max-content;min-width:100%}
+.otools{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;margin:0 0 10px}
+.ostage{margin:0 auto;position:relative}
+.oin{width:max-content;transform-origin:0 0}
+.otree ul{display:flex;justify-content:center;padding:22px 0 0;margin:0;position:relative;list-style:none;width:max-content}
 .otree>ul{padding-top:0}
 .otree li{position:relative;padding:22px 10px 0;display:flex;flex-direction:column;align-items:center;list-style:none}
 .otree li::before,.otree li::after{content:"";position:absolute;top:0;right:50%;width:50%;height:22px;border-top:2px solid var(--accent)}
@@ -792,8 +795,9 @@ function orgTree(u,list,roots){
   const rootLi=`<li>${card(u,true)}${roots.length&&!col.includes(u.id)?`<ul>${roots.map(li).join('')}</ul>`:''}</li>`;
   const lv=depthCount.map((n,i)=>`<span class="pill">Level ${i+1}: ${n}</span>`).join('');
   return `<div class="otree-wrap"><div class="inline" style="margin:12px 0 4px;gap:8px"><span class="sub">Your network, level by level.</span>${lv}</div>
-    <p class="sub" style="margin:0 0 8px">Select a person for their profile. Use the numbered button under a person to hide or show the people below them. Scroll sideways when the tree is wide.</p>
-    <div class="otree" tabindex="0" aria-label="Network tree"><ul>${rootLi}</ul></div></div>`;
+    <p class="sub" style="margin:0 0 8px">Select a person to open their profile. The numbered button hides or shows the people below.</p>
+    <div class="otools"><span class="sub" id="ozl">Fit to screen</span><div class="inline" style="gap:6px"><button class="btn sm" type="button" data-act="tzoom" data-v="out" aria-label="Zoom out">&minus;</button><button class="btn sm" type="button" data-act="tzoom" data-v="fit">Fit to screen</button><button class="btn sm" type="button" data-act="tzoom" data-v="in" aria-label="Zoom in">+</button><button class="btn sm primary" type="button" data-act="tpng">Download as picture (PNG)</button></div></div>
+    <div class="otree" id="otree" tabindex="0" aria-label="Network tree"><div class="ostage" id="ostage"><div class="oin" id="oin"><ul>${rootLi}</ul></div></div></div></div>`;
 }
 
 /* ============================== team and members ============================== */
@@ -1016,7 +1020,73 @@ function render(){
   afterRender();
   renderModal();updateTT();
 }
+let TZ=1;
+function applyTreeZoom(){
+  const box=$('#otree'),st=$('#ostage'),inn=$('#oin');if(!box||!st||!inn)return;
+  inn.style.transform='none';st.style.width='';st.style.height='';
+  const nw=inn.offsetWidth,nh=inn.offsetHeight,z=R.p.zoom==null?'fit':R.p.zoom;
+  let s;
+  if(z==='fit'){
+    const cs=getComputedStyle(box),aw=box.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+    const top=box.getBoundingClientRect().top+window.scrollY,ah=Math.max(260,window.innerHeight-Math.min(top,window.innerHeight*.45)-40);
+    s=Math.max(.2,Math.min(1,aw/nw,(window.innerHeight-90)/nh,ah/nh));
+  }else s=z;
+  TZ=s;inn.style.transform='scale('+s+')';st.style.width=nw*s+'px';st.style.height=nh*s+'px';
+  const l=$('#ozl');if(l)l.textContent=z==='fit'?'Fitted to screen ('+Math.round(s*100)+'%)':'Zoom '+Math.round(s*100)+'%';
+}
+window.addEventListener('resize',()=>{if($('#otree'))applyTreeZoom()});
+async function treePng(){
+  const inn=$('#oin');if(!inn)return;
+  const prev=inn.style.transform;inn.style.transform='none';
+  const o=inn.getBoundingClientRect(),W=Math.ceil(inn.offsetWidth),H=Math.ceil(inn.offsetHeight);
+  const rel=el=>{const r=el.getBoundingClientRect();return {x:r.left-o.left,y:r.top-o.top,w:r.width,h:r.height}};
+  const PAD=36,HEAD=64,K=2,cv=document.createElement('canvas');cv.width=(W+PAD*2)*K;cv.height=(H+PAD*2+HEAD)*K;
+  const c=cv.getContext('2d');c.scale(K,K);
+  const ACC='#6A5AE0',INK='#171C3F',MUT='#686E8E';
+  c.fillStyle='#FFFFFF';c.fillRect(0,0,cv.width,cv.height);
+  const ox=PAD,oy=PAD+HEAD;
+  const team=(DB.teams.find(x=>x.id===(me()||{}).teamId)||{}).name||'';
+  c.textBaseline='top';c.fillStyle=INK;c.font='800 22px system-ui,-apple-system,sans-serif';c.textAlign='left';c.fillText('TeamPulse network'+(team?' · '+team:''),PAD,PAD-4);
+  c.fillStyle=MUT;c.font='500 13px system-ui,-apple-system,sans-serif';c.fillText(fmtISO(nowD().toISOString())+' · '+(document.querySelectorAll('.ocard').length-1)+' members',PAD,PAD+26);
+  // lines
+  c.strokeStyle=ACC;c.lineWidth=2;c.lineCap='square';
+  const walk=li=>{const card=li.querySelector(':scope>.ocard'),ul=li.querySelector(':scope>ul');if(!card||!ul)return;
+    const pr=rel(card),kids=[...ul.children].filter(x=>x.tagName==='LI');if(!kids.length)return;
+    const px=ox+pr.x+pr.w/2,py=oy+pr.y+pr.h+2,krs=kids.map(k=>rel(k.querySelector(':scope>.ocard'))),ky=oy+krs[0].y,my=(py+ky)/2;
+    c.beginPath();c.moveTo(px,py);c.lineTo(px,my);c.stroke();
+    const xs=krs.map(r=>ox+r.x+r.w/2);c.beginPath();c.moveTo(Math.min(px,...xs),my);c.lineTo(Math.max(px,...xs),my);c.stroke();
+    xs.forEach(x=>{c.beginPath();c.moveTo(x,my);c.lineTo(x,ky);c.stroke()});
+    kids.forEach(walk)};
+  const rootLi=inn.querySelector('ul>li');walk(rootLi);
+  const wrap=(txt,maxW)=>{const words=txt.split(/\s+/),lines=[];let cur='';words.forEach(w=>{const t=cur?cur+' '+w:w;if(c.measureText(t).width>maxW&&cur){lines.push(cur);cur=w}else cur=t});if(cur)lines.push(cur);return lines};
+  for(const card of inn.querySelectorAll('.ocard')){
+    const r=rel(card),cx=ox+r.x+r.w/2,av=card.querySelector('.av'),ar=rel(av),d=ar.w,ax=ox+ar.x+d/2,ay=oy+ar.y+d/2;
+    const inv=card.classList.contains('inv');
+    c.save();c.globalAlpha=card.classList.contains('dim')?.55:1;
+    c.beginPath();c.arc(ax,ay,d/2-2,0,Math.PI*2);c.save();c.clip();
+    if(av.tagName==='IMG'){try{c.drawImage(av,ax-d/2,ay-d/2,d,d)}catch(_){}}
+    else{c.fillStyle=getComputedStyle(av).backgroundColor||'#ccc';c.fillRect(ax-d/2,ay-d/2,d,d);c.fillStyle=getComputedStyle(av).color;c.font='700 '+(d*.3)+'px system-ui,sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(av.textContent.trim(),ax,ay+1);c.textBaseline='top'}
+    c.restore();
+    c.beginPath();c.arc(ax,ay,d/2-2,0,Math.PI*2);c.lineWidth=4;c.strokeStyle=ACC;if(inv)c.setLineDash([8,6]);c.stroke();c.setLineDash([]);
+    c.textAlign='center';
+    const put=(el,color,upper)=>{if(!el)return;const cs=getComputedStyle(el),er=rel(el);c.fillStyle=color;c.font=cs.fontWeight+' '+cs.fontSize+' system-ui,-apple-system,sans-serif';
+      const txt=upper?el.textContent.toUpperCase():el.textContent,lh=parseFloat(cs.fontSize)*1.2;
+      wrap(txt,r.w-6).forEach((ln,i)=>c.fillText(ln,cx,oy+er.y+i*lh))};
+    put(card.querySelector('.on'),ACC,true);put(card.querySelector('.orank'),INK,true);card.querySelectorAll('.ost').forEach(e=>put(e,e.classList.contains('sm')?MUT:INK,false));put(card.querySelector('.oid'),MUT,false);
+    c.restore();
+  }
+  inn.style.transform=prev;
+  const blob=await new Promise(ok=>cv.toBlob(ok,'image/png'));
+  const name='teampulse-network-'+toISO(nowD())+'.png';
+  try{
+    const host=window.claude||(window.parent&&window.parent.claude);
+    const dl=host&&host.use?await host.use('downloads'):null;
+    if(dl){await dl.save({filename:name,data:blob});toast('Picture ready');return}
+  }catch(err){if(err&&err.code==='declined')return}
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);toast('Picture saved to your downloads');
+}
 function afterRender(){
+  applyTreeZoom();
   document.querySelectorAll('.auth-card input[type=password]').forEach(i=>{
     const w=document.createElement('span');w.className='pwwrap';i.parentNode.insertBefore(w,i);w.appendChild(i);
     const b=document.createElement('button');b.type='button';b.className='pwtog';b.textContent='Show';b.setAttribute('aria-label','Show password');
@@ -1055,6 +1125,7 @@ function renderModal(){
 }
 
 /* ============================== test tools (prototype only) ============================== */
+const TESTMEMBER={name:'Test Distributor',email:'test.distributor@example.com',neo:'063-1000002',pw:'Member2026pw',tp:'06OW002'};
 const TESTLEADER={name:'Test Leader',team:'Team Test',email:'test.leader@example.com',neo:'063-1000001',pw:'Test2026pw'};
 function updateTT(){
   const n=DB.mail.filter(m=>!m.read).length,b=$('#ttbadge');
@@ -1068,6 +1139,7 @@ function updateTT(){
       <div class="inline"><input type="date" id="tt-date" value="${esc(DB.testDate||toISO(new Date()))}"><button class="btn sm" type="button" data-act="setdate">Use this date</button><button class="btn sm" type="button" data-act="realdate">Real date</button></div>
       <p class="sub" style="margin:6px 0 0">Using ${DB.testDate?'test date '+DB.testDate:'the real date'}.</p>
       <h4>Test account</h4>${(()=>{const L=DB.users.find(x=>x.email===TESTLEADER.email);return L?`<p class="sub" style="margin:0 0 6px">Team leader for testing. Sign in with:<br>TeamPulse ID <b class="mono">${esc(L.tp)}</b><br>Password <b class="mono">${esc(TESTLEADER.pw)}</b></p><button class="btn sm" type="button" data-act="usetest" data-id="${esc(L.tp)}">Go to sign in with this ID</button>`:'<p class="sub" style="margin:0 0 6px">Makes a ready team leader, so you can skip registration while testing.</p><button class="btn sm primary" type="button" data-act="maketest">Create a test team leader</button>'})()}
+      <h4>Test distributor</h4>${(()=>{const M=DB.users.find(x=>x.email===TESTMEMBER.email);return M?`<p class="sub" style="margin:0 0 6px">Distributor for testing, under the test team leader. Sign in with:<br>TeamPulse ID <b class="mono">${esc(M.tp)}</b><br>Password <b class="mono">${esc(TESTMEMBER.pw)}</b></p><button class="btn sm" type="button" data-act="usetest" data-id="${esc(M.tp)}">Go to sign in with this ID</button>`:'<p class="sub" style="margin:0 0 6px">Makes a distributor who is already set up, so you can see the member side. To test the real email journey instead, add a member as the team leader and open the welcome email in the Mailbox above.</p><button class="btn sm primary" type="button" data-act="maketestmember">Create a test distributor</button>'})()}
       <h4>Data</h4><p class="sub" style="margin:0 0 6px">Everything you enter is stored in this browser only.</p>
       <button class="btn sm bad" type="button" data-act="wipe">Delete all data in this browser</button>`;
   }
@@ -1121,15 +1193,24 @@ document.addEventListener('click',async e=>{
   else if(act==='ckey'){R.p.key=a.dataset.key;render()}
   else if(act==='filter'){R.p.filter=a.dataset.v;render()}
   else if(act==='tog'){const c=R.p.col||(R.p.col=[]),i=c.indexOf(id);if(i<0)c.push(id);else c.splice(i,1);render()}
+  else if(act==='tzoom'){const v=a.dataset.v;R.p.zoom=v==='fit'?'fit':Math.min(2,Math.max(.2,TZ*(v==='in'?1.25:.8)));applyTreeZoom()}
+  else if(act==='tpng'){await treePng()}
   else if(act==='mode'){R.p.mode=a.dataset.v;render()}
-  else if(act==='maketest'){
-    if(!DB.users.some(x=>x.email===TESTLEADER.email)){
+  else if(act==='maketest'||act==='maketestmember'){
+    let L=DB.users.find(x=>x.email===TESTLEADER.email);
+    if(!L){
       const tm={id:nid('tm'),name:TESTLEADER.team};DB.teams.push(tm);
       const salt=newSalt(),pwHash=await hashPw(salt,TESTLEADER.pw);
-      DB.users.push({id:nid('u'),teamId:tm.id,role:'admin',name:TESTLEADER.name,email:TESTLEADER.email,neoId:TESTLEADER.neo,tp:'06OW001',status:'active',salt,pwHash,tries:0,locked:false,sponsorId:null,rank:0,joinedAt:nowD().toISOString(),firstPv:null,phone:'',city:'',bio:'',photo:null,answers:{},history:[],sent:{}});
-      save();
+      L={id:nid('u'),teamId:tm.id,role:'admin',name:TESTLEADER.name,email:TESTLEADER.email,neoId:TESTLEADER.neo,tp:'06OW001',status:'active',salt,pwHash,tries:0,locked:false,sponsorId:null,rank:0,joinedAt:nowD().toISOString(),firstPv:null,phone:'',city:'',bio:'',photo:null,answers:{},history:[],sent:{}};
+      DB.users.push(L);save();
     }
-    const L=DB.users.find(x=>x.email===TESTLEADER.email);setSession(null);go('signin',{prefill:L.tp});$('#tt').hidden=true;
+    let who=L;
+    if(act==='maketestmember'&&!DB.users.some(x=>x.email===TESTMEMBER.email)){
+      const salt=newSalt(),pwHash=await hashPw(salt,TESTMEMBER.pw);
+      who={id:nid('u'),teamId:L.teamId,role:'member',name:TESTMEMBER.name,email:TESTMEMBER.email,neoId:TESTMEMBER.neo,tp:TESTMEMBER.tp,status:'active',salt,pwHash,tries:0,locked:false,sponsorId:L.id,rank:0,joinedAt:nowD().toISOString(),firstPv:136,phone:'08000000000',city:'Lagos',bio:'',photo:null,answers:{},history:[],sent:{}};
+      DB.users.push(who);DB.feed.unshift({id:nid('f'),teamId:L.teamId,kind:'join',who:who.id,by:L.id,at:nowD().toISOString()});save();
+    }else if(act==='maketestmember')who=DB.users.find(x=>x.email===TESTMEMBER.email);
+    setSession(null);go('signin',{prefill:who.tp});$('#tt').hidden=true;
   }
   else if(act==='usetest'){setSession(null);go('signin',{prefill:id});$('#tt').hidden=true}
   else if(act==='signout'){setSession(null);Q='';go('signin')}

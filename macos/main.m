@@ -4,7 +4,7 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate, WKNavigationDelegate, WKUIDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate, WKNavigationDelegate, WKUIDelegate, WKDownloadDelegate>
 @property (strong) NSWindow *window;
 @property (strong) WKWebView *webView;
 @property (assign) BOOL selfTestMode;
@@ -75,6 +75,9 @@
 #pragma mark - Links open in the default browser, never inside the app
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)action decisionHandler:(void (^)(WKNavigationActionPolicy))handler {
+    if (@available(macOS 11.3, *)) {
+        if (action.shouldPerformDownload) { handler(WKNavigationActionPolicyDownload); return; }
+    }
     NSURL *url = action.request.URL;
     NSString *scheme = url.scheme.lowercaseString;
     if (scheme && [@[@"http", @"https", @"mailto", @"tel"] containsObject:scheme]) {
@@ -83,6 +86,30 @@
         return;
     }
     handler(WKNavigationActionPolicyAllow);
+}
+
+#pragma mark - Saving files (for example the network tree picture)
+
+- (void)webView:(WKWebView *)webView navigationAction:(WKNavigationAction *)navigationAction didBecomeDownload:(WKDownload *)download API_AVAILABLE(macos(11.3)) {
+    download.delegate = self;
+}
+
+- (void)webView:(WKWebView *)webView navigationResponse:(WKNavigationResponse *)navigationResponse didBecomeDownload:(WKDownload *)download API_AVAILABLE(macos(11.3)) {
+    download.delegate = self;
+}
+
+- (void)download:(WKDownload *)download decideDestinationUsingResponse:(NSURLResponse *)response suggestedFilename:(NSString *)suggestedFilename completionHandler:(void (^)(NSURL *destination))completionHandler API_AVAILABLE(macos(11.3)) {
+    NSSavePanel *panel = [NSSavePanel savePanel];
+    panel.nameFieldStringValue = suggestedFilename ?: @"TeamPulse file";
+    panel.directoryURL = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, NSUserDomainMask, YES) firstObject] ?: NSHomeDirectory()];
+    [panel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse result) {
+        if (result == NSModalResponseOK && panel.URL) {
+            [[NSFileManager defaultManager] removeItemAtURL:panel.URL error:nil];
+            completionHandler(panel.URL);
+        } else {
+            completionHandler(nil);
+        }
+    }];
 }
 
 - (WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)action windowFeatures:(WKWindowFeatures *)features {
