@@ -77,7 +77,8 @@ await step('adding a member sends an invitation', async () => {
   await wait(500);
   const m = w.TP.db().users.find(u => u.name === 'First Member');
   (m && m.status === 'invited' && !m.pwHash) ? ok('the member is added as invited, with no password yet') : fail('the member was not added correctly');
-  w.TP.mail()[0].subject.startsWith('Welcome') ? ok('the welcome email with the set-password link was sent') : fail('no welcome email');
+  const wm=w.TP.mail()[0];
+  (wm.subject.startsWith('Welcome') && wm.html.includes(m.tp) && wm.cta) ? ok('the welcome email carries the TeamPulse ID and the create-login button') : fail('the welcome email is missing the ID or the button');
 });
 
 await step('the member sets a password and signs in', async () => {
