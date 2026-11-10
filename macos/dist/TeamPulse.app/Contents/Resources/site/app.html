@@ -186,30 +186,34 @@ td.num,th.num{text-align:right}
 .dots i.on{background:var(--accent)}
 .diff{display:block;font-size:.7rem;color:var(--warn);white-space:nowrap}
 .otree-wrap{margin-top:6px}
-.otree{overflow:auto;padding:18px 8px 24px;border-radius:18px;background:var(--surface2);-webkit-overflow-scrolling:touch}
+.otree{overflow:auto;padding:18px 8px 24px;border-radius:18px;background:var(--surface);-webkit-overflow-scrolling:touch}
 .otree ul{display:flex;justify-content:center;padding:22px 0 0;margin:0;position:relative;list-style:none;width:max-content;min-width:100%}
 .otree>ul{padding-top:0}
 .otree li{position:relative;padding:22px 10px 0;display:flex;flex-direction:column;align-items:center;list-style:none}
-.otree li::before,.otree li::after{content:"";position:absolute;top:0;right:50%;width:50%;height:22px;border-top:2px solid var(--line)}
-.otree li::after{right:auto;left:50%;border-left:2px solid var(--line)}
+.otree li::before,.otree li::after{content:"";position:absolute;top:0;right:50%;width:50%;height:22px;border-top:2px solid var(--accent)}
+.otree li::after{right:auto;left:50%;border-left:2px solid var(--accent)}
 .otree li:only-child::before,.otree li:only-child::after{display:none}
 .otree li:only-child{padding-top:0}
 .otree>ul>li{padding-top:0}
 .otree li:first-child::before,.otree li:last-child::after{border:0 none}
-.otree li:last-child::before{border-right:2px solid var(--line);border-radius:0 10px 0 0}
-.otree li:first-child::after{border-radius:10px 0 0 0}
-.otree ul ul::before{content:"";position:absolute;top:0;left:50%;border-left:2px solid var(--line);height:22px}
-.ocard{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;width:170px;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:14px 10px 12px;cursor:pointer;text-align:center;box-shadow:var(--shadow)}
-.ocard:hover{border-color:var(--accent)}
-.ocard.root{border-color:var(--accent);cursor:default;background:var(--accent-soft)}
-.ocard.inv{border-style:dashed}
-.ocard.dim{opacity:.6}
-.ocard .av.lg{width:56px;height:56px;border:3px solid var(--accent-soft)}
-.ocard .on{font-size:.92rem;line-height:1.2;max-width:100%;overflow-wrap:anywhere}
-.ocard small{color:var(--muted);font-size:.74rem}
-.ocard .oid{font-size:.72rem;color:var(--muted)}
-.otog{margin-top:-10px;position:relative;z-index:1;border:2px solid var(--line);background:var(--surface);color:var(--accent);border-radius:99px;font-weight:800;font-size:.78rem;padding:2px 10px;cursor:pointer}
-.otog:hover{border-color:var(--accent)}
+.otree li:last-child::before{border-right:2px solid var(--accent);border-radius:0}
+.otree li:first-child::after{border-radius:0}
+.otree ul ul::before{content:"";position:absolute;top:0;left:50%;border-left:2px solid var(--accent);height:22px}
+.ocard{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;width:170px;padding:0 4px;cursor:pointer;text-align:center}
+.ocard.root{cursor:default}
+.ocard .av.lg{width:92px;height:92px;font-size:1.6rem;border:4px solid var(--accent);box-sizing:border-box;margin-bottom:8px;background-clip:padding-box;transition:box-shadow .15s}
+.ocard.root .av.lg{width:116px;height:116px;font-size:2rem}
+.ocard:hover .av.lg{box-shadow:0 0 0 5px var(--accent-soft)}
+.ocard.inv .av.lg{border-style:dashed;opacity:.8}
+.ocard.dim{opacity:.55}
+.ocard .on{font-size:1.08rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);line-height:1.15;max-width:100%;overflow-wrap:anywhere}
+.ocard.root .on{font-size:1.5rem}
+.ocard .orank{font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:.78rem;color:var(--ink)}
+.ocard .ost{font-size:.85rem;color:var(--ink)}
+.ocard .ost.sm{font-size:.76rem;color:var(--muted)}
+.ocard .oid{font-size:.7rem;color:var(--muted);margin-top:2px}
+.otog{margin-top:6px;position:relative;z-index:1;border:2px solid var(--accent);background:var(--surface);color:var(--accent);border-radius:99px;font-weight:800;font-size:.76rem;padding:1px 10px;cursor:pointer}
+.otog:hover{background:var(--accent-soft)}
 .tree .node{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:8px 0;cursor:pointer}
 .tree .lvl{border-left:2px solid var(--line);margin-left:19px;padding-left:16px}
 .tree .dim{opacity:.6}
@@ -780,8 +784,9 @@ function orgTree(u,list,roots){
   const card=(m,isRoot)=>{
     const c=isRoot?[]:kidsOf(m),n=isRoot?roots.length:c.length;
     const tog=n?`<button class="otog" type="button" data-act="tog" data-id="${m.id}" aria-expanded="${!col.includes(m.id)}" aria-label="${col.includes(m.id)?'Show':'Hide'} ${n} below ${esc(m.name)}">${col.includes(m.id)?'+':'&minus;'} ${n}</button>`:'';
-    const stats=isRoot?`<small>${roots.length} direct</small>`:m.status==='invited'?'<small>Invited. No login yet.</small>':m.status==='inactive'?'<small>Inactive</small>':`<small>PPV ${ppvNow(m)==null?'—':num(ppvNow(m))} · QPV ${qpvRep(m)==null?'—':num(qpvRep(m))}</small>`;
-    return `<div class="ocard ${isRoot?'root':''} ${m.status==='invited'?'inv':''} ${m.status==='inactive'?'dim':''} r${m.rank}" ${isRoot?'':`data-act="member" data-id="${m.id}" role="button" tabindex="0"`}>${av(m,'lg')}<b class="on">${esc(isRoot?m.name+' (you)':m.name)}</b><span class="pill ${m.rank>=1?'acc':''}">${esc(rankName(m))}</span>${stats}<span class="mono oid">${esc(m.tp)}</span></div>${tog}`;
+    const ppv=ppvNow(m),q=qpvRep(m);
+    const stats=m.status==='invited'?'<span class="ost">Invited. No login yet.</span>':m.status==='inactive'?'<span class="ost">Inactive</span>':isRoot?`<span class="ost">${roots.length} directly sponsored</span>`:`<span class="ost">${ppv==null?'No PPV yet':num(ppv)+' PPV'}</span>${n&&q!=null?`<span class="ost sm">${num(q)} QPV</span>`:''}`;
+    return `<div class="ocard ${isRoot?'root':''} ${m.status==='invited'?'inv':''} ${m.status==='inactive'?'dim':''}" ${isRoot?'':`data-act="member" data-id="${m.id}" role="button" tabindex="0"`}>${av(m,'lg')}<b class="on">${esc(isRoot?'You':m.name)}</b><span class="orank">${esc(rankName(m))}</span>${stats}<span class="mono oid">${esc(m.tp)}</span></div>${tog}`;
   };
   const li=m=>{const c=kidsOf(m);return `<li>${card(m,false)}${c.length&&!col.includes(m.id)?`<ul>${c.map(li).join('')}</ul>`:''}</li>`};
   const rootLi=`<li>${card(u,true)}${roots.length&&!col.includes(u.id)?`<ul>${roots.map(li).join('')}</ul>`:''}</li>`;
